@@ -14,7 +14,7 @@ public class HelloPlugin extends JavaPlugin {
     @Override
     protected void setup() {
         super.setup();
-        this.getCommandRegistry().registerCommand(new HelloCommand("tini", "An example command", false));
+        this.getCommandRegistry().registerCommand(new HelloCommand("test", "An example command", false));
     }
 
 }
