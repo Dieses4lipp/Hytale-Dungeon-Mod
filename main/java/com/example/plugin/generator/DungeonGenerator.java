@@ -82,13 +82,6 @@ public class DungeonGenerator {
             if (room.getBlocks() != null && !room.getBlocks().isEmpty()) {
                 placer.placeRoomFromData(room, room.getBlocks());
             }
-
-            // Create doorways at exits
-            if (room.getExits() != null && !room.getExits().isEmpty()) {
-                for (Room.Exit exit : room.getExits()) {
-                    placer.createDoorway(room, exit.getDirection());
-                }
-            }
         }
     }
 
