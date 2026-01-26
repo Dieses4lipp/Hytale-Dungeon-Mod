@@ -1,0 +1,28 @@
+[
+  {
+    "templateId": "hytale:dungeon_hallway_v1",
+    "minX": 155,
+    "minY": 123,
+    "minZ": 398,
+    "maxX": 150,
+    "maxY": 128,
+    "maxZ": 393,
+    "blocks": [],
+    "exits": [
+      { "x": 0, "y": 0, "z": 10, "direction": "NORTH" }
+    ]
+  },
+  {
+    "templateId": "hytale:dungeon_hallway_v2",
+    "minX": 155,
+    "minY": 123,
+    "minZ": 391,
+    "maxX": 150,
+    "maxY": 128,
+    "maxZ": 386,
+    "blocks": [],
+    "exits": [
+      { "x": 0, "y": 0, "z": 10, "direction": "NORTH" }
+    ]
+  }
+]
