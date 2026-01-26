@@ -9,29 +9,59 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class DungeonGenerator {
     private final List<Room> rooms;
-    private int currentX = 0;
-    private int currentY = 0;
-    private int currentZ = 0;
+    private int currentX = 31;
+    private int currentY = 136;
+    private int currentZ = 4;
 
     public DungeonGenerator(Path configPath) throws IOException {
         this.rooms = loadRoomsFromJson(configPath);
     }
 
     /**
-     * Loads room definitions from a JSON file
+     * Loads room definitions from individual JSON files in a directory
      */
     private List<Room> loadRoomsFromJson(Path configPath) throws IOException {
-        try (FileReader reader = new FileReader(configPath.toFile())) {
-            Gson gson = new Gson();
-            Type roomListType = new TypeToken<List<Room>>(){}.getType();
-            return gson.fromJson(reader, roomListType);
+        List<Room> allRooms = new ArrayList<>();
+        
+        // If configPath is a file, try the parent directory as rooms directory
+        Path roomsDir = configPath;
+        if (Files.isRegularFile(configPath)) {
+            roomsDir = configPath.getParent();
         }
+        
+        // Look for rooms directory
+        if (!Files.exists(roomsDir)) {
+            throw new IOException("Rooms directory not found: " + roomsDir);
+        }
+        
+        // Load all JSON files from the rooms directory
+        try (Stream<Path> paths = Files.list(roomsDir)) {
+            paths.filter(p -> p.toString().endsWith(".json"))
+                 .sorted()
+                 .forEach(roomFile -> {
+                     try (FileReader reader = new FileReader(roomFile.toFile())) {
+                         Gson gson = new Gson();
+                         Room room = gson.fromJson(reader, Room.class);
+                         if (room != null) {
+                             allRooms.add(room);
+                         }
+                     } catch (IOException e) {
+                         System.err.println("Error loading room file: " + roomFile);
+                         e.printStackTrace();
+                     }
+                 });
+        }
+        
+        return allRooms;
     }
 
     /**
@@ -62,9 +92,28 @@ public class DungeonGenerator {
             // Move to the next room position based on the first exit
             if (!room.getExits().isEmpty()) {
                 Room.Exit exit = room.getExits().get(0);
-                currentX += exit.getX() + width;
-                currentY = exit.getY();
-                currentZ += exit.getZ();
+                String direction = exit.getDirection();
+                
+                // Calculate next room position based on direction
+                switch (direction != null ? direction : "NORTH") {
+                    case "NORTH":
+                        // NORTH: decrease Z (move away from positive Z)
+                        currentZ -= depth + exit.getZ() + 1;
+                        break;
+                    case "SOUTH":
+                        // SOUTH: increase Z (move toward positive Z)
+                        currentZ += depth + exit.getZ() + 1;
+                        break;
+                    case "EAST":
+                        // EAST: increase X (move toward positive X)
+                        currentX += width + exit.getX() + 1;
+                        break;
+                    case "WEST":
+                        // WEST: decrease X (move away from positive X)
+                        currentX -= width + exit.getX() + 1;
+                        break;
+                }
+                
             }
         }
 

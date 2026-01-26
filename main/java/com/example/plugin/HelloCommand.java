@@ -14,14 +14,11 @@ import com.example.plugin.generator.BlockCapture;
 import com.example.plugin.model.Room;
 import com.example.plugin.model.BlockData;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import javax.annotation.Nonnull;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 public class HelloCommand extends AbstractPlayerCommand {
@@ -57,32 +54,32 @@ public class HelloCommand extends AbstractPlayerCommand {
     }
 
     private void buildDungeonFromJson(@Nonnull World world, @Nonnull PlayerRef playerRef) throws Exception {
-        // Try multiple paths to find rooms.json
+        // Try multiple paths to find rooms directory
         String[] possiblePaths = {
-            "Server/config/rooms.json",
-            "config/rooms.json",
-            "../Server/config/rooms.json",
-            "/home/philipp/hytale-server/Server/config/rooms.json"
+            "Server/config/rooms",
+            "config/rooms",
+            "../Server/config/rooms",
+            "/home/philipp/hytale-server/Server/config/rooms"
         };
         
-        java.nio.file.Path roomsPath = null;
+        java.nio.file.Path roomsDir = null;
         for (String path : possiblePaths) {
             java.nio.file.Path p = java.nio.file.Paths.get(path);
-            System.out.println("[DEBUG] Checking path: " + p.toAbsolutePath());
-            if (java.nio.file.Files.exists(p)) {
-                roomsPath = p;
-                System.out.println("[DEBUG] ✓ Found rooms.json at: " + roomsPath.toAbsolutePath());
+            System.out.println("[DEBUG] Checking rooms directory: " + p.toAbsolutePath());
+            if (java.nio.file.Files.exists(p) && java.nio.file.Files.isDirectory(p)) {
+                roomsDir = p;
+                System.out.println("[DEBUG] ✓ Found rooms directory at: " + roomsDir.toAbsolutePath());
                 break;
             }
         }
         
-        if (roomsPath == null) {
+        if (roomsDir == null) {
             System.out.println("[ERROR] Working directory: " + Paths.get("").toAbsolutePath());
-            throw new Exception("rooms.json not found in any expected location");
+            throw new Exception("rooms directory not found in any expected location");
         }
         
-        // Load and generate dungeon from JSON configuration
-        DungeonGenerator generator = new DungeonGenerator(roomsPath);
+        // Load and generate dungeon from individual room files
+        DungeonGenerator generator = new DungeonGenerator(roomsDir);
         DungeonGenerator.DungeonLayout layout = generator.generateDungeon();
         
         // Build the dungeon in the world
@@ -102,71 +99,72 @@ public class HelloCommand extends AbstractPlayerCommand {
     private void captureAndSaveBlocks(@Nonnull World world, @Nonnull PlayerRef playerRef) throws Exception {
         // Try multiple possible paths
         String[] possiblePaths = {
-            "Server/config/rooms.json",
-            "config/rooms.json",
-            "../Server/config/rooms.json",
-            "/home/philipp/hytale-server/Server/config/rooms.json"
+            "Server/config/rooms",
+            "config/rooms",
+            "../Server/config/rooms",
+            "/home/philipp/hytale-server/Server/config/rooms"
         };
         
-        Path configPath = null;
+        Path roomsDir = null;
         for (String pathStr : possiblePaths) {
             Path p = Paths.get(pathStr);
-            System.out.println("[DEBUG] Checking path: " + p.toAbsolutePath());
-            if (Files.exists(p)) {
-                configPath = p;
-                System.out.println("[DEBUG] ✓ Found rooms.json at: " + configPath.toAbsolutePath());
+            System.out.println("[DEBUG] Checking rooms directory: " + p.toAbsolutePath());
+            if (Files.exists(p) && Files.isDirectory(p)) {
+                roomsDir = p;
+                System.out.println("[DEBUG] ✓ Found rooms directory at: " + roomsDir.toAbsolutePath());
                 break;
             }
         }
         
-        if (configPath == null) {
-            System.out.println("[ERROR] Config file not found in any location. Working directory: " + Paths.get("").toAbsolutePath());
+        if (roomsDir == null) {
+            System.out.println("[ERROR] Rooms directory not found in any location. Working directory: " + Paths.get("").toAbsolutePath());
             EventTitleUtil.showEventTitleToPlayer(
                     playerRef,
                     Message.raw("Error"),
-                    Message.raw("rooms.json not found"),
+                    Message.raw("rooms directory not found"),
                     true
             );
             return;
         }
 
-        // Parse rooms from JSON
-        String jsonContent = new String(Files.readAllBytes(configPath));
-        Gson gson = new Gson();
-        Type roomListType = new TypeToken<List<Room>>(){}.getType();
-        List<Room> rooms = gson.fromJson(jsonContent, roomListType);
-
-        if (rooms == null || rooms.isEmpty()) {
-            System.out.println("No rooms found in config");
-            return;
-        }
-
+        // List all JSON files in the directory and load them
         BlockCapture capture = new BlockCapture(world);
-        List<Room> updatedRooms = new ArrayList<>();
-
-        // Capture blocks for each room
-        for (Room room : rooms) {
-            System.out.println("Capturing blocks for: " + room.getTemplateId());
-            
-            List<BlockData> blocks = capture.captureRegion(
-                    room.getMinX(), room.getMinY(), room.getMinZ(),
-                    room.getMaxX(), room.getMaxY(), room.getMaxZ()
-            );
-            
-            room.setBlocks(blocks);
-            updatedRooms.add(room);
+        
+        try (java.util.stream.Stream<Path> paths = Files.list(roomsDir)) {
+            paths.filter(p -> p.toString().endsWith(".json"))
+                 .sorted()
+                 .forEach(roomFile -> {
+                     try {
+                         String jsonContent = new String(Files.readAllBytes(roomFile));
+                         Gson gson = new Gson();
+                         Room room = gson.fromJson(jsonContent, Room.class);
+                         
+                         if (room != null) {
+                             System.out.println("Capturing blocks for: " + room.getTemplateId());
+                             
+                             List<BlockData> blocks = capture.captureRegion(
+                                     room.getMinX(), room.getMinY(), room.getMinZ(),
+                                     room.getMaxX(), room.getMaxY(), room.getMaxZ()
+                             );
+                             
+                             room.setBlocks(blocks);
+                             
+                             // Save updated room back to its own file
+                             capture.saveRoomToJson(room, roomFile);
+                         }
+                     } catch (Exception e) {
+                         System.err.println("Error processing room file: " + roomFile);
+                         e.printStackTrace();
+                     }
+                 });
         }
-
-        // Save updated rooms back to JSON
-        String updatedJson = new com.google.gson.GsonBuilder().setPrettyPrinting().create().toJson(updatedRooms);
-        Files.write(configPath, updatedJson.getBytes());
-
-        System.out.println("Blocks captured and saved to: " + configPath.toAbsolutePath());
+        
+        System.out.println("Blocks captured and saved to individual room files");
         
         EventTitleUtil.showEventTitleToPlayer(
                 playerRef,
                 Message.raw("Blocks Captured!"),
-                Message.raw("Saved to rooms.json"),
+                Message.raw("Saved to room files"),
                 true
         );
     }

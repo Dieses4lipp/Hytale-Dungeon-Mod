@@ -106,15 +106,5 @@ public class BlockCapture {
         }
         System.out.println("Room saved to: " + outputPath);
     }
-
-    /**
-     * Saves multiple rooms to JSON file
-     */
-    public void saveRoomsToJson(List<Room> rooms, Path outputPath) throws IOException {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        try (FileWriter writer = new FileWriter(outputPath.toFile())) {
-            gson.toJson(rooms, writer);
-        }
-        System.out.println("Rooms saved to: " + outputPath);
-    }
 }
+
