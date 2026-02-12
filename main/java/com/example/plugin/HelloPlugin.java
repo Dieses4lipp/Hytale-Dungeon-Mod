@@ -1,5 +1,7 @@
 package com.example.plugin;
 
+import com.example.plugin.Commands.GenerateDungeonCommand;
+import com.example.plugin.Commands.SaveRoomCommand;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 
@@ -14,7 +16,8 @@ public class HelloPlugin extends JavaPlugin {
     @Override
     protected void setup() {
         super.setup();
-        this.getCommandRegistry().registerCommand(new HelloCommand("test", "An example command", false));
+        this.getCommandRegistry().registerCommand(new GenerateDungeonCommand("test", "An example command", false));
+        this.getCommandRegistry().registerCommand(new SaveRoomCommand("saveroom", "Saves a room", false));
     }
 
 }
