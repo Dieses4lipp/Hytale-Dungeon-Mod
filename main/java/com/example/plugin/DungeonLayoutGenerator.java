@@ -6,9 +6,19 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.awt.Point;
+import java.nio.file.Path;
 import java.util.Set;
+import java.util.Vector;
 
+import com.hypixel.hytale.builtin.buildertools.prefabeditor.enums.PrefabAlignment;
+import com.hypixel.hytale.math.Axis;
+import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.protocol.Position;
+import com.hypixel.hytale.server.core.prefab.PrefabStore;
+import com.hypixel.hytale.server.core.prefab.selection.standard.BlockSelection;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.worldgen.cave.CavePrefabPlacement.PrefabPlacementFunction;
+
 
 public class DungeonLayoutGenerator {
     private int gridsize = 20;
@@ -19,7 +29,7 @@ public class DungeonLayoutGenerator {
         int startY = grid.length / 2;
         int startX = grid[0].length / 2;
         Room startRoom = new Room();
-        startRoom.getDoors()[0] = true; 
+        startRoom.getDoors()[0] = true;
         grid[startY][startX] = startRoom;
         nextRoomToProcess.add(new Point(startX, startY - 1));
         while (!nextRoomToProcess.isEmpty()) {
@@ -29,23 +39,44 @@ public class DungeonLayoutGenerator {
                 continue;
             currentRoom = grid[currentPoint.x][currentPoint.y] = new Room();
 
-            //norden check ob raum da mit tür zu mir
-            if(grid[currentPoint.x][currentPoint.y-1]!=null && grid[currentPoint.x][currentPoint.y-1].getDoors()[2]){currentRoom.getDoors()[0]=true;}
-            //osten check ob raum da mit tür zu mir
-            if(grid[currentPoint.x+1][currentPoint.y]!=null && grid[currentPoint.x + 1][currentPoint.y].getDoors()[3]){currentRoom.getDoors()[1]=true;}
-            //süden check ob raum da mit tür zu mir
-            if(grid[currentPoint.x][currentPoint.y+1]!=null && grid[currentPoint.x][currentPoint.y+1].getDoors()[0]){currentRoom.getDoors()[2]=true;}
-            //westen check ob raum da mit tür zu mir
-            if(grid[currentPoint.x-1][currentPoint.y]!=null && grid[currentPoint.x - 1][currentPoint.y].getDoors()[1]){currentRoom.getDoors()[3]=true;}
+            // norden check ob raum da mit tür zu mir
+            if (grid[currentPoint.x][currentPoint.y - 1] != null
+                    && grid[currentPoint.x][currentPoint.y - 1].getDoors()[2]) {
+                currentRoom.getDoors()[0] = true;
+            }
+            // osten check ob raum da mit tür zu mir
+            if (grid[currentPoint.x + 1][currentPoint.y] != null
+                    && grid[currentPoint.x + 1][currentPoint.y].getDoors()[3]) {
+                currentRoom.getDoors()[1] = true;
+            }
+            // süden check ob raum da mit tür zu mir
+            if (grid[currentPoint.x][currentPoint.y + 1] != null
+                    && grid[currentPoint.x][currentPoint.y + 1].getDoors()[0]) {
+                currentRoom.getDoors()[2] = true;
+            }
+            // westen check ob raum da mit tür zu mir
+            if (grid[currentPoint.x - 1][currentPoint.y] != null
+                    && grid[currentPoint.x - 1][currentPoint.y].getDoors()[1]) {
+                currentRoom.getDoors()[3] = true;
+            }
 
             boolean[] doors = currentRoom.getDoors();
 
-            if(grid[currentPoint.x][currentPoint.y-1]==null && Math.random()<0.5 && currentPoint.y > 1){doors[0]=true;} //norden
-            if(grid[currentPoint.x+1][currentPoint.y]==null && Math.random()<0.5 && currentPoint.x < gridsize - 2){doors[1]=true;} //osten
-            if(grid[currentPoint.x][currentPoint.y+1]==null && Math.random()<0.5 && currentPoint.y < gridsize - 2){doors[2]=true;} //süden
-            if(grid[currentPoint.x-1][currentPoint.y]==null && Math.random()<0.5 && currentPoint.x > 1){doors[3]=true;} //westen
+            if (grid[currentPoint.x][currentPoint.y - 1] == null && Math.random() < 0.5 && currentPoint.y > 1) {
+                doors[0] = true;
+            } // norden
+            if (grid[currentPoint.x + 1][currentPoint.y] == null && Math.random() < 0.5
+                    && currentPoint.x < gridsize - 2) {
+                doors[1] = true;
+            } // osten
+            if (grid[currentPoint.x][currentPoint.y + 1] == null && Math.random() < 0.5
+                    && currentPoint.y < gridsize - 2) {
+                doors[2] = true;
+            } // süden
+            if (grid[currentPoint.x - 1][currentPoint.y] == null && Math.random() < 0.5 && currentPoint.x > 1) {
+                doors[3] = true;
+            } // westen
 
-            
             for (int i = 0; i < doors.length; i++) {
                 if (doors[i]) {
                     switch (i) {
@@ -77,33 +108,65 @@ public class DungeonLayoutGenerator {
     }
 
     public static <T> T getAndRemoveRandom(Set<T> set) {
-    if (set.isEmpty()) return null;
+        if (set.isEmpty())
+            return null;
 
-    int index = new Random().nextInt(set.size());
-    Iterator<T> iter = set.iterator();
+        int index = new Random().nextInt(set.size());
+        Iterator<T> iter = set.iterator();
 
-    for (int i = 0; i < index; i++) {
-        iter.next();
+        for (int i = 0; i < index; i++) {
+            iter.next();
+        }
+
+        T item = iter.next();
+        iter.remove();
+        return item;
     }
 
-    T item = iter.next();
-    iter.remove();
-    return item;
-}
-public int abstand = 10;
-public void generate(World world){
-    for (int x = 0; x < grid.length; x++) {
-        for (int y = 0; y < grid[x].length; y++) {
-            if(grid[x][y] != null){
-                world.setBlock(x * abstand, 90, y * abstand, "Cloth_Block_Wool_Green");
-                Room currentRoom = grid[x][y];
-                if(currentRoom.getDoors()[0]){world.setBlock(x * abstand, 90, y * abstand -1, "Cloth_Block_Wool_Red");}
-                if(currentRoom.getDoors()[1]){world.setBlock(x * abstand +1, 90, y * abstand, "Cloth_Block_Wool_Red");}
-                if(currentRoom.getDoors()[2]){world.setBlock(x * abstand, 90, y * abstand +1, "Cloth_Block_Wool_Red");}
-                if(currentRoom.getDoors()[3]){world.setBlock(x * abstand -1, 90, y * abstand, "Cloth_Block_Wool_Red");}
+    public int abstand = 10;
+
+    public void generate(World world) {
+        for (int x = 0; x < grid.length; x++) {
+            for (int y = 0; y < grid[x].length; y++) {
+                if (grid[x][y] != null) {
+
+                    PrefabStore prefabStore = PrefabStore.get();
+                    Path roomPrefabPath = Path.of("prefabs/Prefabs/testroom1.prefab.json");
+                    Path doorWEPath = Path.of("prefabs/Prefabs/door2.prefab.json");
+                    Path doorSNPath = Path.of("prefabs/Prefabs/door.prefab.json");
+                    BlockSelection roomSNPrefab = prefabStore.getPrefab(doorSNPath);
+                    BlockSelection roomWEPrefab = prefabStore.getPrefab(doorWEPath);
+                    BlockSelection roomPrefab = prefabStore.getPrefab(roomPrefabPath);
+                    
+                    if (roomPrefab != null) {
+                        world.setBlock(x * abstand, 90, y * abstand, "Cloth_Block_Wool_Green");
+                        Vector3i place = new Vector3i(x * abstand, 90, y * abstand);
+                        roomPrefab.placeNoReturn(world, place, null);
+                        
+                    }
+                    world.setBlock(x * abstand, 90, y * abstand, "Cloth_Block_Wool_Blue");
+                    Room currentRoom = grid[x][y];
+                    if (currentRoom.getDoors()[0]) {
+                        world.setBlock(x * abstand, 90, y * abstand - 1, "Cloth_Block_Wool_Red");
+                        roomSNPrefab.placeNoReturn(world, new Vector3i(x * abstand, 91, y * abstand - (abstand / 2)), null);
+                    }
+                    if (currentRoom.getDoors()[1]) {
+                        world.setBlock(x * abstand + 1, 90, y * abstand, "Cloth_Block_Wool_Red");
+                        roomWEPrefab.placeNoReturn(world, new Vector3i((x * abstand) + (abstand / 2), 91, y * abstand), null);
+                        
+                    }
+                    if (currentRoom.getDoors()[2]) {
+                        world.setBlock(x * abstand, 90, y * abstand + 1, "Cloth_Block_Wool_Red");
+                        roomSNPrefab.placeNoReturn(world, new Vector3i(x * abstand, 91, y * abstand + (abstand / 2)), null);
+                    }
+                    if (currentRoom.getDoors()[3]) {
+                        world.setBlock(x * abstand - 1, 90, y * abstand, "Cloth_Block_Wool_Red");
+                        roomWEPrefab.placeNoReturn(world, new Vector3i(x * abstand - (abstand / 2), 91, y * abstand), null);
+                        
+                    }
+                }
             }
         }
     }
-}
 
 }
