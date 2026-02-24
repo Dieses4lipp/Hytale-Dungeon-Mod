@@ -172,7 +172,9 @@ public class DungeonLayoutGenerator {
         Path[] allroomPrefabs = new Path[]{
             Path.of("prefabs/Prefabs/testroom1.prefab.json"),
             Path.of("prefabs/Prefabs/testroom2.prefab.json"),
-            Path.of("prefabs/Prefabs/testroom3.prefab.json")
+            Path.of("prefabs/Prefabs/testroom3.prefab.json"),
+            Path.of("prefabs/Prefabs/testroom4.prefab.json"),
+            Path.of("prefabs/Prefabs/testroom5.prefab.json")
         };
         return allroomPrefabs[new Random().nextInt(allroomPrefabs.length)];
     }
