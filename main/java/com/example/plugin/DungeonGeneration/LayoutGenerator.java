@@ -1,24 +1,20 @@
-package com.example.plugin;
+package com.example.plugin.DungeonGeneration;
 
 import java.util.Random;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.awt.Point;
-import java.nio.file.Path;
 import java.util.Set;
-import com.hypixel.hytale.math.vector.Vector3i;
-import com.hypixel.hytale.server.core.prefab.PrefabStore;
-import com.hypixel.hytale.server.core.prefab.selection.standard.BlockSelection;
-import com.hypixel.hytale.server.core.universe.world.World;
 
 
-public class DungeonLayoutGenerator {
-    private int NUMBERROOMS = 100;
+public class LayoutGenerator {
+    private int NUMBERROOMS = 20;
     private int gridsize = 20;
     private Room[][] grid = new Room[gridsize][gridsize];
     private Set<Point> nextRoomToProcess = new HashSet<>();
     int counter = 0;
-    public void generateLayout() {
+    public void generateLayout( int roomCount) {
+        NUMBERROOMS = roomCount;
         int startY = grid.length / 2;
         int startX = grid[0].length / 2;
         Room startRoom = new Room();
@@ -100,6 +96,31 @@ public class DungeonLayoutGenerator {
 
         }
         //#endregion
+        for (int x = 0; x < gridsize; x++) {
+        for (int y = 0; y < gridsize; y++) {
+            Room room = grid[x][y];
+            if (room == null) continue;
+
+            boolean[] doors = room.getDoors();
+
+            // Check North (0)
+            if (doors[0] && (y == 0 || grid[x][y - 1] == null)) {
+                doors[0] = false;
+            }
+            // Check East (1)
+            if (doors[1] && (x == gridsize - 1 || grid[x + 1][y] == null)) {
+                doors[1] = false;
+            }
+            // Check South (2)
+            if (doors[2] && (y == gridsize - 1 || grid[x][y + 1] == null)) {
+                doors[2] = false;
+            }
+            // Check West (3)
+            if (doors[3] && (x == 0 || grid[x - 1][y] == null)) {
+                doors[3] = false;
+            }
+        }
+    }
 
         for (int y = 0; y < grid.length; y++) {
             for (int x = 0; x < grid[y].length; x++) {
@@ -124,58 +145,9 @@ public class DungeonLayoutGenerator {
         iter.remove();
         return item;
     }
-
-    public int abstand = 10;
-    public void generate(World world) {
-        for (int x = 0; x < grid.length; x++) {
-            for (int y = 0; y < grid[x].length; y++) {
-                if (grid[x][y] != null) {
-                    
-                    PrefabStore prefabStore = PrefabStore.get();
-                    Path roomPrefabPath = getRandomRoomPreFabPath();
-                    Path doorWEPath = Path.of("prefabs/Prefabs/door2.prefab.json");
-                    Path doorSNPath = Path.of("prefabs/Prefabs/door.prefab.json");
-                    BlockSelection roomSNPrefab = prefabStore.getPrefab(doorSNPath);
-                    BlockSelection roomWEPrefab = prefabStore.getPrefab(doorWEPath);
-                    BlockSelection roomPrefab = prefabStore.getPrefab(roomPrefabPath);
-                    
-                    if (roomPrefab != null) {
-                        world.setBlock(x * abstand, 90, y * abstand, "Cloth_Block_Wool_Green");
-                        Vector3i place = new Vector3i(x * abstand, 90, y * abstand);
-                        roomPrefab.placeNoReturn(world, place, null);
-                    }
-                    world.setBlock(x * abstand, 90, y * abstand, "Cloth_Block_Wool_Blue");
-                    Room currentRoom = grid[x][y];
-                    if (currentRoom.getDoors()[0]) {
-                        world.setBlock(x * abstand, 90, y * abstand - 1, "Cloth_Block_Wool_Red");
-                        roomSNPrefab.placeNoReturn(world, new Vector3i(x * abstand, 91, y * abstand - (abstand / 2)), null);
-                    }
-                    if (currentRoom.getDoors()[1]) {
-                        world.setBlock(x * abstand + 1, 90, y * abstand, "Cloth_Block_Wool_Red");
-                        roomWEPrefab.placeNoReturn(world, new Vector3i((x * abstand) + (abstand / 2), 91, y * abstand), null);
-                        
-                    }
-                    if (currentRoom.getDoors()[2]) {
-                        world.setBlock(x * abstand, 90, y * abstand + 1, "Cloth_Block_Wool_Red");
-                        roomSNPrefab.placeNoReturn(world, new Vector3i(x * abstand, 91, y * abstand + (abstand / 2)), null);
-                    }
-                    if (currentRoom.getDoors()[3]) {
-                        world.setBlock(x * abstand - 1, 90, y * abstand, "Cloth_Block_Wool_Red");
-                        roomWEPrefab.placeNoReturn(world, new Vector3i(x * abstand - (abstand / 2), 91, y * abstand), null);
-                        
-                    }
-                }
-            }
-        }
+    
+    public Room[][] getGrid() {
+        return grid;
     }
-    public Path getRandomRoomPreFabPath(){
-        Path[] allroomPrefabs = new Path[]{
-            Path.of("prefabs/Prefabs/testroom1.prefab.json"),
-            Path.of("prefabs/Prefabs/testroom2.prefab.json"),
-            Path.of("prefabs/Prefabs/testroom3.prefab.json"),
-            Path.of("prefabs/Prefabs/testroom4.prefab.json"),
-            Path.of("prefabs/Prefabs/testroom5.prefab.json")
-        };
-        return allroomPrefabs[new Random().nextInt(allroomPrefabs.length)];
-    }
+    
 }
