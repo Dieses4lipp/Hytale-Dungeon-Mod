@@ -1,7 +1,10 @@
 package com.example.plugin;
 
 import com.example.plugin.Commands.GenerateDungeonCommand;
+import com.example.plugin.Commands.SpawnInteractableNPCCommand;
 import com.example.plugin.Commands.TestUi;
+import com.hypixel.hytale.server.core.HytaleServer;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 
@@ -18,6 +21,7 @@ public class HelloPlugin extends JavaPlugin {
         super.setup();
         this.getCommandRegistry().registerCommand(new GenerateDungeonCommand("test", "An example command", false));
         this.getCommandRegistry().registerCommand(new TestUi("testui", "An example command", false));
+        this.getCommandRegistry().registerCommand(new SpawnInteractableNPCCommand());
         
     }
 
