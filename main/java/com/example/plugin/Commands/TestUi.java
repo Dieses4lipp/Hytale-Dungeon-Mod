@@ -26,9 +26,6 @@ public class TestUi extends AbstractPlayerCommand{
             @Nonnull Ref<EntityStore> ref,
             @Nonnull PlayerRef playerRef,
             @Nonnull World world) {
-        npcspawn spawn = new npcspawn();
-        spawn.spawnnpc(store);
-        System.out.println("test1 done spawn");
         Player player = store.getComponent(ref, Player.getComponentType());
         testpage page = new testpage(playerRef);
         player.getPageManager().openCustomPage(ref, store, page);
