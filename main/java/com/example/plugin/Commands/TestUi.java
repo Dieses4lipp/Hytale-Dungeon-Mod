@@ -2,7 +2,10 @@ package com.example.plugin.Commands;
 
 import javax.annotation.Nonnull;
 
-import com.example.plugin.testpage;
+import com.example.plugin.Testpage;
+import com.hypixel.hytale.codec.Codec;
+import com.hypixel.hytale.codec.KeyedCodec;
+import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
@@ -16,9 +19,8 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 public class TestUi extends AbstractPlayerCommand{
 
     public TestUi(@Nonnull String name, @Nonnull String description, boolean requiresConfirmation) {
-        super(name, description, false);
+        super(name, description, requiresConfirmation);
     }
-
     @Override
     protected void execute(
             @Nonnull CommandContext commandContext,
@@ -27,8 +29,9 @@ public class TestUi extends AbstractPlayerCommand{
             @Nonnull PlayerRef playerRef,
             @Nonnull World world) {
         Player player = store.getComponent(ref, Player.getComponentType());
-        testpage page = new testpage(playerRef);
+        Testpage page = new Testpage(playerRef);
         player.getPageManager().openCustomPage(ref, store, page);
     }
+
 
 }

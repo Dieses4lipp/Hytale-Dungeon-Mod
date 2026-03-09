@@ -3,6 +3,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import com.example.plugin.Testpage;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -51,9 +52,7 @@ public class TalkToNPCInteraction extends SimpleInstantInteraction {
             interactionContext.getState().state = InteractionState.Failed;
             return;
         }
-
-        // Send random dialog
-        player.sendMessage(Message.raw("Du nutten"));
+        
         String dialogLine = DIALOG_LINES[random.nextInt(DIALOG_LINES.length)];
         player.sendMessage(Message.raw("§6[Kweebec]§r " + dialogLine));
 
