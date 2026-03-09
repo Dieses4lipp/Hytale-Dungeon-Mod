@@ -1,12 +1,43 @@
 Group {
-    Anchor: (Width: 400, Height: 250);
-    Background: #1a1a2e(0.95);
-    LayoutMode: Top;
-    Padding: (Full: 20);
+  LayoutMode: Center;
 
-    Label #Title {
-        Text: "Hello World";
-        Anchor: (Height: 40);
-        Style: (FontSize: 24, TextColor: #ffffff, Alignment: Center);
+  Group #MyPanel {
+    Anchor: (Width: 800, Height: 1000);
+    LayoutMode: Top;
+
+    Label #MyLabel {
+      Style: (FontSize: 32, Alignment: Center);
+      Anchor: (Top: 50);
+      Text: "MyText";
+      Padding: (Full: 10);
     }
+
+    TextField #MyInput {
+      Anchor: (Top: 10, Width: 200, Height: 50);
+      Padding: (Full: 10);
+    }
+
+    Group #ButtonGroup {
+    Anchor: (Top: 20, Width: 600, Height: 60);
+    LayoutMode: Left; 
+    
+    TextButton #SaveBtn {
+        Anchor: (Width: 150, Height: 50);
+        Text: "Save";
+        Padding: (Horizontal: 5);
+    }
+
+    TextButton #ResetBtn {
+        Anchor: (Width: 150, Height: 50);
+        Text: "Reset";
+        Padding: (Horizontal: 5);
+    }
+
+    TextButton #CloseBtn {
+        Anchor: (Width: 150, Height: 50);
+        Text: "Close";
+        Padding: (Horizontal: 5);
+    }
+}
+  }
 }
