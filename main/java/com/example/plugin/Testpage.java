@@ -1,6 +1,5 @@
 package com.example.plugin;
 
-import java.lang.module.ModuleDescriptor.Builder;
 
 import javax.annotation.Nonnull;
 
@@ -11,7 +10,6 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
-import com.hypixel.hytale.server.core.entity.entities.player.pages.BasicCustomUIPage;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
@@ -19,7 +17,6 @@ import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
-import io.sentry.MeasurementUnit.Custom;
 
 public class Testpage extends InteractiveCustomUIPage<Testpage.Data> {
 
@@ -32,7 +29,7 @@ public class Testpage extends InteractiveCustomUIPage<Testpage.Data> {
             .add() 
 
             // Field 2: Button Click State
-            .append(new KeyedCodec<>("@ButtonClicked", Codec.STRING), 
+            .append(new KeyedCodec<>("ButtonClicked", Codec.STRING), 
                 (data, value) -> data.clickedButton = value, 
                 data -> data.clickedButton)
             .add() 
@@ -53,11 +50,11 @@ public class Testpage extends InteractiveCustomUIPage<Testpage.Data> {
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.ValueChanged, "#MyInput",
                 EventData.of("@MyInput", "#MyInput.Value"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#SaveBtn",
-                EventData.of("@ButtonClicked", "save"), false);
+                EventData.of("ButtonClicked", "save"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ResetBtn",
-                EventData.of("@ButtonClicked", "reset"), false);
+                EventData.of("ButtonClicked", "reset"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CloseBtn",
-                EventData.of("@ButtonClicked", "close"), false);
+                EventData.of("ButtonClicked", "close"), false);
     }
 
     @Override
@@ -67,20 +64,13 @@ public class Testpage extends InteractiveCustomUIPage<Testpage.Data> {
         System.out.println("EVENT: " + data.value);
         if (data.clickedButton != null) {
         switch (data.clickedButton) {
-            case "save":
-                System.out.println("Saving value: " + data.value);
-                break;
-            case "reset":
-                data.value = "";
-                sendUpdate(); // Send the cleared value back to the UI
-                break;
-            case "close":
-                 // Closes the UI page
-                break;
+            case "save"  -> System.out.println("Save button was clicked!");
+            case "reset" -> System.out.println("Reset button was clicked!");
+            case "close" -> System.out.println("Close button was clicked!");
         }
-        // Clear the click state so it doesn't trigger again on the next value change
-        data.clickedButton = null;
+        data.clickedButton = null; // reset so it doesn't fire again on next event
     }
+
         sendUpdate();
     }
 }
