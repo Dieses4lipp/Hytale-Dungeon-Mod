@@ -1,4 +1,4 @@
-package com.example.plugin.Commands;
+package com.example.plugin.Npc.Testinteractionnpc;
 import java.util.Random;
 
 import javax.annotation.Nonnull;

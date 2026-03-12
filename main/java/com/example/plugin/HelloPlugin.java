@@ -1,11 +1,11 @@
 package com.example.plugin;
 
 import com.example.plugin.Commands.GenerateDungeonCommand;
-import com.example.plugin.Commands.NPCInteractionSetupSystem;
-import com.example.plugin.Commands.NPCSetupPending;
-import com.example.plugin.Commands.TalkToNPCInteraction;
 import com.example.plugin.Commands.SpawnNPCCommand;
 import com.example.plugin.Commands.TestUi;
+import com.example.plugin.Npc.Testinteractionnpc.NPCInteractionSetupSystem;
+import com.example.plugin.Npc.Testinteractionnpc.NPCSetupPending;
+import com.example.plugin.Npc.Testinteractionnpc.TalkToNPCInteraction;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.HytaleServer;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;

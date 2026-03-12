@@ -1,6 +1,7 @@
 package com.example.plugin.Commands;
 import javax.annotation.Nonnull;
 
+import com.example.plugin.Npc.Testinteractionnpc.NPCSetupPending;
 import com.hypixel.hytale.builtin.path.PrefabPathSystems.NameplateHolderSystem;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.Ref;
@@ -64,7 +65,7 @@ public class SpawnNPCCommand extends AbstractPlayerCommand {
 
         Ref<EntityStore> npcRef = result.first();
         store.removeComponent(npcRef, DisplayNameComponent.getComponentType());
-        store.addComponent(npcRef, Nameplate.getComponentType(), new Nameplate("ColinsFetteMutter"));
+        store.addComponent(npcRef, Nameplate.getComponentType(), new Nameplate("ColinsMutter"));
         
         NPCSetupPending setupPending = new NPCSetupPending("Root_TalkToNPC", "Talk");
         
