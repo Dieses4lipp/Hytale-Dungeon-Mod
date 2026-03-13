@@ -6,58 +6,86 @@ import java.util.Random;
 import com.hypixel.hytale.server.core.prefab.PrefabStore;
 import com.hypixel.hytale.server.core.prefab.selection.standard.BlockSelection;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.example.plugin.RoomType;
 import com.hypixel.hytale.math.vector.Vector3i;
 
 public class DungeonGenerator {
-        public int abstand = 10;
+
+    public int abstand = 11;
+
+    private final Path doorWEPath = Path.of("prefabs/Prefabs/door2.prefab.json");
+    private final Path doorSNPath = Path.of("prefabs/Prefabs/door.prefab.json");
+
     public void generate(World world, Room[][] grid) {
-        for (int x = 0; x < grid.length; x++) {
+        int gridsize = grid.length;
+        PrefabStore prefabStore = PrefabStore.get();
+
+        for (int x = 0; x < gridsize; x++) {
             for (int y = 0; y < grid[x].length; y++) {
-                if (grid[x][y] != null) {
-                    
-                    PrefabStore prefabStore = PrefabStore.get();
-                    Path roomPrefabPath = getRandomRoomPreFabPath();
-                    Path doorWEPath = Path.of("prefabs/Prefabs/door2.prefab.json");
-                    Path doorSNPath = Path.of("prefabs/Prefabs/door.prefab.json");
-                    BlockSelection roomSNPrefab = prefabStore.getPrefab(doorSNPath);
-                    BlockSelection roomWEPrefab = prefabStore.getPrefab(doorWEPath);
-                    BlockSelection roomPrefab = prefabStore.getPrefab(roomPrefabPath);
-                    
-                    if (roomPrefab != null) {
-                        world.setBlock(x * abstand, 90, y * abstand, "Cloth_Block_Wool_Green");
-                        Vector3i place = new Vector3i(x * abstand, 90, y * abstand);
-                        roomPrefab.placeNoReturn(world, place, null);
-                    }
-                    Room currentRoom = grid[x][y];
-                    if (currentRoom.getDoors()[0]) {
-                        world.setBlock(x * abstand, 90, y * abstand - 1, "Cloth_Block_Wool_Red");
-                        roomSNPrefab.placeNoReturn(world, new Vector3i(x * abstand, 91, y * abstand - (abstand / 2)), null);
-                    }
-                    if (currentRoom.getDoors()[1]) {
-                        world.setBlock(x * abstand + 1, 90, y * abstand, "Cloth_Block_Wool_Red");
-                        roomWEPrefab.placeNoReturn(world, new Vector3i((x * abstand) + (abstand / 2), 91, y * abstand), null);
-                        
-                    }
-                    if (currentRoom.getDoors()[2]) {
-                        world.setBlock(x * abstand, 90, y * abstand + 1, "Cloth_Block_Wool_Red");
-                        roomSNPrefab.placeNoReturn(world, new Vector3i(x * abstand, 91, y * abstand + (abstand / 2)), null);
-                    }
-                    if (currentRoom.getDoors()[3]) {
-                        world.setBlock(x * abstand - 1, 90, y * abstand, "Cloth_Block_Wool_Red");
-                        roomWEPrefab.placeNoReturn(world, new Vector3i(x * abstand - (abstand / 2), 91, y * abstand), null);
-                        
-                    }
-                }
+                Room room = grid[x][y];
+                if (room == null || room.isSatellite()) continue; 
+
+                placeRoom(world, prefabStore, room, x, y);
+                placeDoors(world, prefabStore, room, x, y);
             }
         }
     }
-    public Path getRandomRoomPreFabPath(){
-        Path[] allroomPrefabs = new Path[]{
-            Path.of("prefabs/Prefabs/testroom1.prefab.json"),
-            Path.of("prefabs/Prefabs/testroom2.prefab.json"),
-            Path.of("prefabs/Prefabs/testroom3.prefab.json")
-        };
-        return allroomPrefabs[new Random().nextInt(allroomPrefabs.length)];
-    }
+int bossroomcounter = 0;
+    private void placeRoom(World world, PrefabStore prefabStore, Room room, int x, int y) {
+    RoomType type = room.getType();
+    Path prefabPath = type.getRandomPrefabPath();
+    System.out.println("[Debug] Loading prefab: " + prefabPath);
+    BlockSelection prefab = prefabStore.getPrefab(prefabPath);
+
+    int worldX = x * abstand;
+    int worldZ = y * abstand;
+
+    world.setBlock(worldX, 90, worldZ, markerBlockFor(type));
+    prefab.placeNoReturn(world, new Vector3i(worldX, 90, worldZ), null);
 }
 
+private String markerBlockFor(RoomType type) {
+    return switch (type) {
+        case BOSS     -> "Cloth_Block_Wool_Purple";
+        case TREASURE -> "Cloth_Block_Wool_Yellow";
+        case HALLWAY  -> "Cloth_Block_Wool_Gray";
+        default       -> "Cloth_Block_Wool_Green";
+    };
+}
+
+    private void placeDoors(World world, PrefabStore prefabStore, Room room, int x, int y) {
+        boolean[] doors = room.getDoors();
+        RoomType type   = room.getType();
+
+        int halfSpan  = abstand / 2;
+
+        int worldX = x * abstand;
+        int worldZ = y * abstand;
+
+        BlockSelection doorSN = prefabStore.getPrefab(doorSNPath);
+        BlockSelection doorWE = prefabStore.getPrefab(doorWEPath);
+
+        // North (0)
+        if (doors[0]) {
+            world.setBlock(worldX, 89, worldZ - 1, "Cloth_Block_Wool_Red");
+            doorSN.placeNoReturn(world, new Vector3i(worldX, 91, worldZ - halfSpan), null);
+        }
+        // East (1)
+        if (doors[1]) {
+            world.setBlock(worldX + 1, 89, worldZ, "Cloth_Block_Wool_Red");
+            doorWE.placeNoReturn(world, new Vector3i(worldX + halfSpan, 91, worldZ), null);
+        }
+        // South (2)
+        if (doors[2]) {
+            world.setBlock(worldX, 89, worldZ +1 , "Cloth_Block_Wool_Red");
+            doorSN.placeNoReturn(world, new Vector3i(worldX, 91, worldZ + halfSpan), null);
+        }
+        // West (3)
+        if (doors[3]) {
+            world.setBlock(worldX - 1, 89, worldZ, "Cloth_Block_Wool_Red");
+            doorWE.placeNoReturn(world, new Vector3i(worldX - halfSpan, 91, worldZ), null);
+        }
+    }
+
+    
+}
