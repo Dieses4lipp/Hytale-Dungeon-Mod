@@ -2,10 +2,7 @@ package com.example.plugin.Commands;
 
 import javax.annotation.Nonnull;
 
-import com.example.plugin.Testpage;
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
-import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.example.plugin.Ui.PlayPage.PlayPage;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
@@ -15,23 +12,20 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
+public class OpenPlayPageCommand extends AbstractPlayerCommand {
 
-public class TestUi extends AbstractPlayerCommand{
-
-    public TestUi(@Nonnull String name, @Nonnull String description, boolean requiresConfirmation) {
-        super(name, description, requiresConfirmation);
+    public OpenPlayPageCommand() {
+        super("playpage", "Opens the fullscreen play UI", false);
     }
+
     @Override
-    protected void execute(
-            @Nonnull CommandContext commandContext,
-            @Nonnull Store<EntityStore> store,
-            @Nonnull Ref<EntityStore> ref,
-            @Nonnull PlayerRef playerRef,
-            @Nonnull World world) {
+    protected void execute(@Nonnull CommandContext commandContext,
+                           @Nonnull Store<EntityStore> store,
+                           @Nonnull Ref<EntityStore> ref,
+                           @Nonnull PlayerRef playerRef,
+                           @Nonnull World world) {
         Player player = store.getComponent(ref, Player.getComponentType());
-        Testpage page = new Testpage(playerRef);
+        PlayPage page = new PlayPage(playerRef);
         player.getPageManager().openCustomPage(ref, store, page);
     }
-
-
 }

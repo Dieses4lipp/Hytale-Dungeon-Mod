@@ -1,4 +1,4 @@
-package com.example.plugin;
+package com.example.plugin.Ui.TestUi;
 
 
 import javax.annotation.Nonnull;

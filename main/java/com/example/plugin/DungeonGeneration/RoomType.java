@@ -1,4 +1,4 @@
-package com.example.plugin;
+package com.example.plugin.DungeonGeneration;
 
 import java.nio.file.Path;
 

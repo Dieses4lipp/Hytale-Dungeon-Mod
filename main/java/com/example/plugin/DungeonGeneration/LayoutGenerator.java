@@ -3,8 +3,6 @@ package com.example.plugin.DungeonGeneration;
 import java.awt.Point;
 import java.util.*;
 
-import com.example.plugin.RoomType;
-
 public class LayoutGenerator {
 
     private int NUMBERROOMS = 20;

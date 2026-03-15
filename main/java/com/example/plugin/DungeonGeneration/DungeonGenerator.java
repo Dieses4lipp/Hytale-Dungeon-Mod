@@ -6,7 +6,6 @@ import java.util.Random;
 import com.hypixel.hytale.server.core.prefab.PrefabStore;
 import com.hypixel.hytale.server.core.prefab.selection.standard.BlockSelection;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.example.plugin.RoomType;
 import com.hypixel.hytale.math.vector.Vector3i;
 
 public class DungeonGenerator {
