@@ -171,8 +171,9 @@ public class LayoutGenerator {
                 }
             }
 
-            int connectDoor = (doorIndex[d] + 2) % 4;
-            grid[rx][ry].getDoors()[connectDoor] = true;
+            int edgeX = rx + directions[d][0] / 2;
+            int edgeY = ry + directions[d][1] / 2;
+            grid[edgeX][edgeY].getDoors()[doorIndex[d]] = true; 
 
             int[][] offsets = { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 } };
             int[] opposite = { 2, 3, 0, 1 };
@@ -194,6 +195,8 @@ public class LayoutGenerator {
                     }
                 }
             }
+            int connectDoor = (doorIndex[d] + 2) % 4;
+            grid[rx][ry].getDoors()[connectDoor] = true;
 
             System.out.println(
                     "[LayoutGenerator] Boss placed at (" + bx + "," + by + ") adjacent to (" + rx + "," + ry + ")");
