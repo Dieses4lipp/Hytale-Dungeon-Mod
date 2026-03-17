@@ -2,8 +2,7 @@ package com.example.plugin;
 
 import com.example.plugin.Commands.GenerateDungeonCommand;
 import com.example.plugin.Commands.OpenPlayPageCommand;
-import com.example.plugin.Commands.SpawnNPCCommand;
-import com.example.plugin.Commands.TestUiCommand;
+import com.example.plugin.Commands.SpawnNPCCommand; 
 import com.example.plugin.Npc.Testinteractionnpc.NPCInteractionSetupSystem;
 import com.example.plugin.Npc.Testinteractionnpc.NPCSetupPending;
 import com.example.plugin.Npc.Testinteractionnpc.TalkToNPCInteraction;
@@ -47,7 +46,6 @@ public class HelloPlugin extends JavaPlugin {
         );
 
         this.getCommandRegistry().registerCommand(new GenerateDungeonCommand("test", "An example command", false));
-        this.getCommandRegistry().registerCommand(new TestUiCommand("testui", "An example command", false));
         this.getCommandRegistry().registerCommand(new SpawnNPCCommand());
         this.getCommandRegistry().registerCommand(new OpenPlayPageCommand());
                 System.out.println("Plugin loaded");

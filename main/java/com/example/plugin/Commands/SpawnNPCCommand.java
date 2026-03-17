@@ -19,6 +19,9 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.npc.INonPlayerCharacter;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
+import com.hypixel.hytale.server.npc.components.StepComponent;
+import com.hypixel.hytale.server.npc.entities.NPCEntity;
+import com.hypixel.hytale.server.npc.role.Role;
 
 import it.unimi.dsi.fastutil.Pair;
 
@@ -52,7 +55,7 @@ public class SpawnNPCCommand extends AbstractPlayerCommand {
         // Spawn the NPC
         Pair<Ref<EntityStore>, INonPlayerCharacter> result = NPCPlugin.get().spawnNPC(
             store,
-            "Goblin_Ogre",
+            "Klops_Merchant",
             null,
             spawnPos,
             npcRotation
@@ -64,11 +67,12 @@ public class SpawnNPCCommand extends AbstractPlayerCommand {
         }
 
         Ref<EntityStore> npcRef = result.first();
+
+        
         store.removeComponent(npcRef, DisplayNameComponent.getComponentType());
-        store.addComponent(npcRef, Nameplate.getComponentType(), new Nameplate("ColinsMutter"));
+        // store.addComponent(npcRef, Nameplate.getComponentType(), new Nameplate("Merchant"));
         
         NPCSetupPending setupPending = new NPCSetupPending("Root_TalkToNPC", "Talk");
-        
         store.addComponent(npcRef, NPCSetupPending.getComponentType(), setupPending);
         store.addComponent(npcRef, Invulnerable.getComponentType());
         

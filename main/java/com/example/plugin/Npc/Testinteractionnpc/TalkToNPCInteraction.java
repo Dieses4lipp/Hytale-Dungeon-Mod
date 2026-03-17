@@ -1,12 +1,14 @@
 package com.example.plugin.Npc.Testinteractionnpc;
+
 import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import com.example.plugin.Testpage;
+import com.example.plugin.Ui.TestUi.Testpage;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.Message;
@@ -14,6 +16,7 @@ import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 public class TalkToNPCInteraction extends SimpleInstantInteraction {
@@ -45,18 +48,28 @@ public class TalkToNPCInteraction extends SimpleInstantInteraction {
             return;
         }
 
-        Ref<EntityStore> playerRef = interactionContext.getEntity();
-        Player player = commandBuffer.getComponent(playerRef, Player.getComponentType());
+        // ref is the entity ref of the player who triggered the interaction
+        Ref<EntityStore> ref = interactionContext.getEntity();
+        Player player = commandBuffer.getComponent(ref, Player.getComponentType());
 
         if (player == null) {
             interactionContext.getState().state = InteractionState.Failed;
             return;
         }
-        
+
+        // docs: player.getPlayerRef() gives the typed PlayerRef needed by the page constructor
+        PlayerRef playerRef = player.getPlayerRef();
+
+        // docs: player.getWorld().getEntityStore().getStore() gives the Store<EntityStore>
+        Store<EntityStore> store = player.getWorld().getEntityStore().getStore();
+
+        // docs: player.getPageManager().openCustomPage(ref, store, page)
+        Testpage page = new Testpage(playerRef);
+        player.getPageManager().openCustomPage(ref, store, page);
+
         String dialogLine = DIALOG_LINES[random.nextInt(DIALOG_LINES.length)];
         player.sendMessage(Message.raw("§6[Kweebec]§r " + dialogLine));
 
         interactionContext.getState().state = InteractionState.Finished;
-        // cooldownHandler.setCooldown(1000);
     }
 }
