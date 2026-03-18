@@ -1,8 +1,10 @@
 package com.example.plugin;
 
+import com.example.plugin.Commands.DestroyDungeonCommand;
 import com.example.plugin.Commands.GenerateDungeonCommand;
 import com.example.plugin.Commands.OpenPlayPageCommand;
-import com.example.plugin.Commands.SpawnNPCCommand; 
+import com.example.plugin.Commands.SpawnNPCCommand;
+import com.example.plugin.DungeonGeneration.DungeonManager;
 import com.example.plugin.Npc.Testinteractionnpc.NPCInteractionSetupSystem;
 import com.example.plugin.Npc.Testinteractionnpc.NPCSetupPending;
 import com.example.plugin.Npc.Testinteractionnpc.TalkToNPCInteraction;
@@ -24,7 +26,7 @@ public class HelloPlugin extends JavaPlugin {
     protected void setup() {
         super.setup();
         System.out.println("Hello from the plugin!");
-        
+        new DungeonManager();
         // 1. Register the marker component
         ComponentType<EntityStore, NPCSetupPending> setupPendingType = 
             this.getEntityStoreRegistry().registerComponent(
@@ -48,6 +50,7 @@ public class HelloPlugin extends JavaPlugin {
         this.getCommandRegistry().registerCommand(new GenerateDungeonCommand("test", "An example command", false));
         this.getCommandRegistry().registerCommand(new SpawnNPCCommand());
         this.getCommandRegistry().registerCommand(new OpenPlayPageCommand());
+        this.getCommandRegistry().registerCommand(new DestroyDungeonCommand());
                 System.out.println("Plugin loaded");
 
         

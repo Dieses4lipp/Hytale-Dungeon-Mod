@@ -1,6 +1,8 @@
 package com.example.plugin.Commands;
 
 import com.example.plugin.DungeonGeneration.DungeonGenerator;
+import com.example.plugin.DungeonGeneration.DungeonInstance;
+import com.example.plugin.DungeonGeneration.DungeonManager;
 import com.example.plugin.DungeonGeneration.LayoutGenerator;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -33,16 +35,16 @@ public class GenerateDungeonCommand extends AbstractPlayerCommand {
             @Nonnull World world) {
 
                 Integer roomCount = roomArg.get(commandContext);
-        // Show success message to player
-        EventTitleUtil.showEventTitleToPlayer(
-                playerRef,
-                Message.raw("Dungeon Built!"),
-                Message.raw("Dungeon Built!"),
-                true);
 
-        LayoutGenerator layoutGenerator = new LayoutGenerator();
-        DungeonGenerator dungeonGenerator = new DungeonGenerator();
-        layoutGenerator.generateLayout(roomCount);
-        dungeonGenerator.generate(world, layoutGenerator.getGrid());
+    DungeonInstance instance = DungeonManager.get().createDungeon(world, roomCount);
+
+    EventTitleUtil.showEventTitleToPlayer(
+        playerRef,
+        Message.raw("Dungeon Built!"),
+        Message.raw("Dungeon Built!"),
+        true);
+
+    playerRef.sendMessage(Message.raw("Slot " + instance.slot +
+        " at (" + instance.worldOriginX + ", " + instance.worldOriginZ + ")"));
     }
 }

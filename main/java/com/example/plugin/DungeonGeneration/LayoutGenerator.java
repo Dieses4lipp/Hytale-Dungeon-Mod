@@ -5,18 +5,22 @@ import java.util.*;
 
 public class LayoutGenerator {
 
+    public int getStartX() { return startX; }
+public int getStartY() { return startY; }
     private int NUMBERROOMS = 20;
     private int gridsize = 20;
     private Room[][] grid = new Room[gridsize][gridsize];
     private Set<Point> nextRoomToProcess = new HashSet<>();
     int counter = 0;
+    private int startX;
+    private int startY;
     private static final double TREASURE_CHANCE = 0.10;
     private static final double HALLWAY_CHANCE = 0.20;
 
     public void generateLayout(int roomCount) {
         NUMBERROOMS = roomCount;
-        int startY = grid.length / 2;
-        int startX = grid[0].length / 2;
+        startY = grid.length / 2;
+        startX = grid[0].length / 2;
         Room startRoom = new Room();
         startRoom.getDoors()[0] = true;
         grid[startY][startX] = startRoom;
@@ -98,6 +102,8 @@ public class LayoutGenerator {
                 if (grid[x][y] != null)
                     roomnullCount++;
         System.out.println("[LayoutGenerator] Total cells filled: " + roomnullCount);
+        System.out.println("[LayoutGenerator] Start room at (" + startX + "," + startY + ")");
+
         printGrid();
     }
 
@@ -128,6 +134,8 @@ public class LayoutGenerator {
             Room room = grid[p.x][p.y];
             if (room == null || room.isSatellite() || room.getType() == RoomType.BOSS)
                 continue;
+            if (p.x == startX && p.y == startY) 
+        continue;
             double roll = Math.random();
             if (roll < TREASURE_CHANCE)
                 room.setType(RoomType.TREASURE);
@@ -171,7 +179,7 @@ public class LayoutGenerator {
 
             int edgeX = rx + directions[d][0] / 2;
             int edgeY = ry + directions[d][1] / 2;
-            grid[edgeX][edgeY].getDoors()[doorIndex[d]] = true; 
+            grid[edgeX][edgeY].getDoors()[doorIndex[d]] = true;
 
             int[][] offsets = { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 } };
             int[] opposite = { 2, 3, 0, 1 };
@@ -223,6 +231,8 @@ public class LayoutGenerator {
                 Room r = grid[x][y];
                 if (r == null)
                     System.out.print(" .");
+                else if (x == startX && y == startY)
+                    System.out.print(" S"); // ← start room marker
                 else if (r.isSatellite())
                     System.out.print(" b");
                 else
