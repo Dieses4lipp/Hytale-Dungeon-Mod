@@ -5,13 +5,18 @@ import java.util.*;
 
 public class LayoutGenerator {
 
-     public int getStartX() { return startX; }
-    public int getStartY() { return startY; }
+    public int getStartX() {
+        return startX;
+    }
+
+    public int getStartY() {
+        return startY;
+    }
 
     private int NUMBERROOMS = 20;
-    private final int gridsize        = DungeonConfig.get().gridsize;
-    private final double TREASURE_CHANCE = DungeonConfig.get().treasureChance;
-    private final double HALLWAY_CHANCE  = DungeonConfig.get().hallwayChance;
+    private final int gridsize = DungeonConfig.get().layout.gridsize;
+    private final double TREASURE_CHANCE = DungeonConfig.get().layout.treasureChance;
+    private final double HALLWAY_CHANCE = DungeonConfig.get().layout.hallwayChance;
     private Room[][] grid = new Room[gridsize][gridsize];
     private Set<Point> nextRoomToProcess = new HashSet<>();
     int counter = 0;
@@ -135,13 +140,29 @@ public class LayoutGenerator {
             Room room = grid[p.x][p.y];
             if (room == null || room.isSatellite() || room.getType() == RoomType.BOSS)
                 continue;
-            if (p.x == startX && p.y == startY) 
-        continue;
+            if (p.x == startX && p.y == startY)
+                continue;
             double roll = Math.random();
             if (roll < TREASURE_CHANCE)
                 room.setType(RoomType.TREASURE);
             else if (roll < TREASURE_CHANCE + HALLWAY_CHANCE)
                 room.setType(RoomType.HALLWAY);
+        }
+        Collections.shuffle(allRooms);
+        if (Math.random() < DungeonConfig.get().layout.shopChance) {
+            allRooms.stream()
+                    .filter(p -> grid[p.x][p.y].getType() == RoomType.NORMAL)
+                    .filter(p -> !(p.x == startX && p.y == startY))
+                    .filter(p -> grid[p.x][p.y].countDoors() == 1)
+                    .findAny()
+                    .ifPresent(p -> grid[p.x][p.y].setType(RoomType.SHOP));
+        }
+        if (Math.random() < DungeonConfig.get().layout.stashChance) {
+            allRooms.stream()
+                    .filter(p -> grid[p.x][p.y].getType() == RoomType.NORMAL)
+                    .filter(p -> !(p.x == startX && p.y == startY))
+                    .findAny()
+                    .ifPresent(p -> grid[p.x][p.y].setType(RoomType.STASH));
         }
     }
 
@@ -233,7 +254,7 @@ public class LayoutGenerator {
                 if (r == null)
                     System.out.print(" .");
                 else if (x == startX && y == startY)
-                    System.out.print(" S"); // ← start room marker
+                    System.out.print(" S");
                 else if (r.isSatellite())
                     System.out.print(" b");
                 else
@@ -241,6 +262,8 @@ public class LayoutGenerator {
                         case BOSS -> System.out.print(" B");
                         case TREASURE -> System.out.print(" T");
                         case HALLWAY -> System.out.print(" H");
+                        case SHOP -> System.out.print(" $");
+                        case STASH -> System.out.print(" X");
                         default -> System.out.print(" R");
                     }
             }

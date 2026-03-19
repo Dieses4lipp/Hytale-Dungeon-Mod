@@ -9,11 +9,11 @@ import com.hypixel.hytale.math.vector.Vector3i;
 
 public class DungeonGenerator {
 
-    private final int spacing  = DungeonConfig.get().spacing;
-    private final int baseY    = DungeonConfig.get().baseY;
-    private final int doorY    = DungeonConfig.get().doorY;
-    private final int clearYMin = DungeonConfig.get().clearYMin;
-    private final int clearYMax = DungeonConfig.get().clearYMax;
+    private final int spacing  = DungeonConfig.get().manager.spacing;
+    private final int baseY    = DungeonConfig.get().generator.baseY;
+    private final int doorY    = DungeonConfig.get().generator.doorY;
+    private final int clearYMin = DungeonConfig.get().generator.clearYMin;
+    private final int clearYMax = DungeonConfig.get().generator.clearYMax;
 
     private final Path doorWEPath = Path.of("prefabs/Prefabs/door2.prefab.json");
     private final Path doorSNPath = Path.of("prefabs/Prefabs/door.prefab.json");
@@ -42,20 +42,33 @@ public class DungeonGenerator {
 
 
     private void placeRoom(World world, PrefabStore prefabStore, Room room, int worldX, int worldZ) {
-        Path prefabPath = room.getType().getRandomPrefabPath();
-        BlockSelection prefab = prefabStore.getPrefab(prefabPath);
-        world.setBlock(worldX, baseY, worldZ, markerBlockFor(room.getType()));
-        prefab.placeNoReturn(world, new Vector3i(worldX, baseY, worldZ), null);
+    Path prefabPath;
+
+    if (room.getType() == RoomType.SHOP) {
+        int dir = room.getSingleDoorDirection();
+        prefabPath = room.getType().getPrefabPathForDirection(dir);
+    } else {
+        prefabPath = room.getType().getRandomPrefabPath();
     }
 
+    BlockSelection prefab = prefabStore.getPrefab(prefabPath);
+    int placeY = room.getType() == RoomType.BOSS
+        ? baseY + DungeonConfig.get().generator.bossYOffset
+        : baseY;
+    world.setBlock(worldX, baseY - 1, worldZ, markerBlockFor(room.getType()));
+    prefab.placeNoReturn(world, new Vector3i(worldX, placeY, worldZ), null);
+}
+
     private String markerBlockFor(RoomType type) {
-        return switch (type) {
-            case BOSS     -> "Cloth_Block_Wool_Purple";
-            case TREASURE -> "Cloth_Block_Wool_Yellow";
-            case HALLWAY  -> "Cloth_Block_Wool_Gray";
-            default       -> "Cloth_Block_Wool_Green";
-        };
-    }
+    return switch (type) {
+        case BOSS     -> "Cloth_Block_Wool_Purple";
+        case TREASURE -> "Cloth_Block_Wool_Yellow";
+        case HALLWAY  -> "Cloth_Block_Wool_Gray";
+        case SHOP     -> "Cloth_Block_Wool_Blue";
+        case STASH    -> "Cloth_Block_Wool_Orange";
+        default       -> "Cloth_Block_Wool_Green";
+    };
+}
 
     private void placeDoors(World world, PrefabStore prefabStore, Room room, int worldX, int worldZ) {
         boolean[] doors = room.getDoors();

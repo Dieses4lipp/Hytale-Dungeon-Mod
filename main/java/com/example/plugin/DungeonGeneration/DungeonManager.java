@@ -7,10 +7,10 @@ public class DungeonManager {
     private static DungeonManager instance;
     public static DungeonManager get() { return instance; }
 
-    private final int gridsize    = DungeonConfig.get().gridsize;
-    private final int spacing     = DungeonConfig.get().spacing;   
+    private final int gridsize    = DungeonConfig.get().layout.gridsize;
+    private final int spacing     = DungeonConfig.get().manager.spacing;   
     private final int slotSize    = gridsize * spacing;
-    private final int slotsPerRow = DungeonConfig.get().slotsPerRow;
+    private final int slotsPerRow = DungeonConfig.get().manager.slotsPerRow;
 
     private int nextSlot = 0;
     private final Queue<Integer> freeSlots = new LinkedList<>();
