@@ -4,6 +4,7 @@ import com.example.plugin.Commands.DestroyDungeonCommand;
 import com.example.plugin.Commands.GenerateDungeonCommand;
 import com.example.plugin.Commands.OpenPlayPageCommand;
 import com.example.plugin.Commands.SpawnNPCCommand;
+import com.example.plugin.DungeonGeneration.DungeonConfig;
 import com.example.plugin.DungeonGeneration.DungeonManager;
 import com.example.plugin.Npc.Testinteractionnpc.NPCInteractionSetupSystem;
 import com.example.plugin.Npc.Testinteractionnpc.NPCSetupPending;
@@ -13,6 +14,8 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Int
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+
+import java.io.InputStream;
 
 import javax.annotation.Nonnull;
 
@@ -25,9 +28,13 @@ public class HelloPlugin extends JavaPlugin {
     @Override
     protected void setup() {
         super.setup();
-        System.out.println("Hello from the plugin!");
+        InputStream configStream = getClass().getResourceAsStream("/dungeon_config.json");
+        if(configStream == null) {
+            System.out.println("Failed to load dungeon_config.json");
+        } 
+        DungeonConfig.load(configStream);
+        
         new DungeonManager();
-        // 1. Register the marker component
         ComponentType<EntityStore, NPCSetupPending> setupPendingType = 
             this.getEntityStoreRegistry().registerComponent(
                 NPCSetupPending.class, 
@@ -35,12 +42,10 @@ public class HelloPlugin extends JavaPlugin {
             );
         NPCSetupPending.setComponentType(setupPendingType);
 
-        // 2. Register the EntityTickingSystem that uses CommandBuffer
         this.getEntityStoreRegistry().registerSystem(
             new NPCInteractionSetupSystem(NPCSetupPending.getComponentType())
         );
 
-        // 3. Register the custom interaction handler
         this.getCodecRegistry(Interaction.CODEC).register(
             "talk_to_npc_type",
             TalkToNPCInteraction.class,
