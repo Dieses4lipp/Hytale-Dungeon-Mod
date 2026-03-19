@@ -1,0 +1,15 @@
+{
+  "gridsize": 20,
+  "abstand": 11,
+  "slotsPerRow": 10,
+
+  "treasureChance": 0.10,
+  "hallwayChance": 0.20,
+
+  "baseY": 90,
+  "clearYMin": 85,
+  "clearYMax": 115,
+  "doorY": 91,
+
+  "bossRoomSize": 3
+}

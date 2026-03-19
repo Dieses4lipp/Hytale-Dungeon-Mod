@@ -5,17 +5,18 @@ import java.util.*;
 
 public class LayoutGenerator {
 
-    public int getStartX() { return startX; }
-public int getStartY() { return startY; }
+     public int getStartX() { return startX; }
+    public int getStartY() { return startY; }
+
     private int NUMBERROOMS = 20;
-    private int gridsize = 20;
+    private final int gridsize        = DungeonConfig.get().gridsize;
+    private final double TREASURE_CHANCE = DungeonConfig.get().treasureChance;
+    private final double HALLWAY_CHANCE  = DungeonConfig.get().hallwayChance;
     private Room[][] grid = new Room[gridsize][gridsize];
     private Set<Point> nextRoomToProcess = new HashSet<>();
     int counter = 0;
     private int startX;
     private int startY;
-    private static final double TREASURE_CHANCE = 0.10;
-    private static final double HALLWAY_CHANCE = 0.20;
 
     public void generateLayout(int roomCount) {
         NUMBERROOMS = roomCount;
