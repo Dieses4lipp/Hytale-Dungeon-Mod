@@ -38,18 +38,17 @@ public class GenerateDungeonCommand extends AbstractPlayerCommand {
 
         Integer roomCount = roomArg.get(commandContext);
 
-        DungeonInstance instance = DungeonManager.get().createDungeon(world, roomCount);
+        DungeonInstance instance = DungeonManager.get().createDungeon(world, roomCount, store);
 
         // Calculate start room world position
         int spawnX = instance.worldOriginX + instance.startX * instance.spacing;
         int spawnY = DungeonConfig.get().generator.baseY + 2; // +2 so player spawns above floor
         int spawnZ = instance.worldOriginZ + instance.startY * instance.spacing;
 
-        Transform transform = new Transform(spawnX, spawnY, spawnZ);                                                                                                                           
-    Teleport teleport = Teleport.createForPlayer(world, transform);                                                                                                   
-    store.addComponent(ref, Teleport.getComponentType(), teleport); 
+        Transform transform = new Transform(spawnX, spawnY, spawnZ);
+        Teleport teleport = Teleport.createForPlayer(world, transform);
+        store.addComponent(ref, Teleport.getComponentType(), teleport);
 
-    
         EventTitleUtil.showEventTitleToPlayer(
                 playerRef,
                 Message.raw("Dungeon Built!"),
