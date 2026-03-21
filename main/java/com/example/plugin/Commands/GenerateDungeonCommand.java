@@ -1,11 +1,13 @@
 package com.example.plugin.Commands;
 
+import com.example.plugin.DungeonGeneration.DungeonConfig;
 import com.example.plugin.DungeonGeneration.DungeonGenerator;
 import com.example.plugin.DungeonGeneration.DungeonInstance;
 import com.example.plugin.DungeonGeneration.DungeonManager;
 import com.example.plugin.DungeonGeneration.LayoutGenerator;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.math.vector.Transform;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredArg;
@@ -15,12 +17,12 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.EventTitleUtil;
-
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import javax.annotation.Nonnull;
 
 public class GenerateDungeonCommand extends AbstractPlayerCommand {
-     private final RequiredArg<Integer> roomArg =
-        withRequiredArg("room", "Rooms", ArgTypes.INTEGER);
+    private final RequiredArg<Integer> roomArg = withRequiredArg("room", "Rooms", ArgTypes.INTEGER);
 
     public GenerateDungeonCommand(@Nonnull String name, @Nonnull String description, boolean requiresConfirmation) {
         super(name, description, requiresConfirmation);
@@ -34,17 +36,26 @@ public class GenerateDungeonCommand extends AbstractPlayerCommand {
             @Nonnull PlayerRef playerRef,
             @Nonnull World world) {
 
-                Integer roomCount = roomArg.get(commandContext);
+        Integer roomCount = roomArg.get(commandContext);
 
-    DungeonInstance instance = DungeonManager.get().createDungeon(world, roomCount);
+        DungeonInstance instance = DungeonManager.get().createDungeon(world, roomCount, store);
 
-    EventTitleUtil.showEventTitleToPlayer(
-        playerRef,
-        Message.raw("Dungeon Built!"),
-        Message.raw("Dungeon Built!"),
-        true);
+        // Calculate start room world position
+        int spawnX = instance.worldOriginX + instance.startX * instance.spacing;
+        int spawnY = DungeonConfig.get().generator.baseY + 2; // +2 so player spawns above floor
+        int spawnZ = instance.worldOriginZ + instance.startY * instance.spacing;
 
-    playerRef.sendMessage(Message.raw("Slot " + instance.slot +
-        " at (" + instance.worldOriginX + ", " + instance.worldOriginZ + ")"));
+        Transform transform = new Transform(spawnX, spawnY, spawnZ);
+        Teleport teleport = Teleport.createForPlayer(world, transform);
+        store.addComponent(ref, Teleport.getComponentType(), teleport);
+
+        EventTitleUtil.showEventTitleToPlayer(
+                playerRef,
+                Message.raw("Dungeon Built!"),
+                Message.raw("Dungeon Built!"),
+                true);
+
+        playerRef.sendMessage(Message.raw("Slot " + instance.slot +
+                " at (" + instance.worldOriginX + ", " + instance.worldOriginZ + ")"));
     }
 }

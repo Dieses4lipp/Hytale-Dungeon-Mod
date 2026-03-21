@@ -1,15 +1,20 @@
 {
-  "gridsize": 20,
-  "abstand": 11,
-  "slotsPerRow": 10,
-
-  "treasureChance": 0.10,
-  "hallwayChance": 0.20,
-
-  "baseY": 90,
-  "clearYMin": 85,
-  "clearYMax": 115,
-  "doorY": 91,
-
-  "bossRoomSize": 3
+  "layout": {
+    "gridsize": 20,
+    "treasureChance": 0.10,
+    "hallwayChance": 0.20,
+    "shopChance": 0.50,
+    "stashChance": 0.30
+  },
+  "manager": {
+    "spacing": 11,
+    "slotsPerRow": 10
+  },
+  "generator": {
+    "baseY": 90,
+    "bossYOffset": -2,
+    "clearYMin": 85,
+    "clearYMax": 115,
+    "doorY": 91
+  }
 }
