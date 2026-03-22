@@ -118,12 +118,12 @@ public class DungeonGenerator {
     private void spawnDoorNPC(Store<EntityStore> store, Vector3i pos,
             DoorRegistry.Orientation orientation) {
     // Spawn position centered on the door, at a walkable Y
-    Vector3d spawnPos = new Vector3d(pos.x, pos.y, pos.z);
+    Vector3d spawnPos = new Vector3d(pos.x +0.5, pos.y, pos.z+ 0.5);
         Vector3f rotation = new Vector3f(0, 0, 0);
 
         Pair<Ref<EntityStore>, INonPlayerCharacter> result = NPCPlugin.get().spawnNPC(
                 store,
-                "Goblin_Ogre",
+                "Invis",
                 null,
                 spawnPos,
                 rotation);
