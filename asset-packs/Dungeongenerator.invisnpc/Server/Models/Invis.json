@@ -1,0 +1,21 @@
+{
+  "Model": "NPC/Intelligent/Invis/Model.blockymodel",
+  "Texture": "NPC/Intelligent/Invis/transparent.png",
+  "Overlay": "NPC/Intelligent/Invis/transparent.png",
+  "EyeHeight": 2.85,
+  "CrouchOffset": -0.3,
+  "HitBox": {
+    "Max": {
+      "X": 0.9,
+      "Y": 2.3,
+      "Z": 0.9
+    },
+    "Min": {
+      "X": -0.9,
+      "Y": 0,
+      "Z": -0.9
+    }
+  },
+  "MinScale": 1.395,
+  "MaxScale": 1.405
+}
