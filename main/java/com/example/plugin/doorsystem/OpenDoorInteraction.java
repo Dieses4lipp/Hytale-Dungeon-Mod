@@ -41,7 +41,6 @@ public class OpenDoorInteraction extends SimpleInstantInteraction {
             return;
         }
 
-        
         Ref<EntityStore> npcRef = interactionContext.getTargetEntity();
 
         DoorNPCComponent doorData = commandBuffer.getComponent(npcRef, DoorNPCComponent.getComponentType());
@@ -51,9 +50,9 @@ public class OpenDoorInteraction extends SimpleInstantInteraction {
             return;
         }
 
-        World world = DoorRegistry.getWorld();
+        World world = doorData.getWorld();
         if (world == null) {
-            System.out.println("[DoorSystem] ERROR: World is null in registry");
+            System.out.println("[DoorSystem] ERROR: World is null in DoorNPCComponent");
             interactionContext.getState().state = InteractionState.Failed;
             return;
         }
@@ -62,12 +61,10 @@ public class OpenDoorInteraction extends SimpleInstantInteraction {
         Path openPath = doorData.getOrientation() == DoorRegistry.Orientation.WE ? DOOR_WE_OPEN : DOOR_SN_OPEN;
         BlockSelection openPrefab = PrefabStore.get().getPrefab(openPath);
 
-
         openPrefab.placeNoReturn(world, pos, null);
         System.out.println("[DoorSystem] Door opened at " + pos.x + "," + pos.y + "," + pos.z);
 
-        // Despawn the NPC now the door is open
-        commandBuffer.removeEntity(npcRef, RemoveReason.REMOVE); 
+        commandBuffer.removeEntity(npcRef, RemoveReason.REMOVE);
         DoorRegistry.remove(pos);
 
         interactionContext.getState().state = InteractionState.Finished;
