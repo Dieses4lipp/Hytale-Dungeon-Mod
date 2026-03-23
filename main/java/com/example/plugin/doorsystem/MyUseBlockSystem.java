@@ -19,9 +19,11 @@ public class MyUseBlockSystem extends EntityEventSystem<EntityStore, UseBlockEve
 
     private static final Path doorWE_open = Path.of("prefabs/Prefabs/Door/door_we_open.prefab.json");
     private static final Path doorSN_open = Path.of("prefabs/Prefabs/Door/door_sn_open.prefab.json");
+     private final World world;
 
-    public MyUseBlockSystem() {
+    public MyUseBlockSystem(World world) {
         super(UseBlockEvent.Pre.class);
+        this.world = world;
     }
 
     @Override
@@ -46,7 +48,6 @@ public class MyUseBlockSystem extends EntityEventSystem<EntityStore, UseBlockEve
         System.out.println("[DoorSystem] Door found! Orientation: " + orientation);
         event.setCancelled(true);
 
-        World world = DoorRegistry.getWorld();
         if (world == null) {
             System.out.println("[DoorSystem] ERROR: World is null in registry!");
             return;

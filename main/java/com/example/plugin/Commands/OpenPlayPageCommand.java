@@ -25,7 +25,7 @@ public class OpenPlayPageCommand extends AbstractPlayerCommand {
                            @Nonnull PlayerRef playerRef,
                            @Nonnull World world) {
         Player player = store.getComponent(ref, Player.getComponentType());
-        PlayPage page = new PlayPage(playerRef);
+        PlayPage page = new PlayPage(playerRef, world);
         player.getPageManager().openCustomPage(ref, store, page);
     }
 }

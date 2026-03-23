@@ -11,7 +11,7 @@ public class DungeonManager {
     public static DungeonManager get() { return instance; }
 
     private final int gridsize    = DungeonConfig.get().layout.gridsize;
-    private final int spacing     = DungeonConfig.get().manager.spacing;   
+    private final int spacing     = DungeonConfig.get().manager.spacing;
     private final int slotSize    = gridsize * spacing;
     private final int slotsPerRow = DungeonConfig.get().manager.slotsPerRow;
 
@@ -35,18 +35,20 @@ public class DungeonManager {
         LayoutGenerator layout = new LayoutGenerator();
         layout.generateLayout(roomCount);
 
-        DungeonGenerator generator = new DungeonGenerator();
-        generator.generate(world, layout.getGrid(), originX, originZ, store);
-
         DungeonInstance inst = new DungeonInstance(
             slot, layout.getGrid(), originX, originZ,
-            spacing, layout.getStartX(), layout.getStartY()  // ← renamed
+            spacing, layout.getStartX(), layout.getStartY()
         );
         activeBySlot.put(slot, inst);
+
+        DungeonGenerator generator = new DungeonGenerator();
+        generator.generate(world, inst, store);
+
         return inst;
     }
 
-    public void destroyDungeon(World world, DungeonInstance inst) {
+    public void destroyDungeon(Store<EntityStore> store,World world, DungeonInstance inst) {
+        inst.cleanup(store); 
         DungeonGenerator generator = new DungeonGenerator();
         generator.clearDungeon(world, inst);
         activeBySlot.remove(inst.slot);
