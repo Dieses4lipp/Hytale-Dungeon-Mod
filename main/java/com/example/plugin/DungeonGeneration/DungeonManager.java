@@ -43,7 +43,7 @@ public class DungeonManager {
 
         DungeonGenerator generator = new DungeonGenerator();
         generator.generate(world, inst, store);
-
+        EnemySpawner.populateDungeon(world, inst, store);
         return inst;
     }
 
