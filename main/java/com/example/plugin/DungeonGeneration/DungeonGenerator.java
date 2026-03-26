@@ -10,6 +10,8 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.protocol.EquipmentUpdate;
+import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.modules.entity.component.Invulnerable;
 import com.hypixel.hytale.server.core.prefab.PrefabStore;
 import com.hypixel.hytale.server.core.prefab.selection.standard.BlockSelection;
@@ -17,13 +19,16 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.npc.INonPlayerCharacter;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
+import com.hypixel.hytale.server.npc.entities.NPCEntity;
+
 import it.unimi.dsi.fastutil.Pair;
+import java.util.Objects;
 
 public class DungeonGenerator {
 
-    private final int spacing   = DungeonConfig.get().manager.spacing;
-    private final int baseY     = DungeonConfig.get().generator.baseY;
-    private final int doorY     = DungeonConfig.get().generator.doorY;
+    private final int spacing = DungeonConfig.get().manager.spacing;
+    private final int baseY = DungeonConfig.get().generator.baseY;
+    private final int doorY = DungeonConfig.get().generator.doorY;
     private final int clearYMin = DungeonConfig.get().generator.clearYMin;
     private final int clearYMax = DungeonConfig.get().generator.clearYMax;
 
@@ -40,7 +45,8 @@ public class DungeonGenerator {
         for (int x = 0; x < gridsize; x++) {
             for (int y = 0; y < grid[x].length; y++) {
                 Room room = grid[x][y];
-                if (room == null) continue;
+                if (room == null)
+                    continue;
 
                 int worldX = originX + x * spacing;
                 int worldZ = originZ + y * spacing;
@@ -72,12 +78,12 @@ public class DungeonGenerator {
 
     private String markerBlockFor(RoomType type) {
         return switch (type) {
-            case BOSS      -> "Cloth_Block_Wool_Purple";
-            case TREASURE  -> "Cloth_Block_Wool_Yellow";
-            case HALLWAY   -> "Cloth_Block_Wool_Gray";
-            case SHOP      -> "Cloth_Block_Wool_Blue";
-            case STASH     -> "Cloth_Block_Wool_Orange";
-            default        -> "Cloth_Block_Wool_Green";
+            case BOSS -> "Cloth_Block_Wool_Purple";
+            case TREASURE -> "Cloth_Block_Wool_Yellow";
+            case HALLWAY -> "Cloth_Block_Wool_Gray";
+            case SHOP -> "Cloth_Block_Wool_Blue";
+            case STASH -> "Cloth_Block_Wool_Orange";
+            default -> "Cloth_Block_Wool_Green";
         };
     }
 
@@ -123,9 +129,13 @@ public class DungeonGenerator {
             System.out.println("[DoorSystem] ERROR: Failed to spawn door NPC at " + pos.x + "," + pos.y + "," + pos.z);
             return;
         }
-
         Ref<EntityStore> npcRef = result.first();
-
+        NPCEntity npcComponent = store.getComponent(npcRef, Objects.requireNonNull(NPCEntity.getComponentType()));
+        npcComponent.setInventorySize(3,9,0);
+        Inventory inventory = npcComponent.getInventory();
+        inventory.getHotbar().clear();
+        inventory.getArmor().clear();
+        inventory.setActiveHotbarSlot((byte) 0);
         store.addComponent(npcRef, DoorNPCComponent.getComponentType(),
                 new DoorNPCComponent(pos, orientation, world));
 
@@ -144,7 +154,8 @@ public class DungeonGenerator {
         int gridsize = inst.grid.length;
         for (int x = 0; x < gridsize; x++) {
             for (int y = 0; y < gridsize; y++) {
-                if (inst.grid[x][y] == null) continue;
+                if (inst.grid[x][y] == null)
+                    continue;
                 int worldX = inst.worldOriginX + x * inst.spacing;
                 int worldZ = inst.worldOriginZ + y * inst.spacing;
                 for (int dx = -inst.spacing / 2; dx <= inst.spacing / 2; dx++) {

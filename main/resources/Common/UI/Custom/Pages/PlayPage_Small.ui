@@ -1,0 +1,96 @@
+Group {
+  LayoutMode: Top;
+  Anchor: (Full: 0);
+  Background: #0a0c10(0.85);
+
+  Group #TopNav {
+    Anchor: (Full: 0, Height: 100);
+    LayoutMode: Left;
+    Background: #0d1117;
+    Padding: (Horizontal: 40, Vertical: 18);
+
+    TextButton #PlayBtn {
+      Anchor: (Width: 140, Height: 64); Text: "PLAY"; Padding: (Horizontal: 14); Background: #1c3a5c;
+      Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Pressed: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)));
+    }
+    Group { Anchor: (Width: 8); }
+    TextButton #StashBtn { Anchor: (Width: 140, Height: 64); Text: "STASH"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+    Group { Anchor: (Width: 8); }
+    TextButton #CharacterBtn { Anchor: (Width: 180, Height: 64); Text: "CHARACTER"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+    Group { Anchor: (Width: 8); }
+    TextButton #MarketBtn { Anchor: (Width: 140, Height: 64); Text: "MARKET"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+    Group { Anchor: (Width: 8); }
+    TextButton #LeaderboardBtn { Anchor: (Width: 200, Height: 64); Text: "LEADERBOARDS"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+  }
+
+  Group #NavSpacer { Anchor: (Full: 0, Height: 18); Background: #060809; }
+
+  Group #ContentRow {
+    FlexWeight: 1;
+    LayoutMode: Left;
+
+    Group #LeftPanel {
+      Anchor: (Width: 400);
+      LayoutMode: Top;
+      Background: #0d1117(0.95);
+      Padding: (Horizontal: 20);
+
+      Label #PanelTitle { Style: (FontSize: 26, TextColor: #5bc8f5, HorizontalAlignment: Center, RenderBold: true); Anchor: (Top: 40, Width: 360, Height: 44); Text: "PLAY"; Padding: (Full: 8); }
+      Label #PanelSubtitle { Style: (FontSize: 15, TextColor: #8899aa, HorizontalAlignment: Center); Anchor: (Top: 6, Width: 360, Height: 28); Text: "Choose your dungeon size"; Padding: (Full: 6); }
+      Group #Divider1 { Anchor: (Top: 20, Width: 360, Height: 2); Background: #2a3040; }
+      Label #StatLabel1 { Style: (FontSize: 15, TextColor: #ccddee, HorizontalAlignment: Center); Anchor: (Top: 14, Width: 360, Height: 32); Text: "Max Floor Depth: 12"; Padding: (Full: 6); }
+      Label #StatLabel2 { Style: (FontSize: 15, TextColor: #ccddee, HorizontalAlignment: Center); Anchor: (Top: 6, Width: 360, Height: 32); Text: "Bosses Slain: 4"; Padding: (Full: 6); }
+      Group #Divider2 { Anchor: (Top: 20, Width: 360, Height: 2); Background: #2a3040; }
+
+      TextButton #SmallBtn {
+        Anchor: (Top: 16, Width: 360, Height: 72);
+        Text: "> SMALL  —  20 Rooms <";
+        Padding: (Full: 12);
+        Style: (
+          Default: (Background: #1c3a5c, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)),
+          Hovered: (Background: #254a75, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)),
+          Pressed: (Background: #0f151e, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))
+        );
+      }
+
+      TextButton #MediumBtn {
+        Anchor: (Top: 10, Width: 360, Height: 72);
+        Text: "MEDIUM  —  100 Rooms";
+        Padding: (Full: 12);
+        Style: (
+          Default: (Background: #141c28, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)),
+          Hovered: (Background: #254a75, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)),
+          Pressed: (Background: #0f151e, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))
+        );
+      }
+
+      TextButton #LargeBtn {
+        Anchor: (Top: 10, Width: 360, Height: 72);
+        Text: "LARGE  —  150 Rooms";
+        Padding: (Full: 12);
+        Style: (
+          Default: (Background: #141c28, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)),
+          Hovered: (Background: #254a75, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)),
+          Pressed: (Background: #0f151e, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))
+        );
+      }
+    }
+
+    Group #RightArea {
+      FlexWeight: 1; LayoutMode: CenterMiddle;
+      Label #CharacterLabel { Style: (FontSize: 20, TextColor: #ffffff, HorizontalAlignment: Center); Anchor: (Width: 300, Height: 60); Text: "[ Character ]"; Padding: (Full: 10); }
+    }
+  }
+
+  Group #BottomBar {
+    Anchor: (Full: 0, Height: 100); LayoutMode: CenterMiddle; Background: #0d1117(0.97);
+    Group #BottomBarContent {
+      Anchor: (Width: 860, Height: 70); LayoutMode: Left;
+      Label #LevelLabel { Style: (FontSize: 18, TextColor: #ffffff, HorizontalAlignment: Center, RenderBold: true); Anchor: (Width: 120, Height: 60); Text: "Lv. 3"; Padding: (Full: 8); }
+      Label #XpLabel { Style: (FontSize: 15, TextColor: #8899aa, HorizontalAlignment: Center); Anchor: (Width: 180, Height: 60); Text: "86 / 335 XP"; Padding: (Full: 8); }
+      TextButton #EnterBtn { Anchor: (Width: 240, Height: 54); Text: "ENTER DUNGEON"; Padding: (Horizontal: 12); Style: (Default: (Background: #1a3a5c, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (Background: #254a75, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Pressed: (Background: #0f151e, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+      Group { Anchor: (Width: 16); }
+      TextButton #CloseBtn { Anchor: (Width: 140, Height: 54); Text: "CLOSE"; Padding: (Horizontal: 12); Style: (Default: (Background: #1c2333, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (Background: #2a344d, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Pressed: (Background: #0f151e, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+    }
+  }
+}

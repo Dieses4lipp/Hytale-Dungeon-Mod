@@ -28,8 +28,10 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.EventTitleUtil;
 
 public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
-        public World world;
-private int selectedRoomCount = 20;
+    public World world;
+    public PlayerRef playerRef;
+    private int selectedRoomCount;
+
     public static class Data {
         public static final BuilderCodec<Data> CODEC = BuilderCodec.builder(Data.class, Data::new)
             .append(new KeyedCodec<>("ButtonClicked", Codec.STRING),
@@ -41,9 +43,17 @@ private int selectedRoomCount = 20;
         private String clickedButton;
     }
 
+    // This constructor allows your OpenPlayPageCommand to work without any changes!
     public PlayPage(PlayerRef playerRef, World world) {
+        this(playerRef, world, 20); // Defaults to small
+    }
+
+    // This constructor is used internally to load the different sizes
+    public PlayPage(PlayerRef playerRef, World world, int selectedRoomCount) {
         super(playerRef, CustomPageLifetime.CanDismiss, Data.CODEC);
         this.world = world;
+        this.playerRef = playerRef;
+        this.selectedRoomCount = selectedRoomCount;
     }
 
     @Override
@@ -52,33 +62,30 @@ private int selectedRoomCount = 20;
                       @Nonnull UIEventBuilder uiEventBuilder,
                       @Nonnull Store<EntityStore> store) {
 
-        uiCommandBuilder.append("Pages/PlayPage.ui");
+        // Load the specific UI file based on the selected size
+        if (this.selectedRoomCount == 100) {
+            uiCommandBuilder.append("Pages/PlayPage_Medium.ui");
+        } else if (this.selectedRoomCount == 150) {
+            uiCommandBuilder.append("Pages/PlayPage_Large.ui");
+        } else {
+            uiCommandBuilder.append("Pages/PlayPage_Small.ui");
+        }
 
         // Top nav
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#PlayBtn",
-                EventData.of("ButtonClicked", "play"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#StashBtn",
-                EventData.of("ButtonClicked", "stash"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CharacterBtn",
-                EventData.of("ButtonClicked", "character"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#MarketBtn",
-                EventData.of("ButtonClicked", "market"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#LeaderboardBtn",
-                EventData.of("ButtonClicked", "leaderboard"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#PlayBtn", EventData.of("ButtonClicked", "play"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#StashBtn", EventData.of("ButtonClicked", "stash"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CharacterBtn", EventData.of("ButtonClicked", "character"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#MarketBtn", EventData.of("ButtonClicked", "market"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#LeaderboardBtn", EventData.of("ButtonClicked", "leaderboard"), false);
 
         // Dungeon size selection
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#SmallBtn",
-                EventData.of("ButtonClicked", "small"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#MediumBtn",
-                EventData.of("ButtonClicked", "medium"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#LargeBtn",
-                EventData.of("ButtonClicked", "large"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#SmallBtn", EventData.of("ButtonClicked", "small"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#MediumBtn", EventData.of("ButtonClicked", "medium"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#LargeBtn", EventData.of("ButtonClicked", "large"), false);
 
         // Bottom bar
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EnterBtn",
-                EventData.of("ButtonClicked", "enter"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CloseBtn",
-                EventData.of("ButtonClicked", "close"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EnterBtn", EventData.of("ButtonClicked", "enter"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CloseBtn", EventData.of("ButtonClicked", "close"), false);
     }
 
     @Override
@@ -88,38 +95,29 @@ private int selectedRoomCount = 20;
         super.handleDataEvent(ref, store, data);
 
         if (data.clickedButton == null) return;
+        String action = data.clickedButton;
+        data.clickedButton = null;
 
-        switch (data.clickedButton) {
+        Player player = store.getComponent(ref, Player.getComponentType());
+
+        switch (action) {
             case "play"        -> System.out.println("[PlayPage] Play tab clicked");
             case "stash"       -> System.out.println("[PlayPage] Stash tab clicked");
             case "character"   -> System.out.println("[PlayPage] Character tab clicked");
             case "market"      -> System.out.println("[PlayPage] Market tab clicked");
             case "leaderboard" -> System.out.println("[PlayPage] Leaderboards tab clicked");
 
-            case "small"       -> {
-                this.selectedRoomCount = 20;
-                System.out.println("[PlayPage] Selected Small (20)");
-            }
-            case "medium"      -> {
-                this.selectedRoomCount = 100;
-                System.out.println("[PlayPage] Selected Medium (100)");
-            }
-            case "large"       -> {
-                this.selectedRoomCount = 150;
-                System.out.println("[PlayPage] Selected Large (150)");
-            }
+            // Re-open the CustomPage using the exact method from your Command
+            case "small"       -> player.getPageManager().openCustomPage(ref, store, new PlayPage(playerRef, world, 20));
+            case "medium"      -> player.getPageManager().openCustomPage(ref, store, new PlayPage(playerRef, world, 100));
+            case "large"       -> player.getPageManager().openCustomPage(ref, store, new PlayPage(playerRef, world, 150));
 
-            case "enter"       -> {
-                generateAndTeleport(ref, store);
-            }
-            case "close"       -> System.out.println("[PlayPage] Close clicked");
+            case "enter"       -> generateAndTeleport(ref, store);
+            case "close"       -> player.getPageManager().setPage(ref, store, Page.None);
         }
-
-        data.clickedButton = null;
-        sendUpdate();
     }
-    private void generateAndTeleport(Ref<EntityStore> ref, Store<EntityStore> store) {
 
+    private void generateAndTeleport(Ref<EntityStore> ref, Store<EntityStore> store) {
         DungeonInstance instance = DungeonManager.get().createDungeon(world, selectedRoomCount, store);
 
         int spawnX = instance.worldOriginX + (instance.startX * instance.spacing);
@@ -130,7 +128,6 @@ private int selectedRoomCount = 20;
         Teleport teleport = Teleport.createForPlayer(world, transform);
         store.addComponent(ref, Teleport.getComponentType(), teleport);
 
-        
         Player player = store.getComponent(ref, Player.getComponentType());
         player.getPageManager().setPage(ref, store, Page.None);
     }
