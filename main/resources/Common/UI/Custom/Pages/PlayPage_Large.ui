@@ -1,7 +1,6 @@
 Group {
   LayoutMode: Top;
   Anchor: (Full: 0);
-  Background: #0a0c10(0.85);
 
   Group #TopNav {
     Anchor: (Full: 0, Height: 100);
@@ -14,7 +13,7 @@ Group {
       Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Pressed: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)));
     }
     Group { Anchor: (Width: 8); }
-    TextButton #StashBtn { Anchor: (Width: 140, Height: 64); Text: "STASH"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+    TextButton #StashBtn { Anchor: (Width: 140, Height: 64); Text: "INVENTORY"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
     Group { Anchor: (Width: 8); }
     TextButton #CharacterBtn { Anchor: (Width: 180, Height: 64); Text: "CHARACTER"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
     Group { Anchor: (Width: 8); }

@@ -1,6 +1,6 @@
 {
   "Type": "Variant",
-  "Reference": "Template_Goblin_Ogre",
+  "Reference": "Template_Goblin",
   "Modify": {
     "Appearance": "Invis",
     "MaxHealth": 124,

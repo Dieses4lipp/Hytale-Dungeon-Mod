@@ -59,4 +59,8 @@ public class DungeonManager {
     public DungeonInstance getBySlot(int slot) {
         return activeBySlot.get(slot);
     }
+
+    public Collection<DungeonInstance> getAllActiveDungeons() {
+        return activeBySlot.values();
+    }
 }
