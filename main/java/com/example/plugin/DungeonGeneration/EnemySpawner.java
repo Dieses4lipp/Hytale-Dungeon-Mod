@@ -114,6 +114,7 @@ public class EnemySpawner {
             instance.spawnedEnemies.add(result.first());
             System.out.println("[EnemySpawner] SUCCESS: Spawned BOSS " + prefabToSpawn + " at " + centerX + ", " + y
                     + ", " + centerZ);
+                    instance.bossRef = result.first();
         } else {
             System.out.println("[EnemySpawner] FAILED: BOSS spawnNPC returned null for " + prefabToSpawn
                     + ". (Prefab ID wrong or chunks unloaded?)");

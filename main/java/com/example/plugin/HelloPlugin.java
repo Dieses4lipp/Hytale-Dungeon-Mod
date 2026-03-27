@@ -60,7 +60,7 @@ public class HelloPlugin extends JavaPlugin {
                 "talk_to_npc_type",
                 TalkToNPCInteraction.class,
                 TalkToNPCInteraction.CODEC);
-
+        this.getEntityStoreRegistry().registerSystem(new com.example.plugin.DungeonGeneration.BossDeathSystem());
         this.getCommandRegistry().registerCommand(new GenerateDungeonCommand("test", "An example command", false));
         this.getCommandRegistry().registerCommand(new SpawnNPCCommand());
         this.getCommandRegistry().registerCommand(new OpenPlayPageCommand());

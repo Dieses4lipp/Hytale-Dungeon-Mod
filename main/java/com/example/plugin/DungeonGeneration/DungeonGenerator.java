@@ -130,12 +130,6 @@ public class DungeonGenerator {
             return;
         }
         Ref<EntityStore> npcRef = result.first();
-        NPCEntity npcComponent = store.getComponent(npcRef, Objects.requireNonNull(NPCEntity.getComponentType()));
-        npcComponent.setInventorySize(3,9,0);
-        Inventory inventory = npcComponent.getInventory();
-        inventory.getHotbar().clear();
-        inventory.getArmor().clear();
-        inventory.setActiveHotbarSlot((byte) 0);
         store.addComponent(npcRef, DoorNPCComponent.getComponentType(),
                 new DoorNPCComponent(pos, orientation, world));
 
