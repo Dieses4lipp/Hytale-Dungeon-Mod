@@ -1,0 +1,134 @@
+Group {
+  LayoutMode: Top;
+  Anchor: (Full: 0);
+  Background: #000000(0.0); /* Transparent für den 3D Charakter! */
+
+  /* --- DEINE NAVBAR (Inventory ist jetzt farblich markiert) --- */
+  Group #TopNav {
+    Anchor: (Full: 0, Height: 100);
+    LayoutMode: Left;
+    Background: #0d1117;
+    Padding: (Horizontal: 40, Vertical: 18);
+
+    TextButton #PlayBtn { Anchor: (Width: 140, Height: 64); Text: "PLAY"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+    Group { Anchor: (Width: 8); }
+    /* INVENTORY ist jetzt aktiv (#1c3a5c) */
+    TextButton #StashBtn { Anchor: (Width: 140, Height: 64); Text: "INVENTORY"; Padding: (Horizontal: 14); Background: #1c3a5c; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Pressed: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+    Group { Anchor: (Width: 8); }
+    TextButton #CharacterBtn { Anchor: (Width: 180, Height: 64); Text: "CHARACTER"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+    Group { Anchor: (Width: 8); }
+    TextButton #MarketBtn { Anchor: (Width: 140, Height: 64); Text: "MARKET"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+    Group { Anchor: (Width: 8); }
+    TextButton #LeaderboardBtn { Anchor: (Width: 200, Height: 64); Text: "LEADERBOARDS"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+  }
+
+  Group #NavSpacer { Anchor: (Full: 0, Height: 18); Background: #060809; }
+
+  /* --- HAUPTBEREICH: EQUIPMENT & KISTE --- */
+  Group #ContentRow {
+    FlexWeight: 1;
+    LayoutMode: Left;
+
+    /* 1. EQUIPMENT (Links und rechts vom Charakter) */
+    Group #EquipmentPanel {
+      FlexWeight: 1; /* Nimmt den übrigen Platz links ein */
+      LayoutMode: Left;
+
+      /* Linke Spalte: Rüstung */
+      Group #ArmorCol {
+        Anchor: (Width: 320); LayoutMode: Top; Padding: (Top: 128, Left: 40);
+        TextButton #EquipHead { Anchor: (Width: 128, Height: 128); Text: "Head"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+        Group { Anchor: (Height: 16); }
+        TextButton #EquipChest { Anchor: (Width: 128, Height: 128); Text: "Chest"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+        Group { Anchor: (Height: 16); }
+        TextButton #EquipLegs { Anchor: (Width: 128, Height: 128); Text: "Legs"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+        Group { Anchor: (Height: 16); }
+        TextButton #EquipBoots { Anchor: (Width: 128, Height: 128); Text: "Boots"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+      }
+
+      /* Mitte: Platz für den 3D Charakter (Komplett transparent) */
+      Group #CharacterSpace {
+        FlexWeight: 1; 
+      }
+
+      /* Rechte Spalte: Waffen & Utility */
+      Group #WeaponCol {
+        Anchor: (Width: 140); LayoutMode: Top; Padding: (Top: 60, Right: 40);
+        TextButton #EquipWeapon { Anchor: (Width: 64, Height: 64); Text: "Weap"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+        Group { Anchor: (Height: 12); }
+        TextButton #EquipShield { Anchor: (Width: 64, Height: 64); Text: "Shld"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+        Group { Anchor: (Height: 12); }
+        TextButton #EquipUtility { Anchor: (Width: 64, Height: 64); Text: "Util"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+      }
+    }
+
+    /* 2. INVENTAR/KISTE (Rechtes massives Panel) */
+    Group #InventoryPanel {
+      Anchor: (Width: 420);
+      LayoutMode: Top;
+      Background: #0d1117(0.95);
+      Padding: (Horizontal: 30);
+
+      Label #InvTitle { Style: (FontSize: 24, TextColor: #5bc8f5, HorizontalAlignment: Center, RenderBold: true); Anchor: (Top: 40, Width: 360, Height: 44); Text: "STASH"; Padding: (Full: 8); }
+      Group #DividerInv { Anchor: (Top: 10, Width: 360, Height: 2); Background: #2a3040; }
+      Group { Anchor: (Height: 20); } /* Abstandhalter */
+
+      /* Zeile 1 */
+      Group #InvRow1 {
+        LayoutMode: Left; Anchor: (Width: 360, Height: 64);
+        TextButton #Slot1 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
+        Group { Anchor: (Width: 10); }
+        TextButton #Slot2 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
+        Group { Anchor: (Width: 10); }
+        TextButton #Slot3 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
+        Group { Anchor: (Width: 10); }
+        TextButton #Slot4 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
+        Group { Anchor: (Width: 10); }
+        TextButton #Slot5 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
+      }
+      Group { Anchor: (Height: 10); }
+
+      /* Zeile 2 */
+      Group #InvRow2 {
+        LayoutMode: Left; Anchor: (Width: 360, Height: 64);
+        TextButton #Slot6 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
+        Group { Anchor: (Width: 10); }
+        TextButton #Slot7 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
+        Group { Anchor: (Width: 10); }
+        TextButton #Slot8 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
+        Group { Anchor: (Width: 10); }
+        TextButton #Slot9 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
+        Group { Anchor: (Width: 10); }
+        TextButton #Slot10 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
+      }
+      Group { Anchor: (Height: 10); }
+
+      /* Zeile 3 */
+      Group #InvRow3 {
+        LayoutMode: Left; Anchor: (Width: 360, Height: 64);
+        TextButton #Slot11 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
+        Group { Anchor: (Width: 10); }
+        TextButton #Slot12 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
+        Group { Anchor: (Width: 10); }
+        TextButton #Slot13 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
+        Group { Anchor: (Width: 10); }
+        TextButton #Slot14 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
+        Group { Anchor: (Width: 10); }
+        TextButton #Slot15 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
+      }
+    }
+  }
+
+  /* --- DEINE BOTTOM BAR --- */
+  Group #BottomBar {
+    Anchor: (Full: 0, Height: 100); LayoutMode: CenterMiddle; Background: #0d1117(0.97);
+    Group #BottomBarContent {
+      Anchor: (Width: 860, Height: 70); LayoutMode: Left;
+      Label #LevelLabel { Style: (FontSize: 18, TextColor: #ffffff, HorizontalAlignment: Center, RenderBold: true); Anchor: (Width: 120, Height: 60); Text: "Lv. 3"; Padding: (Full: 8); }
+      Label #XpLabel { Style: (FontSize: 15, TextColor: #8899aa, HorizontalAlignment: Center); Anchor: (Width: 180, Height: 60); Text: "86 / 335 XP"; Padding: (Full: 8); }
+      TextButton #EnterBtn { Anchor: (Width: 240, Height: 54); Text: "EQUIP MODE"; Padding: (Horizontal: 12); Style: (Default: (Background: #1a3a5c, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (Background: #254a75, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Pressed: (Background: #0f151e, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+      Group { Anchor: (Width: 16); }
+      TextButton #CloseBtn { Anchor: (Width: 140, Height: 54); Text: "CLOSE"; Padding: (Horizontal: 12); Style: (Default: (Background: #1c2333, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (Background: #2a344d, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Pressed: (Background: #0f151e, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+    }
+  }
+}
