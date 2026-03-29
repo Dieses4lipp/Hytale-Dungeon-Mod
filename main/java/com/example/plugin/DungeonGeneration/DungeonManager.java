@@ -1,8 +1,12 @@
 package com.example.plugin.DungeonGeneration;
 
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.protocol.packets.worldmap.MapImage;
+import com.hypixel.hytale.protocol.packets.worldmap.MapMarker;
+import com.hypixel.hytale.protocol.packets.worldmap.MapMarkerComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.core.universe.world.worldmap.markers.MapMarkerBuilder;
 
 import java.util.*;
 

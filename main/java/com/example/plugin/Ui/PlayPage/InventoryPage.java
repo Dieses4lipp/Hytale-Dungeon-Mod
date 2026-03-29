@@ -1,5 +1,8 @@
 package com.example.plugin.Ui.PlayPage; // Passe das an dein genaues Package an
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 
 import com.hypixel.hytale.codec.Codec;
@@ -26,6 +29,9 @@ import com.hypixel.hytale.protocol.packets.interface_.Page;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.CameraManager;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
+import com.hypixel.hytale.server.core.inventory.Inventory;
+import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
+import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
@@ -39,7 +45,7 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
 
     public World world;
     public PlayerRef playerRef;
-
+    private static final Map<String, ItemContainer> player_inventorys = new HashMap<>();
     // 1. Data-Klasse für die Button-Klicks
     public static class Data {
         public static final BuilderCodec<Data> CODEC = BuilderCodec.builder(Data.class, Data::new)
@@ -57,7 +63,14 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
         this.world = world;
         this.playerRef = playerRef;
     }
-
+    private ItemContainer getPlayerInventory(Player player) {
+        String playerId = player.getUuid().toString(); 
+        
+        if (!player_inventorys.containsKey(playerId)) {
+            player_inventorys.put(playerId, new SimpleItemContainer((short) 15));
+        }
+        return player_inventorys.get(playerId);
+    }
     // 3. UI Bauen und Buttons binden
     @Override
     public void build(@Nonnull Ref<EntityStore> ref,
@@ -89,8 +102,9 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
                 EventData.of("ButtonClicked", "close"), false);
 
         // Optional: Hier kannst du später auch deine ganzen Rüstungs-Slots binden!
-        // uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipHead",
-        //         EventData.of("ButtonClicked", "equip_head"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipHead",
+                EventData.of("ButtonClicked", "equip_head"), false);
+
     }
 
     @Override
@@ -125,7 +139,37 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
                 player.getPageManager().setPage(ref, store, Page.None);
                 resetCamera(ref, store);
             }
+            case "equip_head" -> {
+                System.out.println("[InventoryPage] Versuche Helm auszurüsten...");
+
+                // 1. Inventar direkt vom Spieler holen (So einfach kann es sein!)
+                Inventory inventory = player.getInventory();
+
+                if (inventory != null) {
+                    // 2. Die beiden Container holen
+                    ItemContainer stash = inventory.getStorage(); // Deine 36 Rucksack-Slots
+                    ItemContainer armorSlots = inventory.getArmor(); // Die Rüstungs-Slots
+
+                    short slotImStash = 0; 
+                    
+                    // In Hytale ist der Kopf-Slot im Armor-Container immer Slot 0
+                    short kopfSlot = 0; 
+
+                    // 3. Das Item vom Rucksack auf den Kopf verschieben
+                    stash.moveItemStackFromSlotToSlot(
+                            slotImStash, 
+                            1,            
+                            armorSlots, 
+                            kopfSlot
+                    );
+                    
+                    System.out.println("[InventoryPage] Helm erfolgreich ausgerüstet!");
+                }
+            }
+            
         }
+
+        var inventory = player.getInventory();
     }
 
     // 5. Hilfsmethode zum Zurücksetzen der Kamera beim Schließen
@@ -152,12 +196,12 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
         ServerCameraSettings camSettings = new ServerCameraSettings();
         camSettings.isFirstPerson = false;
         camSettings.distance = 1.4f;
-        camSettings.positionOffset = new Position(-0.8, -0.7, 2.5);
+        camSettings.positionOffset = new Position(-0.8, -0.7, 2);
         camSettings.positionLerpSpeed = 0.15f;
         camSettings.rotationLerpSpeed = 0.15f;
         camSettings.attachedToType = AttachedToType.LocalPlayer;
         camSettings.rotationType = RotationType.AttachedToPlusOffset;
-        camSettings.rotationOffset = new Direction((float) Math.PI, 0f, 0f);
+        camSettings.rotationOffset = new Direction((float) Math.PI - 0.5f, 0.3f, 0f);
         camSettings.allowPitchControls = false;
         camSettings.sendMouseMotion = false;
         camSettings.mouseInputType = MouseInputType.LookAtTargetEntity;

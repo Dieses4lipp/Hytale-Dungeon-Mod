@@ -41,81 +41,175 @@ Group {
         Group { Anchor: (Height: 16); }
         TextButton #EquipChest { Anchor: (Width: 128, Height: 128); Text: "Chest"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
         Group { Anchor: (Height: 16); }
-        TextButton #EquipLegs { Anchor: (Width: 128, Height: 128); Text: "Legs"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+        TextButton #EquipGloves { Anchor: (Width: 128, Height: 128); Text: "Gloves"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
         Group { Anchor: (Height: 16); }
-        TextButton #EquipBoots { Anchor: (Width: 128, Height: 128); Text: "Boots"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+        TextButton #EquipPants { Anchor: (Width: 128, Height: 128); Text: "Pants"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
       }
 
-      /* Mitte: Platz für den 3D Charakter (Komplett transparent) */
+      /* Charakter */
       Group #CharacterSpace {
-        FlexWeight: 1; 
+        Anchor: (Width: 350);
       }
 
       /* Rechte Spalte: Waffen & Utility */
       Group #WeaponCol {
-        Anchor: (Width: 140); LayoutMode: Top; Padding: (Top: 60, Right: 40);
-        TextButton #EquipWeapon { Anchor: (Width: 64, Height: 64); Text: "Weap"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
-        Group { Anchor: (Height: 12); }
-        TextButton #EquipShield { Anchor: (Width: 64, Height: 64); Text: "Shld"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
-        Group { Anchor: (Height: 12); }
-        TextButton #EquipUtility { Anchor: (Width: 64, Height: 64); Text: "Util"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+        LayoutMode: Top; Padding: (Top: 128, Left: 0);
+        TextButton #EquipWeapon { Anchor: (Width: 128, Height: 128); Text: "Weap"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+        Group { Anchor: (Height: 16); }
+        TextButton #EquipShield { Anchor: (Width: 128, Height: 128); Text: "Shld"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+        Group { Anchor: (Height: 16); }
+        TextButton #EquipHeal { Anchor: (Width: 128, Height: 128); Text: "Heal"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+      }
+      Group {
+        FlexWeight: 1;
       }
     }
 
-    /* 2. INVENTAR/KISTE (Rechtes massives Panel) */
+    /* 2. Inventarchest */
     Group #InventoryPanel {
-      Anchor: (Width: 420);
+      Anchor: (Width: 1028);
       LayoutMode: Top;
       Background: #0d1117(0.95);
       Padding: (Horizontal: 30);
 
-      Label #InvTitle { Style: (FontSize: 24, TextColor: #5bc8f5, HorizontalAlignment: Center, RenderBold: true); Anchor: (Top: 40, Width: 360, Height: 44); Text: "STASH"; Padding: (Full: 8); }
-      Group #DividerInv { Anchor: (Top: 10, Width: 360, Height: 2); Background: #2a3040; }
-      Group { Anchor: (Height: 20); } /* Abstandhalter */
+      Label #InvTitle { Style: (FontSize: 24, TextColor: #5bc8f5, HorizontalAlignment: Center, RenderBold: true); Anchor: (Top: 40, Width: 730, Height: 44); Text: "Inventory"; Padding: (Full: 8); }
+      Group #DividerInv { Anchor: (Top: 10, Width: 730, Height: 2); Background: #2a3040; }
+      Group { Anchor: (Height: 20); }
 
-      /* Zeile 1 */
-      Group #InvRow1 {
-        LayoutMode: Left; Anchor: (Width: 360, Height: 64);
-        TextButton #Slot1 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
-        Group { Anchor: (Width: 10); }
-        TextButton #Slot2 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
-        Group { Anchor: (Width: 10); }
-        TextButton #Slot3 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
-        Group { Anchor: (Width: 10); }
-        TextButton #Slot4 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
-        Group { Anchor: (Width: 10); }
-        TextButton #Slot5 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
+      /* Zeile 1 (Slots 1-10) */
+      Group #InvRow1 { LayoutMode: Left; Anchor: (Width: 730, Height: 64);
+        TextButton #Slot1 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot2 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot3 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot4 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot5 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot6 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot7 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot8 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot9 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot10 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); }
       }
       Group { Anchor: (Height: 10); }
 
-      /* Zeile 2 */
-      Group #InvRow2 {
-        LayoutMode: Left; Anchor: (Width: 360, Height: 64);
-        TextButton #Slot6 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
-        Group { Anchor: (Width: 10); }
-        TextButton #Slot7 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
-        Group { Anchor: (Width: 10); }
-        TextButton #Slot8 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
-        Group { Anchor: (Width: 10); }
-        TextButton #Slot9 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
-        Group { Anchor: (Width: 10); }
-        TextButton #Slot10 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
+      /* Zeile 2 (Slots 11-20) */
+      Group #InvRow2 { LayoutMode: Left; Anchor: (Width: 730, Height: 64);
+        TextButton #Slot11 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot12 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot13 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot14 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot15 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot16 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot17 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot18 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot19 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot20 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); }
       }
       Group { Anchor: (Height: 10); }
 
-      /* Zeile 3 */
-      Group #InvRow3 {
-        LayoutMode: Left; Anchor: (Width: 360, Height: 64);
-        TextButton #Slot11 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
-        Group { Anchor: (Width: 10); }
-        TextButton #Slot12 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
-        Group { Anchor: (Width: 10); }
-        TextButton #Slot13 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
-        Group { Anchor: (Width: 10); }
-        TextButton #Slot14 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
-        Group { Anchor: (Width: 10); }
-        TextButton #Slot15 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #141c28; Style: (Hovered: (Background: #254a75)); }
+      /* Zeile 3 (Slots 21-30) */
+      Group #InvRow3 { LayoutMode: Left; Anchor: (Width: 730, Height: 64);
+        TextButton #Slot21 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot22 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot23 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot24 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot25 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot26 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot27 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot28 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot29 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot30 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); }
       }
+      Group { Anchor: (Height: 10); }
+
+      /* Zeile 4 (Slots 31-40) */
+      Group #InvRow4 { LayoutMode: Left; Anchor: (Width: 730, Height: 64);
+        TextButton #Slot31 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot32 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot33 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot34 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot35 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot36 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot37 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot38 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot39 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot40 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); }
+      }
+      Group { Anchor: (Height: 10); }
+
+      /* Zeile 5 (Slots 41-50) */
+      Group #InvRow5 { LayoutMode: Left; Anchor: (Width: 730, Height: 64);
+        TextButton #Slot41 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot42 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot43 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot44 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot45 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot46 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot47 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot48 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot49 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot50 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); }
+      }
+      Group { Anchor: (Height: 10); }
+
+      /* Zeile 6 (Slots 51-60) */
+      Group #InvRow6 { LayoutMode: Left; Anchor: (Width: 730, Height: 64);
+        TextButton #Slot51 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot52 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot53 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot54 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot55 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot56 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot57 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot58 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot59 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot60 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); }
+      }
+      Group { Anchor: (Height: 10); }
+
+      /* Zeile 7 (Slots 61-70) */
+      Group #InvRow7 { LayoutMode: Left; Anchor: (Width: 730, Height: 64);
+        TextButton #Slot61 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot62 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot63 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot64 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot65 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot66 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot67 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot68 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot69 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot70 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); }
+      }
+      Group { Anchor: (Height: 10); }
+
+      /* Zeile 8 (Slots 71-80) */
+      Group #InvRow8 { LayoutMode: Left; Anchor: (Width: 730, Height: 64);
+        TextButton #Slot71 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot72 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot73 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot74 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot75 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot76 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot77 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot78 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot79 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot80 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); }
+      }
+      Group { Anchor: (Height: 10); }
+
+      /* Zeile 9 (Slots 81-90) */
+      Group #InvRow9 { LayoutMode: Left; Anchor: (Width: 730, Height: 64);
+        TextButton #Slot81 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot82 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot83 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot84 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot85 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot86 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot87 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot88 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot89 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); } Group { Anchor: (Width: 10); }
+        TextButton #Slot90 { Anchor: (Width: 64, Height: 64); Text: ""; Background: #30435f; Style: (Hovered: (Background: #254a75)); }
+      }
+      Group { Anchor: (Height: 10); }
     }
   }
 
