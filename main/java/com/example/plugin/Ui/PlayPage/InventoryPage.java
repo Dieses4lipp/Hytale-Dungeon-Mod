@@ -30,6 +30,7 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.CameraManager;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.inventory.Inventory;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
@@ -95,7 +96,7 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
 
         uiCommandBuilder.append("Pages/InventoryPage.ui");
 
-        // Nav bindings
+        // Navigation bindings
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#PlayBtn",
                 EventData.of("ButtonClicked", "play"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#StashBtn",
@@ -134,10 +135,10 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
             Inventory inventory = player.getInventory();
             if (inventory != null) {
                 ItemContainer armor = inventory.getArmor();
-                appendArmorSlot(uiCommandBuilder, armor, (short) 0, "#EquipHead", "Head");
-                appendArmorSlot(uiCommandBuilder, armor, (short) 1, "#EquipChest", "Chest");
-                appendArmorSlot(uiCommandBuilder, armor, (short) 2, "#EquipGloves", "Gloves");
-                appendArmorSlot(uiCommandBuilder, armor, (short) 3, "#EquipPants", "Pants");
+                appendArmorSlot(uiCommandBuilder, armor, (short) 0, "#EquipHeadItem", "Head");
+                appendArmorSlot(uiCommandBuilder, armor, (short) 1, "#EquipChestItem", "Chest");
+                appendArmorSlot(uiCommandBuilder, armor, (short) 2, "#EquipGlovesItem", "Gloves");
+                appendArmorSlot(uiCommandBuilder, armor, (short) 3, "#EquipPantsItem", "Pants");
             }
 
             // Inventory stash slots
@@ -147,11 +148,12 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
                 String btnId = "#Slot" + (i + 1) + "Btn";
 
                 var item = stash.getItemStack(i);
-                if (item != null && !com.hypixel.hytale.server.core.inventory.ItemStack.isEmpty(item)) {
+                if (item != null && !ItemStack.isEmpty(item)) {
                     String itemName = item.getItem().getId();
 
                     // ItemSlot with TooltipText
-                    String slotUI = "ItemSlot { ItemId: \"" + itemName + "\"; Anchor: (Full: 0); ShowQuantity: true; TooltipText: \"" + itemName + "\"; }";
+                    String slotUI = "ItemSlot { ItemId: \"" + itemName
+                            + "\"; Anchor: (Full: 0); ShowQuantity: true; TooltipText: \"" + itemName + "\"; }";
 
                     uiCommandBuilder.appendInline(slotId, slotUI);
                 }
@@ -166,11 +168,12 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
             String fallback) {
         var item = armor.getItemStack(slot);
 
-        if (item != null && !com.hypixel.hytale.server.core.inventory.ItemStack.isEmpty(item)) {
+        if (item != null && !ItemStack.isEmpty(item)) {
             String itemName = item.getItem().getId();
 
             // ItemSlot with TooltipText
-            String slotUI = "ItemSlot { ItemId: \"" + itemName + "\"; Anchor: (Full: 0); ShowQuantity: false; TooltipText: \"" + itemName + "\"; }";
+            String slotUI = "ItemSlot { ItemId: \"" + itemName
+                    + "\"; Anchor: (Full: 0); ShowQuantity: false; TooltipText: \"" + itemName + "\"; }";
 
             cmd.appendInline(groupId, slotUI);
         }
@@ -188,69 +191,66 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
         data.clickedButton = null;
 
         Player player = store.getComponent(ref, Player.getComponentType());
+        if (player == null)
+            return;
 
+        Inventory inventory = player.getInventory();
+        if (inventory == null)
+            return;
+
+        // --- Handle Stash Slot Clicks ---
         if (action.startsWith("slot_clicked_")) {
             String slotIndexString = action.replace("slot_clicked_", "");
             try {
                 short clickedSlotIndex = Short.parseShort(slotIndexString);
-                ItemContainer stash = getPlayerInventory(player);
-                var clickedItem = stash.getItemStack(clickedSlotIndex);
-
-                if (clickedItem != null && !com.hypixel.hytale.server.core.inventory.ItemStack.isEmpty(clickedItem)) {
-                    System.out.println("[Stash] Spieler hat Item in Slot " + clickedSlotIndex + " angeklickt!");
-                } else {
-                    System.out.println("[Stash] Leerer Slot " + clickedSlotIndex + " angeklickt.");
-                }
+                System.out.println("[Stash] Clicked slot: " + clickedSlotIndex);
             } catch (NumberFormatException e) {
-                System.out.println("[Stash] Fehler beim Parsen des Slot-Index.");
+                System.out.println("[Stash] Error parsing slot index.");
             }
             return;
         }
 
+        // --- Navigation ---
         switch (action) {
             case "play" -> {
-                System.out.println("[InventoryPage] Switching to Play tab");
                 PlayPage playPage = new PlayPage(playerRef, world);
                 playPage.LineUpCameraForCamModel(store, ref, playerRef);
-                player.getPageManager().openCustomPage(ref, store, new PlayPage(playerRef, world));
+                player.getPageManager().openCustomPage(ref, store, playPage);
+                return;
             }
-            case "inventory" -> System.out.println("[InventoryPage] Already on Inventory tab");
-            case "character" -> System.out.println("[InventoryPage] Character tab clicked");
-            case "market" -> System.out.println("[InventoryPage] Market tab clicked");
-            case "leaderboard" -> System.out.println("[InventoryPage] Leaderboards tab clicked");
-            case "equip_mode" -> System.out.println("[InventoryPage] Equip mode activated");
-            case "equip_weapon" -> System.out.println("[InventoryPage] Weapon slot clicked");
-            case "equip_shield" -> System.out.println("[InventoryPage] Shield slot clicked");
-            case "equip_heal" -> System.out.println("[InventoryPage] Heal slot clicked");
-
             case "close" -> {
                 player.getPageManager().setPage(ref, store, Page.None);
                 resetCamera(ref, store);
-            }
-
-            case "equip_head" -> {
-                System.out.println("[InventoryPage] Versuche Helm auszurüsten...");
-                Inventory inventory = player.getInventory();
-                if (inventory != null) {
-                    ItemContainer stash = inventory.getStorage();
-                    ItemContainer armorSlots = inventory.getArmor();
-                    stash.moveItemStackFromSlotToSlot((short) 0, 1, armorSlots, (short) 0);
-                    System.out.println("[InventoryPage] Helm erfolgreich ausgerüstet!");
-                }
-            }
-
-            case "equip_chest" -> {
-                System.out.println("[InventoryPage] Chest slot clicked");
-            }
-
-            case "equip_gloves" -> {
-                System.out.println("[InventoryPage] Gloves slot clicked");
-            }
-
-            case "equip_pants" -> {
-                System.out.println("[InventoryPage] Pants slot clicked");
+                return;
             }
         }
+
+        // --- Armor Slot Removal ---
+        short armorSlotToDelete = switch (action) {
+            case "equip_head" -> (short) 0;
+            case "equip_chest" -> (short) 1;
+            case "equip_gloves" -> (short) 2;
+            case "equip_pants" -> (short) 3;
+            default -> (short) -1;
+        };
+
+        if (armorSlotToDelete == -1)
+            return;
+
+        ItemContainer armor = inventory.getArmor();
+        var item = armor.getItemStack(armorSlotToDelete);
+
+        if (item != null && !ItemStack.isEmpty(item)) {
+            System.out.println("[Armor] Removing item from slot " + armorSlotToDelete + ": " + item.getItem().getId());
+            armor.setItemStackForSlot(armorSlotToDelete, null);
+        } else {
+            System.out.println("[Armor] Slot " + armorSlotToDelete + " is already empty.");
+        }
+
+        // Refresh the inventory page
+        InventoryPage freshPage = new InventoryPage(this.playerRef, this.world);
+player.getPageManager().openCustomPage(ref, store, freshPage);
+LineUpCameraForCamModel(store, ref, playerRef);
     }
 
     private void resetCamera(Ref<EntityStore> ref, Store<EntityStore> store) {

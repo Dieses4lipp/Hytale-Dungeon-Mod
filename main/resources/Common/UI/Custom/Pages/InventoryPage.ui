@@ -32,13 +32,25 @@ Group {
 
       Group #ArmorCol {
         Anchor: (Width: 320); LayoutMode: Top; Padding: (Top: 128, Left: 40);
-        Group #EquipHead { Anchor: (Width: 128, Height: 128); TextButton #EquipHeadBtn { Anchor: (Full: 0); Text: "Head"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); } }
+        Group #EquipHead { Anchor: (Width: 128, Height: 128);
+  Group #EquipHeadItem { Anchor: (Full: 0); }
+  TextButton #EquipHeadBtn { Anchor: (Full: 0); Text: "Head"; Background: #141c28(0.0); Style: (Hovered: (Background: #254a7588), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+}
         Group { Anchor: (Height: 16); }
-        Group #EquipChest { Anchor: (Width: 128, Height: 128); TextButton #EquipChestBtn { Anchor: (Full: 0); Text: "Chest"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); } }
-        Group { Anchor: (Height: 16); }
-        Group #EquipGloves { Anchor: (Width: 128, Height: 128); TextButton #EquipGlovesBtn { Anchor: (Full: 0); Text: "Gloves"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); } }
-        Group { Anchor: (Height: 16); }
-        Group #EquipPants { Anchor: (Width: 128, Height: 128); TextButton #EquipPantsBtn { Anchor: (Full: 0); Text: "Pants"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); } }
+        Group #EquipChest { Anchor: (Width: 128, Height: 128);
+  Group #EquipChestItem { Anchor: (Full: 0); }
+  TextButton #EquipChestBtn { Anchor: (Full: 0); Text: "Chest"; Background: #141c28(0.0); Style: (Hovered: (Background: #254a7588), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+}
+Group { Anchor: (Height: 16); }
+Group #EquipGloves { Anchor: (Width: 128, Height: 128);
+  Group #EquipGlovesItem { Anchor: (Full: 0); }
+  TextButton #EquipGlovesBtn { Anchor: (Full: 0); Text: "Gloves"; Background: #141c28(0.0); Style: (Hovered: (Background: #254a7588), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+}
+Group { Anchor: (Height: 16); }
+Group #EquipPants { Anchor: (Width: 128, Height: 128);
+  Group #EquipPantsItem { Anchor: (Full: 0); }
+  TextButton #EquipPantsBtn { Anchor: (Full: 0); Text: "Pants"; Background: #141c28(0.0); Style: (Hovered: (Background: #254a7588), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+}
       }
 
       Group #CharacterSpace {
