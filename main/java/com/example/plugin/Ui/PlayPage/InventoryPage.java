@@ -111,7 +111,7 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CloseBtn",
                 EventData.of("ButtonClicked", "close"), false);
 
-        // Armor slot bindings — now targeting the inner TextButton
+        // Armor slot bindings
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipHeadBtn",
                 EventData.of("ButtonClicked", "equip_head"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipChestBtn",
@@ -134,29 +134,26 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
             Inventory inventory = player.getInventory();
             if (inventory != null) {
                 ItemContainer armor = inventory.getArmor();
-                appendArmorSlot(uiCommandBuilder, armor, (short) 0, "#EquipHead",   "Head");
-                appendArmorSlot(uiCommandBuilder, armor, (short) 1, "#EquipChest",  "Chest");
+                appendArmorSlot(uiCommandBuilder, armor, (short) 0, "#EquipHead", "Head");
+                appendArmorSlot(uiCommandBuilder, armor, (short) 1, "#EquipChest", "Chest");
                 appendArmorSlot(uiCommandBuilder, armor, (short) 2, "#EquipGloves", "Gloves");
-                appendArmorSlot(uiCommandBuilder, armor, (short) 3, "#EquipPants",  "Pants");
+                appendArmorSlot(uiCommandBuilder, armor, (short) 3, "#EquipPants", "Pants");
             }
 
             // Inventory stash slots
             ItemContainer stash = getPlayerInventory(player);
             for (short i = 0; i < 90; i++) {
                 String slotId = "#Slot" + (i + 1);
-                String btnId  = "#Slot" + (i + 1) + "Btn";
+                String btnId = "#Slot" + (i + 1) + "Btn";
 
                 var item = stash.getItemStack(i);
                 if (item != null && !com.hypixel.hytale.server.core.inventory.ItemStack.isEmpty(item)) {
                     String itemName = item.getItem().getId();
 
-                    String labelUI = "Label { " +
-                            "Text: \"" + itemName + "\"; " +
-                            "Anchor: (Full: 0); " +
-                            "Style: (HorizontalAlignment: Center, VerticalAlignment: Center, TextColor: #ffffff); " +
-                            "}";
+                    // ItemSlot with TooltipText
+                    String slotUI = "ItemSlot { ItemId: \"" + itemName + "\"; Anchor: (Full: 0); ShowQuantity: true; TooltipText: \"" + itemName + "\"; }";
 
-                    uiCommandBuilder.appendInline(slotId, labelUI);
+                    uiCommandBuilder.appendInline(slotId, slotUI);
                 }
 
                 uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, btnId,
@@ -165,19 +162,18 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
         }
     }
 
-    private void appendArmorSlot(UICommandBuilder cmd, ItemContainer armor, short slot, String groupId, String fallback) {
+    private void appendArmorSlot(UICommandBuilder cmd, ItemContainer armor, short slot, String groupId,
+            String fallback) {
         var item = armor.getItemStack(slot);
-        String text = (item != null && !com.hypixel.hytale.server.core.inventory.ItemStack.isEmpty(item))
-                ? item.getItem().getId()
-                : fallback;
 
-        String labelUI = "Label { " +
-                "Text: \"" + text + "\"; " +
-                "Anchor: (Full: 0); " +
-                "Style: (HorizontalAlignment: Center, VerticalAlignment: Center, TextColor: #ffffff); " +
-                "}";
+        if (item != null && !com.hypixel.hytale.server.core.inventory.ItemStack.isEmpty(item)) {
+            String itemName = item.getItem().getId();
 
-        cmd.appendInline(groupId, labelUI);
+            // ItemSlot with TooltipText
+            String slotUI = "ItemSlot { ItemId: \"" + itemName + "\"; Anchor: (Full: 0); ShowQuantity: false; TooltipText: \"" + itemName + "\"; }";
+
+            cmd.appendInline(groupId, slotUI);
+        }
     }
 
     @Override
@@ -218,14 +214,14 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
                 playPage.LineUpCameraForCamModel(store, ref, playerRef);
                 player.getPageManager().openCustomPage(ref, store, new PlayPage(playerRef, world));
             }
-            case "inventory"  -> System.out.println("[InventoryPage] Already on Inventory tab");
-            case "character"  -> System.out.println("[InventoryPage] Character tab clicked");
-            case "market"     -> System.out.println("[InventoryPage] Market tab clicked");
-            case "leaderboard"-> System.out.println("[InventoryPage] Leaderboards tab clicked");
+            case "inventory" -> System.out.println("[InventoryPage] Already on Inventory tab");
+            case "character" -> System.out.println("[InventoryPage] Character tab clicked");
+            case "market" -> System.out.println("[InventoryPage] Market tab clicked");
+            case "leaderboard" -> System.out.println("[InventoryPage] Leaderboards tab clicked");
             case "equip_mode" -> System.out.println("[InventoryPage] Equip mode activated");
-            case "equip_weapon"-> System.out.println("[InventoryPage] Weapon slot clicked");
-            case "equip_shield"-> System.out.println("[InventoryPage] Shield slot clicked");
-            case "equip_heal"  -> System.out.println("[InventoryPage] Heal slot clicked");
+            case "equip_weapon" -> System.out.println("[InventoryPage] Weapon slot clicked");
+            case "equip_shield" -> System.out.println("[InventoryPage] Shield slot clicked");
+            case "equip_heal" -> System.out.println("[InventoryPage] Heal slot clicked");
 
             case "close" -> {
                 player.getPageManager().setPage(ref, store, Page.None);
@@ -236,7 +232,7 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
                 System.out.println("[InventoryPage] Versuche Helm auszurüsten...");
                 Inventory inventory = player.getInventory();
                 if (inventory != null) {
-                    ItemContainer stash      = inventory.getStorage();
+                    ItemContainer stash = inventory.getStorage();
                     ItemContainer armorSlots = inventory.getArmor();
                     stash.moveItemStackFromSlotToSlot((short) 0, 1, armorSlots, (short) 0);
                     System.out.println("[InventoryPage] Helm erfolgreich ausgerüstet!");
@@ -266,8 +262,8 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
 
     void LineUpCameraForCamModel(Store<EntityStore> store, Ref<EntityStore> ref, PlayerRef playerRef) {
         float f3Pitch = (float) Math.toRadians(-11.9);
-        float f3Yaw   = (float) Math.toRadians(118.2);
-        float f3Roll  = 0.0f;
+        float f3Yaw = (float) Math.toRadians(118.2);
+        float f3Roll = 0.0f;
 
         TransformComponent transformComp = store.getComponent(ref, TransformComponent.getComponentType());
         Vector3d currentPosition = transformComp.getPosition();
@@ -277,23 +273,23 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
         store.addComponent(ref, Teleport.getComponentType(), teleportComponent);
 
         ServerCameraSettings camSettings = new ServerCameraSettings();
-        camSettings.isFirstPerson    = false;
-        camSettings.distance         = 1.4f;
-        camSettings.positionOffset   = new Position(-0.8, -0.7, 2);
+        camSettings.isFirstPerson = false;
+        camSettings.distance = 1.4f;
+        camSettings.positionOffset = new Position(-0.8, -0.7, 2);
         camSettings.positionLerpSpeed = 0.15f;
         camSettings.rotationLerpSpeed = 0.15f;
-        camSettings.attachedToType   = AttachedToType.LocalPlayer;
-        camSettings.rotationType     = RotationType.AttachedToPlusOffset;
-        camSettings.rotationOffset   = new Direction((float) Math.PI - 0.5f, 0.3f, 0f);
+        camSettings.attachedToType = AttachedToType.LocalPlayer;
+        camSettings.rotationType = RotationType.AttachedToPlusOffset;
+        camSettings.rotationOffset = new Direction((float) Math.PI - 0.5f, 0.3f, 0f);
         camSettings.allowPitchControls = false;
-        camSettings.sendMouseMotion  = false;
-        camSettings.mouseInputType   = MouseInputType.LookAtTargetEntity;
-        camSettings.displayCursor    = true;
-        camSettings.displayReticle   = false;
-        camSettings.lookMultiplier   = new Vector2f(0.0f, 0.0f);
+        camSettings.sendMouseMotion = false;
+        camSettings.mouseInputType = MouseInputType.LookAtTargetEntity;
+        camSettings.displayCursor = true;
+        camSettings.displayReticle = false;
+        camSettings.lookMultiplier = new Vector2f(0.0f, 0.0f);
         camSettings.mouseInputTargetType = MouseInputTargetType.None;
         camSettings.skipCharacterPhysics = false;
-        camSettings.eyeOffset        = true;
+        camSettings.eyeOffset = true;
         camSettings.positionDistanceOffsetType = PositionDistanceOffsetType.DistanceOffsetRaycast;
 
         playerRef.getPacketHandler().writeNoCache(new SetServerCamera(ClientCameraView.Custom, false, camSettings));
