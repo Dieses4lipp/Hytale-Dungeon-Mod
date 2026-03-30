@@ -13,7 +13,7 @@ Group {
       Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Pressed: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)));
     }
     Group { Anchor: (Width: 8); }
-    TextButton #StashBtn { Anchor: (Width: 140, Height: 64); Text: "INVENTORY"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+    TextButton #InventoryBtn { Anchor: (Width: 140, Height: 64); Text: "INVENTORY"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
     Group { Anchor: (Width: 8); }
     TextButton #CharacterBtn { Anchor: (Width: 180, Height: 64); Text: "CHARACTER"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
     Group { Anchor: (Width: 8); }
@@ -77,7 +77,7 @@ Group {
 
     Group #RightArea {
       FlexWeight: 1; LayoutMode: CenterMiddle;
-      Label #CharacterLabel { Style: (FontSize: 20, TextColor: #ffffff, HorizontalAlignment: Center); Anchor: (Width: 300, Height: 60); Text: "[ Character ]"; Padding: (Full: 10); }
+      Label #CharacterLabel { Style: (FontSize: 20, TextColor: #ffffff, HorizontalAlignment: Center); Anchor: (Width: 300, Height: 60); Text: ""; Padding: (Full: 10); }
     }
   }
 

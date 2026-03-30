@@ -8,9 +8,24 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.math.vector.Vector3d;
+import com.hypixel.hytale.math.vector.Vector3f;
+import com.hypixel.hytale.protocol.AttachedToType;
+import com.hypixel.hytale.protocol.ClientCameraView;
+import com.hypixel.hytale.protocol.Direction;
+import com.hypixel.hytale.protocol.MouseInputTargetType;
+import com.hypixel.hytale.protocol.MouseInputType;
+import com.hypixel.hytale.protocol.Position;
+import com.hypixel.hytale.protocol.PositionDistanceOffsetType;
+import com.hypixel.hytale.protocol.RotationType;
+import com.hypixel.hytale.protocol.ServerCameraSettings;
+import com.hypixel.hytale.protocol.Vector2f;
+import com.hypixel.hytale.protocol.packets.camera.SetServerCamera;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
@@ -73,4 +88,5 @@ public class Testpage extends InteractiveCustomUIPage<Testpage.Data> {
 
         sendUpdate();
     }
+     
 }
