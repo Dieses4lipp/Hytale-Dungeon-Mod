@@ -45,11 +45,12 @@ Group {
 
       Group #WeaponCol {
         LayoutMode: Top; Padding: (Top: 128, Left: 0);
-        Group #EquipWeapon { Anchor: (Width: 128, Height: 128); TextButton #EquipWeaponBtn { Anchor: (Full: 0); Text: "Weap"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); } }
+        
+        Group #EquipWeapon { Anchor: (Width: 128, Height: 128); }
         Group { Anchor: (Height: 16); }
-        Group #EquipShield { Anchor: (Width: 128, Height: 128); TextButton #EquipShieldBtn { Anchor: (Full: 0); Text: "Shld"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); } }
+        Group #EquipShield { Anchor: (Width: 128, Height: 128); }
         Group { Anchor: (Height: 16); }
-        Group #EquipHeal { Anchor: (Width: 128, Height: 128); TextButton #EquipHealBtn { Anchor: (Full: 0); Text: "Heal"; Background: #141c28; Style: (Hovered: (Background: #254a75), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); } }
+        Group #EquipHeal { Anchor: (Width: 128, Height: 128); }
       }
       Group { FlexWeight: 1; }
     }

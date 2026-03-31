@@ -26,6 +26,7 @@ import com.hypixel.hytale.protocol.packets.camera.SetServerCamera;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.protocol.packets.interface_.Page;
+import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.CameraManager;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
@@ -170,227 +171,120 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
     }
 
     @Override
-    public void build(@Nonnull Ref<EntityStore> ref,
-            @Nonnull UICommandBuilder uiCommandBuilder,
-            @Nonnull UIEventBuilder uiEventBuilder,
-            @Nonnull Store<EntityStore> store) {
-
+    public void build(@Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder uiCommandBuilder, @Nonnull UIEventBuilder uiEventBuilder, @Nonnull Store<EntityStore> store) {
         uiCommandBuilder.append("Pages/InventoryPage.ui");
 
-        // Navigation bindings
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#PlayBtn",
-                EventData.of("ButtonClicked", "play"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#StashBtn",
-                EventData.of("ButtonClicked", "inventory"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CharacterBtn",
-                EventData.of("ButtonClicked", "character"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#MarketBtn",
-                EventData.of("ButtonClicked", "market"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#LeaderboardBtn",
-                EventData.of("ButtonClicked", "leaderboard"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EnterBtn",
-                EventData.of("ButtonClicked", "equip_mode"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CloseBtn",
-                EventData.of("ButtonClicked", "close"), false);
+        // Statische Bindings (Buttons oben/unten)
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#PlayBtn", EventData.of("ButtonClicked", "play"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#StashBtn", EventData.of("ButtonClicked", "inventory"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CloseBtn", EventData.of("ButtonClicked", "close"), false);
 
-        // Armor slot bindings
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipHeadBtn",
-                EventData.of("ButtonClicked", "equip_head"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipChestBtn",
-                EventData.of("ButtonClicked", "equip_chest"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipGlovesBtn",
-                EventData.of("ButtonClicked", "equip_gloves"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipPantsBtn",
-                EventData.of("ButtonClicked", "equip_pants"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipWeaponBtn",
-                EventData.of("ButtonClicked", "equip_weapon"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipShieldBtn",
-                EventData.of("ButtonClicked", "equip_shield"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipHealBtn",
-                EventData.of("ButtonClicked", "equip_heal"), false);
+        // Dynamische Equipment Bindings
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipHeadBtn", EventData.of("ButtonClicked", "equip_head"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipChestBtn", EventData.of("ButtonClicked", "equip_chest"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipGlovesBtn", EventData.of("ButtonClicked", "equip_gloves"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipPantsBtn", EventData.of("ButtonClicked", "equip_pants"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipWeaponBtn", EventData.of("ButtonClicked", "equip_weapon"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipShieldBtn", EventData.of("ButtonClicked", "equip_shield"), false);
 
         Player player = store.getComponent(ref, Player.getComponentType());
         if (player != null) {
-
-            String currentSelection = selectedSlotAction.get(player.getUuid().toString());
+            String playerId = player.getUuid().toString();
+            String currentSelection = selectedSlotAction.get(playerId);
             Inventory inventory = player.getInventory();
+
             if (inventory != null) {
+                // Rüstung
                 ItemContainer armor = inventory.getArmor();
-                appendArmorSlot(uiCommandBuilder, armor, (short) 0, "#EquipHead", "EquipHeadBtn", "Head",
-                        currentSelection != null && currentSelection.equals("equip_head"));
-                appendArmorSlot(uiCommandBuilder, armor, (short) 1, "#EquipChest", "EquipChestBtn", "Chest",
-                        currentSelection != null && currentSelection.equals("equip_chest"));
-                appendArmorSlot(uiCommandBuilder, armor, (short) 2, "#EquipGloves", "EquipGlovesBtn", "Gloves",
-                        currentSelection != null && currentSelection.equals("equip_gloves"));
-                appendArmorSlot(uiCommandBuilder, armor, (short) 3, "#EquipPants", "EquipPantsBtn", "Pants",
-                        currentSelection != null && currentSelection.equals("equip_pants"));
-                ItemContainer hotbar = inventory.getHotbar();
-                appendArmorSlot(uiCommandBuilder, hotbar, (short) 0, "#EquipWeapon", "EquipWeaponBtn", "Weapon",
-                        currentSelection != null && currentSelection.equals("equip_weapon"));
-
-                ItemContainer utility = inventory.getUtility();
-                appendArmorSlot(uiCommandBuilder, utility, (short) 0, "#EquipShield", "EquipShieldBtn", "Shield",
-                        currentSelection != null && currentSelection.equals("equip_shield"));
-            
-        }
-
-        // Inventory stash slots
-        ItemContainer stash = getPlayerInventory(player);
-
-        for (short i = 0; i < 90; i++) {
-            String slotGroupId = "#Slot" + (i + 1);
-            String btnId = "Slot" + (i + 1) + "Btn";
-
-            var item = stash.getItemStack(i);
-            if (item != null && !ItemStack.isEmpty(item)) {
-                String itemName = item.getItem().getId();
-
-                uiCommandBuilder.appendInline(slotGroupId,
-                        "ItemSlot { ItemId: \"" + itemName + "\"; Anchor: (Full: 0); ShowQuantity: true; }");
-
-                uiCommandBuilder.appendInline(slotGroupId,
-                        "TextButton #" + btnId
-                                + " { Anchor: (Full: 0); Text: \"\"; Background: #30435f(0.0); TooltipText: \""
-                                + itemName + "\"; Style: (Hovered: (Background: #254a7588)); }");
-            } else {
-                uiCommandBuilder.appendInline(slotGroupId, "TextButton #" + btnId
-                        + " { Anchor: (Full: 0); Text: \"\"; Background: #30435f(0.0); Style: (Hovered: (Background: #254a7588)); }");
+                appendArmorSlot(uiCommandBuilder, armor, (short) 0, "#EquipHead", "EquipHeadBtn", "Head", currentSelection != null && currentSelection.equals("equip_head"));
+                appendArmorSlot(uiCommandBuilder, armor, (short) 1, "#EquipChest", "EquipChestBtn", "Chest", currentSelection != null && currentSelection.equals("equip_chest"));
+                appendArmorSlot(uiCommandBuilder, armor, (short) 2, "#EquipGloves", "EquipGlovesBtn", "Gloves", currentSelection != null && currentSelection.equals("equip_gloves"));
+                appendArmorSlot(uiCommandBuilder, armor, (short) 3, "#EquipPants", "EquipPantsBtn", "Pants", currentSelection != null && currentSelection.equals("equip_pants"));
+                
+                // Waffen & Schild (100% gleiche Logik wie Rüstung)
+                appendArmorSlot(uiCommandBuilder, inventory.getHotbar(), (short) 0, "#EquipWeapon", "EquipWeaponBtn", "Weapon", currentSelection != null && currentSelection.equals("equip_weapon"));
+                appendArmorSlot(uiCommandBuilder, inventory.getUtility(), (short) 0, "#EquipShield", "EquipShieldBtn", "Shield", currentSelection != null && currentSelection.equals("equip_shield"));
             }
 
-            boolean isSelected = currentSelection != null && currentSelection.equals("slot_clicked_" + i);
-            if (isSelected) {
-                uiCommandBuilder.appendInline(slotGroupId,
-                        "Group { Anchor: (Width: 64, Height: 4); Background: #f5c518; }");
-            }
+            // Stash Slots
+            ItemContainer stash = getPlayerInventory(player);
+            for (short i = 0; i < 90; i++) {
+                String slotGroupId = "#Slot" + (i + 1);
+                String btnId = "Slot" + (i + 1) + "Btn";
+                var item = stash.getItemStack(i);
 
-            uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#" + btnId,
-                    EventData.of("ButtonClicked", "slot_clicked_" + i), false);
+                if (item != null && !ItemStack.isEmpty(item)) {
+                    uiCommandBuilder.appendInline(slotGroupId, "ItemSlot { ItemId: \"" + item.getItem().getId() + "\"; Anchor: (Full: 0); ShowQuantity: true; }");
+                    uiCommandBuilder.appendInline(slotGroupId, "TextButton #" + btnId + " { Anchor: (Full: 0); Text: \"\"; Background: #30435f(0.0); TooltipText: \"" + item.getItem().getId() + "\"; Style: (Hovered: (Background: #254a7588)); }");
+                } else {
+                    uiCommandBuilder.appendInline(slotGroupId, "TextButton #" + btnId + " { Anchor: (Full: 0); Text: \"\"; Background: #30435f(0.0); Style: (Hovered: (Background: #254a7588)); }");
+                }
+
+                if (currentSelection != null && currentSelection.equals("slot_clicked_" + i)) {
+                    uiCommandBuilder.appendInline(slotGroupId, "Group { Anchor: (Width: 64, Height: 4); Background: #f5c518; }");
+                }
+                uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#" + btnId, EventData.of("ButtonClicked", "slot_clicked_" + i), false);
+            }
         }
     }
 
-    }
-
-    private void appendArmorSlot(UICommandBuilder cmd, ItemContainer armor, short slot, String groupId, String btnId,
-            String fallback, boolean isSelected) {
-        var item = armor.getItemStack(slot);
-
+    private void appendArmorSlot(UICommandBuilder cmd, ItemContainer container, short slot, String groupId, String btnId, String fallback, boolean isSelected) {
+        var item = container.getItemStack(slot);
         if (item != null && !ItemStack.isEmpty(item)) {
-            String itemName = item.getItem().getId();
-            cmd.appendInline(groupId,
-                    "ItemSlot { ItemId: \"" + itemName + "\"; Anchor: (Full: 0); ShowQuantity: false; }");
-            cmd.appendInline(groupId,
-                    "TextButton #" + btnId
-                            + " { Anchor: (Full: 0); Text: \"\"; Background: #141c28(0.0); TooltipText: \"" + itemName
-                            + "\"; Style: (Hovered: (Background: #254a7588)); }");
+            cmd.appendInline(groupId, "ItemSlot { ItemId: \"" + item.getItem().getId() + "\"; Anchor: (Full: 0); ShowQuantity: false; }");
+            cmd.appendInline(groupId, "TextButton #" + btnId + " { Anchor: (Full: 0); Text: \"\"; Background: #141c28(0.0); TooltipText: \"" + item.getItem().getId() + "\"; Style: (Hovered: (Background: #254a7588)); }");
         } else {
-            cmd.appendInline(groupId, "TextButton #" + btnId + " { Anchor: (Full: 0); Text: \"" + fallback
-                    + "\"; Background: #141c28(0.0); Style: (Hovered: (Background: #254a7588), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }");
+            cmd.appendInline(groupId, "TextButton #" + btnId + " { Anchor: (Full: 0); Text: \"" + fallback + "\"; Background: #141c28(0.0); Style: (Hovered: (Background: #254a7588), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }");
         }
         if (isSelected) {
-            cmd.appendInline(groupId,
-                    "Group { Anchor: (Width: 64, Height: 4); Background: #f5c518; }");
+            cmd.appendInline(groupId, "Group { Anchor: (Width: 128, Height: 4); Background: #f5c518; }");
         }
     }
 
     @Override
-    public void handleDataEvent(@Nonnull Ref<EntityStore> ref,
-            @Nonnull Store<EntityStore> store,
-            Data data) {
+    public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, Data data) {
         super.handleDataEvent(ref, store, data);
-
-        if (data.clickedButton == null)
-            return;
+        if (data.clickedButton == null) return;
         String action = data.clickedButton;
         data.clickedButton = null;
 
         Player player = store.getComponent(ref, Player.getComponentType());
-        if (player == null)
-            return;
-
+        if (player == null) return;
         String playerId = player.getUuid().toString();
-        Inventory inventory = player.getInventory();
-        if (inventory == null)
-            return;
 
-        switch (action) {
-            case "play" -> {
-                selectedSlotAction.remove(playerId);
-                PlayPage playPage = new PlayPage(playerRef, world);
-                playPage.LineUpCameraForCamModel(store, ref, playerRef);
-                player.getPageManager().openCustomPage(ref, store, playPage);
-                return;
-            }
-            case "close" -> {
-                selectedSlotAction.remove(playerId);
-                player.getPageManager().setPage(ref, store, Page.None);
-                resetCamera(ref, store);
-                return;
-            }
-        }
+        if (action.equals("play")) { selectedSlotAction.remove(playerId); player.getPageManager().openCustomPage(ref, store, new PlayPage(playerRef, world)); return; }
+        if (action.equals("close")) { selectedSlotAction.remove(playerId); player.getPageManager().setPage(ref, store, Page.None); resetCamera(ref, store); return; }
 
-        // --- Stash slot clicked ---
         if (action.startsWith("slot_clicked_") || action.startsWith("equip_")) {
             String currentSelection = selectedSlotAction.get(playerId);
-
             if (currentSelection == null) {
                 SlotData slot = resolveSlot(player, action);
-                if (slot != null) {
-                    var item = slot.container.getItemStack(slot.index);
-                    // Nur markieren, wenn auch ein Item drin ist
-                    if (item != null && !ItemStack.isEmpty(item)) {
-                        selectedSlotAction.put(playerId, action);
-                    }
-                }
+                if (slot != null && slot.container.getItemStack(slot.index) != null) selectedSlotAction.put(playerId, action);
             } else if (currentSelection.equals(action)) {
                 selectedSlotAction.remove(playerId);
-            }
-
-            else {
+            } else {
                 SlotData a = resolveSlot(player, currentSelection);
                 SlotData b = resolveSlot(player, action);
-
                 if (a != null && b != null) {
                     var itemA = a.container.getItemStack(a.index);
                     var itemB = b.container.getItemStack(b.index);
 
-                    if (a.isArmorSlot && !isItemValidForSlot(itemB, action)) {
-                        System.out.println(
-                                "[Inventory] Tausch blockiert: " + (itemB != null ? itemB.getItem().getId() : "Item")
-                                        + " passt nicht in Armor-Slot " + a.index);
-                        selectedSlotAction.remove(playerId);
-                        refreshPage(player, ref, store);
-                        return;
-                    }
-                    if (b.isArmorSlot && !isItemValidForSlot(itemA, action)) {
-                        System.out.println(
-                                "[Inventory] Tausch blockiert: " + (itemA != null ? itemA.getItem().getId() : "Item")
-                                        + " passt nicht in Armor-Slot " + b.index);
-                        selectedSlotAction.remove(playerId);
-                        refreshPage(player, ref, store);
-                        return;
-                    }
+                    // Pre-Checks
+                    if (a.isArmorSlot && !isItemValidForSlot(itemB, currentSelection)) { selectedSlotAction.remove(playerId); refreshPage(player, ref, store); return; }
+                    if (b.isArmorSlot && !isItemValidForSlot(itemA, action)) { selectedSlotAction.remove(playerId); refreshPage(player, ref, store); return; }
 
+                    // Swap
                     ItemContainer temp = new SimpleItemContainer((short) 1);
-
-                    if (itemA != null && !ItemStack.isEmpty(itemA)) {
-                        a.container.moveItemStackFromSlotToSlot(a.index, itemA.getQuantity(), temp, (short) 0);
-                    }
-                    if (itemB != null && !ItemStack.isEmpty(itemB)) {
-                        b.container.moveItemStackFromSlotToSlot(b.index, itemB.getQuantity(), a.container, a.index);
-                    }
-                    var tempItem = temp.getItemStack((short) 0);
-                    if (tempItem != null && !ItemStack.isEmpty(tempItem)) {
-                        temp.moveItemStackFromSlotToSlot((short) 0, tempItem.getQuantity(), b.container, b.index);
-                    }
+                    if (itemA != null) a.container.moveItemStackFromSlotToSlot(a.index, itemA.getQuantity(), temp, (short) 0);
+                    if (itemB != null) b.container.moveItemStackFromSlotToSlot(b.index, itemB.getQuantity(), a.container, a.index);
+                    var tItem = temp.getItemStack((short) 0);
+                    if (tItem != null) temp.moveItemStackFromSlotToSlot((short) 0, tItem.getQuantity(), b.container, b.index);
                 }
-
                 selectedSlotAction.remove(playerId);
             }
-
-            refreshPage(player, ref, store);
-            return;
+            refreshPage(player, ref, store);}
+            
         }
-    }
 
     private void refreshPage(Player player, Ref<EntityStore> ref, Store<EntityStore> store) {
         player.getPageManager().openCustomPage(ref, store, new InventoryPage(this.playerRef, this.world));
