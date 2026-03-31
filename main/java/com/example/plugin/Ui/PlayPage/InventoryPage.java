@@ -47,6 +47,41 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
     public World world;
     public PlayerRef playerRef;
     private static final Map<String, ItemContainer> player_inventorys = new HashMap<>();
+    private static final Map<String, String> selectedSlotAction = new HashMap<>();
+
+    private static class SlotData {
+        ItemContainer container;
+        short index;
+        boolean isArmorSlot;
+
+        SlotData(ItemContainer container, short index, boolean isArmorSlot) {
+            this.container = container;
+            this.index = index;
+            this.isArmorSlot = isArmorSlot;
+        }
+    }
+
+    private SlotData resolveSlot(Player player, String action) {
+        if (action.startsWith("slot_clicked_")) {
+            short index = Short.parseShort(action.replace("slot_clicked_", ""));
+            return new SlotData(getPlayerInventory(player), index, false);
+        }
+
+        Inventory inv = player.getInventory();
+        if (inv == null)
+            return null;
+
+        ItemContainer armor = inv.getArmor();
+        return switch (action) {
+            case "equip_head" -> new SlotData(armor, (short) 0, true);
+            case "equip_chest" -> new SlotData(armor, (short) 1, true);
+            case "equip_gloves" -> new SlotData(armor, (short) 2, true);
+            case "equip_pants" -> new SlotData(armor, (short) 3, true);
+            case "equip_weapon" -> new SlotData(inv.getHotbar(), (short) 0, true);
+            case "equip_shield" -> new SlotData(inv.getUtility(), (short) 1, true);
+            default -> null;
+        };
+    }
 
     public static class Data {
         public static final BuilderCodec<Data> CODEC = BuilderCodec.builder(Data.class, Data::new)
@@ -74,18 +109,64 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
             Inventory vanillaInv = player.getInventory();
             if (vanillaInv != null) {
                 ItemContainer vanillaStorage = vanillaInv.getStorage();
-                vanillaStorage.moveItemStackFromSlotToSlot(
-                        (short) 0,
-                        1,
-                        newStash,
-                        (short) 5);
-                System.out.println("[Stash] Test-Item erfolgreich in den neuen Stash transferiert!");
+
+                short stashIndex = 0;
+                short searchLimit = 36;
+
+                System.out.println("[Stash] Starting transfer from Vanilla Inventory...");
+
+                for (short i = 0; i < searchLimit; i++) {
+                    if (stashIndex >= 18) {
+                        System.out.println("[Stash] Successfully filled 18 slots. Stopping search.");
+                        break;
+                    }
+
+                    try {
+                        ItemStack item = vanillaStorage.getItemStack(i);
+
+                        if (item != null && !ItemStack.isEmpty(item)) {
+                            int amount = item.getQuantity();
+                            String itemId = item.getItem().getId();
+
+                            vanillaStorage.moveItemStackFromSlotToSlot(
+                                    i,
+                                    amount,
+                                    newStash,
+                                    stashIndex);
+                            System.out.println(
+                                    "[Stash] Moved " + amount + "x " + itemId + " to stash slot " + stashIndex);
+                            stashIndex++;
+                        }
+                    } catch (Exception e) {
+                        continue;
+                    }
+                }
+                System.out.println("[Stash] Transfer complete!");
             }
 
             player_inventorys.put(playerId, newStash);
         }
 
         return player_inventorys.get(playerId);
+    }
+
+    private boolean isItemValidForSlot(ItemStack item, String action) {
+        if (item == null || ItemStack.isEmpty(item))
+            return true;
+        String id = item.getItem().getId();
+
+        return switch (action) {
+            case "equip_head" -> id.endsWith("_Head");
+            case "equip_chest" -> id.endsWith("_Chest");
+            case "equip_gloves" -> id.endsWith("_Hands");
+            case "equip_pants" -> id.endsWith("_Legs");
+
+            case "equip_weapon" -> id.startsWith("Weapon_") && !id.contains("_Shield_");
+
+            case "equip_shield" -> id.contains("_Shield_");
+
+            default -> true;
+        };
     }
 
     @Override
@@ -131,51 +212,83 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
         Player player = store.getComponent(ref, Player.getComponentType());
         if (player != null) {
 
-            // Sync armor slots on open
+            String currentSelection = selectedSlotAction.get(player.getUuid().toString());
             Inventory inventory = player.getInventory();
             if (inventory != null) {
                 ItemContainer armor = inventory.getArmor();
-                appendArmorSlot(uiCommandBuilder, armor, (short) 0, "#EquipHeadItem", "Head");
-                appendArmorSlot(uiCommandBuilder, armor, (short) 1, "#EquipChestItem", "Chest");
-                appendArmorSlot(uiCommandBuilder, armor, (short) 2, "#EquipGlovesItem", "Gloves");
-                appendArmorSlot(uiCommandBuilder, armor, (short) 3, "#EquipPantsItem", "Pants");
+                appendArmorSlot(uiCommandBuilder, armor, (short) 0, "#EquipHead", "EquipHeadBtn", "Head",
+                        currentSelection != null && currentSelection.equals("equip_head"));
+                appendArmorSlot(uiCommandBuilder, armor, (short) 1, "#EquipChest", "EquipChestBtn", "Chest",
+                        currentSelection != null && currentSelection.equals("equip_chest"));
+                appendArmorSlot(uiCommandBuilder, armor, (short) 2, "#EquipGloves", "EquipGlovesBtn", "Gloves",
+                        currentSelection != null && currentSelection.equals("equip_gloves"));
+                appendArmorSlot(uiCommandBuilder, armor, (short) 3, "#EquipPants", "EquipPantsBtn", "Pants",
+                        currentSelection != null && currentSelection.equals("equip_pants"));
+                ItemContainer hotbar = inventory.getHotbar();
+                appendArmorSlot(uiCommandBuilder, hotbar, (short) 0, "#EquipWeapon", "EquipWeaponBtn", "Weapon",
+                        currentSelection != null && currentSelection.equals("equip_weapon"));
+
+                ItemContainer utility = inventory.getUtility();
+                appendArmorSlot(uiCommandBuilder, utility, (short) 0, "#EquipShield", "EquipShieldBtn", "Shield",
+                        currentSelection != null && currentSelection.equals("equip_shield"));
+            
+        }
+
+        // Inventory stash slots
+        ItemContainer stash = getPlayerInventory(player);
+
+        for (short i = 0; i < 90; i++) {
+            String slotGroupId = "#Slot" + (i + 1);
+            String btnId = "Slot" + (i + 1) + "Btn";
+
+            var item = stash.getItemStack(i);
+            if (item != null && !ItemStack.isEmpty(item)) {
+                String itemName = item.getItem().getId();
+
+                uiCommandBuilder.appendInline(slotGroupId,
+                        "ItemSlot { ItemId: \"" + itemName + "\"; Anchor: (Full: 0); ShowQuantity: true; }");
+
+                uiCommandBuilder.appendInline(slotGroupId,
+                        "TextButton #" + btnId
+                                + " { Anchor: (Full: 0); Text: \"\"; Background: #30435f(0.0); TooltipText: \""
+                                + itemName + "\"; Style: (Hovered: (Background: #254a7588)); }");
+            } else {
+                uiCommandBuilder.appendInline(slotGroupId, "TextButton #" + btnId
+                        + " { Anchor: (Full: 0); Text: \"\"; Background: #30435f(0.0); Style: (Hovered: (Background: #254a7588)); }");
             }
 
-            // Inventory stash slots
-            ItemContainer stash = getPlayerInventory(player);
-            for (short i = 0; i < 90; i++) {
-                String slotId = "#Slot" + (i + 1);
-                String btnId = "#Slot" + (i + 1) + "Btn";
-
-                var item = stash.getItemStack(i);
-                if (item != null && !ItemStack.isEmpty(item)) {
-                    String itemName = item.getItem().getId();
-
-                    // ItemSlot with TooltipText
-                    String slotUI = "ItemSlot { ItemId: \"" + itemName
-                            + "\"; Anchor: (Full: 0); ShowQuantity: true; TooltipText: \"" + itemName + "\"; }";
-
-                    uiCommandBuilder.appendInline(slotId, slotUI);
-                }
-
-                uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, btnId,
-                        EventData.of("ButtonClicked", "slot_clicked_" + i), false);
+            boolean isSelected = currentSelection != null && currentSelection.equals("slot_clicked_" + i);
+            if (isSelected) {
+                uiCommandBuilder.appendInline(slotGroupId,
+                        "Group { Anchor: (Width: 64, Height: 4); Background: #f5c518; }");
             }
+
+            uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#" + btnId,
+                    EventData.of("ButtonClicked", "slot_clicked_" + i), false);
         }
     }
 
-    private void appendArmorSlot(UICommandBuilder cmd, ItemContainer armor, short slot, String groupId,
-            String fallback) {
+    }
+
+    private void appendArmorSlot(UICommandBuilder cmd, ItemContainer armor, short slot, String groupId, String btnId,
+            String fallback, boolean isSelected) {
         var item = armor.getItemStack(slot);
 
         if (item != null && !ItemStack.isEmpty(item)) {
             String itemName = item.getItem().getId();
-
-            // ItemSlot with TooltipText
-            String slotUI = "ItemSlot { ItemId: \"" + itemName
-                    + "\"; Anchor: (Full: 0); ShowQuantity: false; TooltipText: \"" + itemName + "\"; }";
-
-            cmd.appendInline(groupId, slotUI);
+            cmd.appendInline(groupId,
+                    "ItemSlot { ItemId: \"" + itemName + "\"; Anchor: (Full: 0); ShowQuantity: false; }");
+            cmd.appendInline(groupId,
+                    "TextButton #" + btnId
+                            + " { Anchor: (Full: 0); Text: \"\"; Background: #141c28(0.0); TooltipText: \"" + itemName
+                            + "\"; Style: (Hovered: (Background: #254a7588)); }");
+        } else {
+            cmd.appendInline(groupId, "TextButton #" + btnId + " { Anchor: (Full: 0); Text: \"" + fallback
+                    + "\"; Background: #141c28(0.0); Style: (Hovered: (Background: #254a7588), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }");
+        }
+        if (isSelected) {
+            cmd.appendInline(groupId,
+                    "Group { Anchor: (Width: 64, Height: 4); Background: #f5c518; }");
         }
     }
 
@@ -194,63 +307,94 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
         if (player == null)
             return;
 
+        String playerId = player.getUuid().toString();
         Inventory inventory = player.getInventory();
         if (inventory == null)
             return;
 
-        // --- Handle Stash Slot Clicks ---
-        if (action.startsWith("slot_clicked_")) {
-            String slotIndexString = action.replace("slot_clicked_", "");
-            try {
-                short clickedSlotIndex = Short.parseShort(slotIndexString);
-                System.out.println("[Stash] Clicked slot: " + clickedSlotIndex);
-            } catch (NumberFormatException e) {
-                System.out.println("[Stash] Error parsing slot index.");
-            }
-            return;
-        }
-
-        // --- Navigation ---
         switch (action) {
             case "play" -> {
+                selectedSlotAction.remove(playerId);
                 PlayPage playPage = new PlayPage(playerRef, world);
                 playPage.LineUpCameraForCamModel(store, ref, playerRef);
                 player.getPageManager().openCustomPage(ref, store, playPage);
                 return;
             }
             case "close" -> {
+                selectedSlotAction.remove(playerId);
                 player.getPageManager().setPage(ref, store, Page.None);
                 resetCamera(ref, store);
                 return;
             }
         }
 
-        // --- Armor Slot Removal ---
-        short armorSlotToDelete = switch (action) {
-            case "equip_head" -> (short) 0;
-            case "equip_chest" -> (short) 1;
-            case "equip_gloves" -> (short) 2;
-            case "equip_pants" -> (short) 3;
-            default -> (short) -1;
-        };
+        // --- Stash slot clicked ---
+        if (action.startsWith("slot_clicked_") || action.startsWith("equip_")) {
+            String currentSelection = selectedSlotAction.get(playerId);
 
-        if (armorSlotToDelete == -1)
+            if (currentSelection == null) {
+                SlotData slot = resolveSlot(player, action);
+                if (slot != null) {
+                    var item = slot.container.getItemStack(slot.index);
+                    // Nur markieren, wenn auch ein Item drin ist
+                    if (item != null && !ItemStack.isEmpty(item)) {
+                        selectedSlotAction.put(playerId, action);
+                    }
+                }
+            } else if (currentSelection.equals(action)) {
+                selectedSlotAction.remove(playerId);
+            }
+
+            else {
+                SlotData a = resolveSlot(player, currentSelection);
+                SlotData b = resolveSlot(player, action);
+
+                if (a != null && b != null) {
+                    var itemA = a.container.getItemStack(a.index);
+                    var itemB = b.container.getItemStack(b.index);
+
+                    if (a.isArmorSlot && !isItemValidForSlot(itemB, action)) {
+                        System.out.println(
+                                "[Inventory] Tausch blockiert: " + (itemB != null ? itemB.getItem().getId() : "Item")
+                                        + " passt nicht in Armor-Slot " + a.index);
+                        selectedSlotAction.remove(playerId);
+                        refreshPage(player, ref, store);
+                        return;
+                    }
+                    if (b.isArmorSlot && !isItemValidForSlot(itemA, action)) {
+                        System.out.println(
+                                "[Inventory] Tausch blockiert: " + (itemA != null ? itemA.getItem().getId() : "Item")
+                                        + " passt nicht in Armor-Slot " + b.index);
+                        selectedSlotAction.remove(playerId);
+                        refreshPage(player, ref, store);
+                        return;
+                    }
+
+                    ItemContainer temp = new SimpleItemContainer((short) 1);
+
+                    if (itemA != null && !ItemStack.isEmpty(itemA)) {
+                        a.container.moveItemStackFromSlotToSlot(a.index, itemA.getQuantity(), temp, (short) 0);
+                    }
+                    if (itemB != null && !ItemStack.isEmpty(itemB)) {
+                        b.container.moveItemStackFromSlotToSlot(b.index, itemB.getQuantity(), a.container, a.index);
+                    }
+                    var tempItem = temp.getItemStack((short) 0);
+                    if (tempItem != null && !ItemStack.isEmpty(tempItem)) {
+                        temp.moveItemStackFromSlotToSlot((short) 0, tempItem.getQuantity(), b.container, b.index);
+                    }
+                }
+
+                selectedSlotAction.remove(playerId);
+            }
+
+            refreshPage(player, ref, store);
             return;
-
-        ItemContainer armor = inventory.getArmor();
-        var item = armor.getItemStack(armorSlotToDelete);
-
-        if (item != null && !ItemStack.isEmpty(item)) {
-            System.out.println("[Armor] Removing item from slot " + armorSlotToDelete + ": " + item.getItem().getId());
-            armor.setItemStackForSlot(armorSlotToDelete, null);
-        } else {
-            System.out.println("[Armor] Slot " + armorSlotToDelete + " is already empty.");
         }
+    }
 
-        // Refresh the inventory page
-        InventoryPage freshPage = new InventoryPage(this.playerRef, this.world);
-player.getPageManager().openCustomPage(ref, store, freshPage);
-LineUpCameraForCamModel(store, ref, playerRef);
+    private void refreshPage(Player player, Ref<EntityStore> ref, Store<EntityStore> store) {
+        player.getPageManager().openCustomPage(ref, store, new InventoryPage(this.playerRef, this.world));
+        LineUpCameraForCamModel(store, ref, playerRef);
     }
 
     private void resetCamera(Ref<EntityStore> ref, Store<EntityStore> store) {
