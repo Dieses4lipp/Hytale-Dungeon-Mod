@@ -175,10 +175,12 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
         uiCommandBuilder.append("Pages/InventoryPage.ui");
 
         // Statische Bindings (Buttons oben/unten)
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#PlayBtn", EventData.of("ButtonClicked", "play"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#StashBtn", EventData.of("ButtonClicked", "inventory"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CloseBtn", EventData.of("ButtonClicked", "close"), false);
-
+        uiEventBuilder.addEventBinding(com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#PlayBtn", EventData.of("ButtonClicked", "nav_play"), false);
+        uiEventBuilder.addEventBinding(com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#StashBtn", EventData.of("ButtonClicked", "nav_inventory"), false);
+        uiEventBuilder.addEventBinding(com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#CharacterBtn", EventData.of("ButtonClicked", "nav_character"), false);
+        uiEventBuilder.addEventBinding(com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#MarketBtn", EventData.of("ButtonClicked", "nav_market"), false);
+        uiEventBuilder.addEventBinding(com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#LeaderboardBtn", EventData.of("ButtonClicked", "nav_leaderboard"), false);
+        uiEventBuilder.addEventBinding(com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#CloseBtn", EventData.of("ButtonClicked", "nav_close"), false);
         // Dynamische Equipment Bindings
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipHeadBtn", EventData.of("ButtonClicked", "equip_head"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipChestBtn", EventData.of("ButtonClicked", "equip_chest"), false);
@@ -203,7 +205,7 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
                 
                 // Waffen & Schild (100% gleiche Logik wie Rüstung)
                 appendArmorSlot(uiCommandBuilder, inventory.getHotbar(), (short) 0, "#EquipWeapon", "EquipWeaponBtn", "Weapon", currentSelection != null && currentSelection.equals("equip_weapon"));
-                appendArmorSlot(uiCommandBuilder, inventory.getUtility(), (short) 0, "#EquipShield", "EquipShieldBtn", "Shield", currentSelection != null && currentSelection.equals("equip_shield"));
+                appendArmorSlot(uiCommandBuilder, inventory.getUtility(), (short) 1, "#EquipShield", "EquipShieldBtn", "Shield", currentSelection != null && currentSelection.equals("equip_shield"));
             }
 
             // Stash Slots
@@ -252,8 +254,12 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
         if (player == null) return;
         String playerId = player.getUuid().toString();
 
-        if (action.equals("play")) { selectedSlotAction.remove(playerId); player.getPageManager().openCustomPage(ref, store, new PlayPage(playerRef, world)); return; }
-        if (action.equals("close")) { selectedSlotAction.remove(playerId); player.getPageManager().setPage(ref, store, Page.None); resetCamera(ref, store); return; }
+        if (action.equals("nav_play")) { player.getPageManager().openCustomPage(ref, store, new PlayPage(playerRef, world)); PlayPage.LineUpCameraForCamModel(store, ref, playerRef); return; }
+        if (action.equals("nav_inventory")) { player.getPageManager().openCustomPage(ref, store, new InventoryPage(playerRef, world)); return; }
+        if (action.equals("nav_character")) { player.getPageManager().openCustomPage(ref, store, new CharacterPage(playerRef, world)); return; }
+        if (action.equals("nav_market")) { player.getPageManager().openCustomPage(ref, store, new MarketPage(playerRef, world)); return; }
+        if (action.equals("nav_leaderboard")) { player.getPageManager().openCustomPage(ref, store, new LeaderboardPage(playerRef, world)); return; }
+        if (action.equals("nav_close")) { player.getPageManager().setPage(ref, store, Page.None); resetCamera(ref, store); return; }
 
         if (action.startsWith("slot_clicked_") || action.startsWith("equip_")) {
             String currentSelection = selectedSlotAction.get(playerId);
@@ -298,7 +304,7 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
         }
     }
 
-    void LineUpCameraForCamModel(Store<EntityStore> store, Ref<EntityStore> ref, PlayerRef playerRef) {
+    public static void LineUpCameraForCamModel(Store<EntityStore> store, Ref<EntityStore> ref, PlayerRef playerRef) {
         float f3Pitch = (float) Math.toRadians(-11.9);
         float f3Yaw = (float) Math.toRadians(118.2);
         float f3Roll = 0.0f;

@@ -1,0 +1,77 @@
+Group {
+  LayoutMode: Top;
+  Anchor: (Full: 0);
+  Background: #000000(0.0);
+
+  Group #TopNav {
+    Anchor: (Full: 0, Height: 100);
+    LayoutMode: Left;
+    Background: #0d1117;
+    Padding: (Horizontal: 40, Vertical: 18);
+
+    TextButton #PlayBtn { Anchor: (Width: 140, Height: 64); Text: "PLAY"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+    Group { Anchor: (Width: 8); }
+    
+    TextButton #StashBtn { Anchor: (Width: 140, Height: 64); Text: "INVENTORY"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Pressed: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+    Group { Anchor: (Width: 8); }
+    
+    TextButton #CharacterBtn { Anchor: (Width: 180, Height: 64); Text: "CHARACTER"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+    Group { Anchor: (Width: 8); }
+    
+    TextButton #MarketBtn { Anchor: (Width: 140, Height: 64); Text: "MARKET"; Padding: (Horizontal: 14); Background: #1c3a5c; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+    Group { Anchor: (Width: 8); }
+    
+    TextButton #LeaderboardBtn { Anchor: (Width: 200, Height: 64); Text: "LEADERBOARDS"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+  }
+
+  Group #NavSpacer { Anchor: (Full: 0, Height: 18); Background: #060809; }
+
+  Group #ContentRow {
+    FlexWeight: 1;
+    LayoutMode: CenterMiddle;
+    Background: #0d1117(0.85); 
+
+    Group #FakeBorder {
+      Anchor: (Width: 604, Height: 204);
+      Background: #5bc8f5(0.7);
+      LayoutMode: CenterMiddle;
+
+      Group #BannerInner {
+        Anchor: (Width: 600, Height: 200);
+        Background: #141c28;
+        LayoutMode: Top; 
+        Padding: (Top: 45); 
+
+        Label { 
+          Text: "MARKETPLACE"; 
+          Style: (FontSize: 42, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center); 
+          Anchor: (Width: 600, Height: 50);
+        }Group { Anchor: (Height: 15); } 
+        Group { 
+          Anchor: (Width: 600, Height: 4); 
+          LayoutMode: CenterMiddle; 
+          Group { Anchor: (Width: 80, Height: 2); Background: #5bc8f5; } 
+        }
+
+        Group { Anchor: (Height: 15); } 
+
+        Label { 
+          Text: "COMING SOON"; 
+          Style: (FontSize: 24, TextColor: #f5c518, RenderBold: true, HorizontalAlignment: Center); 
+          Anchor: (Width: 600, Height: 40);
+        }
+      }
+    }
+  }
+
+  // Die Bottom-Bar
+  Group #BottomBar {
+    Anchor: (Full: 0, Height: 100); LayoutMode: CenterMiddle; Background: #0d1117(0.97);
+    Group #BottomBarContent {
+      Anchor: (Width: 860, Height: 70); LayoutMode: Left;
+      Label #LevelLabel { Style: (FontSize: 18, TextColor: #ffffff, HorizontalAlignment: Center, RenderBold: true); Anchor: (Width: 120, Height: 60); Text: "Lv. 3"; Padding: (Full: 8); }
+      Label #XpLabel { Style: (FontSize: 15, TextColor: #8899aa, HorizontalAlignment: Center); Anchor: (Width: 180, Height: 60); Text: "86 / 335 XP"; Padding: (Full: 8); }
+      TextButton #CloseBtn { Anchor: (Width: 140, Height: 54); Text: "CLOSE"; Padding: (Horizontal: 12); Style: (Default: (Background: #1c2333, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (Background: #2a344d, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Pressed: (Background: #0f151e, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+    }
+  }
+}

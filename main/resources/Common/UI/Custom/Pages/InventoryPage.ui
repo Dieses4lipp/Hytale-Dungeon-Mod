@@ -32,13 +32,13 @@ Group {
 
       Group #ArmorCol {
         Anchor: (Width: 320); LayoutMode: Top; Padding: (Top: 128, Left: 40);
-        Group #EquipHead { Anchor: (Width: 128, Height: 128); }
+        Group #EquipHead { Anchor: (Width: 128, Height: 128); Background: #30435f(0.7); }
         Group { Anchor: (Height: 16); }
-        Group #EquipChest { Anchor: (Width: 128, Height: 128); }
+        Group #EquipChest { Anchor: (Width: 128, Height: 128); Background: #30435f(0.7); }
         Group { Anchor: (Height: 16); }
-        Group #EquipGloves { Anchor: (Width: 128, Height: 128); }
+        Group #EquipGloves { Anchor: (Width: 128, Height: 128); Background: #30435f(0.7); }
         Group { Anchor: (Height: 16); }
-        Group #EquipPants { Anchor: (Width: 128, Height: 128); }
+        Group #EquipPants { Anchor: (Width: 128, Height: 128); Background: #30435f(0.7); }
       }
 
       Group #CharacterSpace { Anchor: (Width: 350); }
@@ -46,11 +46,11 @@ Group {
       Group #WeaponCol {
         LayoutMode: Top; Padding: (Top: 128, Left: 0);
         
-        Group #EquipWeapon { Anchor: (Width: 128, Height: 128); }
+        Group #EquipWeapon { Anchor: (Width: 128, Height: 128); Background: #30435f(0.7);}
         Group { Anchor: (Height: 16); }
-        Group #EquipShield { Anchor: (Width: 128, Height: 128); }
+        Group #EquipShield { Anchor: (Width: 128, Height: 128); Background: #30435f(0.7);}
         Group { Anchor: (Height: 16); }
-        Group #EquipHeal { Anchor: (Width: 128, Height: 128); }
+        Group #EquipHeal { Anchor: (Width: 128, Height: 128); Background: #30435f(0.7);}
       }
       Group { FlexWeight: 1; }
     }
@@ -199,8 +199,6 @@ Group {
       Anchor: (Width: 860, Height: 70); LayoutMode: Left;
       Label #LevelLabel { Style: (FontSize: 18, TextColor: #ffffff, HorizontalAlignment: Center, RenderBold: true); Anchor: (Width: 120, Height: 60); Text: "Lv. 3"; Padding: (Full: 8); }
       Label #XpLabel { Style: (FontSize: 15, TextColor: #8899aa, HorizontalAlignment: Center); Anchor: (Width: 180, Height: 60); Text: "86 / 335 XP"; Padding: (Full: 8); }
-      TextButton #EnterBtn { Anchor: (Width: 240, Height: 54); Text: "EQUIP MODE"; Padding: (Horizontal: 12); Style: (Default: (Background: #1a3a5c, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (Background: #254a75, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Pressed: (Background: #0f151e, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
-      Group { Anchor: (Width: 16); }
       TextButton #CloseBtn { Anchor: (Width: 140, Height: 54); Text: "CLOSE"; Padding: (Horizontal: 12); Style: (Default: (Background: #1c2333, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (Background: #2a344d, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Pressed: (Background: #0f151e, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
     }
   }

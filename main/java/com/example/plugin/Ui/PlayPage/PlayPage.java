@@ -85,18 +85,21 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         } else {
             uiCommandBuilder.append("Pages/PlayPage_Small.ui");
         }
-
-        // Top nav
+        
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#PlayBtn",
-                EventData.of("ButtonClicked", "play"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#InventoryBtn",
-                EventData.of("ButtonClicked", "inventory"), false);
+                EventData.of("ButtonClicked", "nav_play"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#StashBtn",
+                EventData.of("ButtonClicked", "nav_inventory"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CharacterBtn",
-                EventData.of("ButtonClicked", "character"), false);
+                EventData.of("ButtonClicked", "nav_character"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#MarketBtn",
-                EventData.of("ButtonClicked", "market"), false);
+                EventData.of("ButtonClicked", "nav_market"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#LeaderboardBtn",
-                EventData.of("ButtonClicked", "leaderboard"), false);
+                EventData.of("ButtonClicked", "nav_leaderboard"), false);
+
+        // Close Button
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CloseBtn",
+                EventData.of("ButtonClicked", "nav_close"), false);
 
         // Dungeon size selection
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#SmallBtn",
@@ -109,8 +112,6 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         // Bottom bar
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EnterBtn",
                 EventData.of("ButtonClicked", "enter"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CloseBtn",
-                EventData.of("ButtonClicked", "close"), false);
     }
 
     @Override
@@ -127,15 +128,26 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         Player player = store.getComponent(ref, Player.getComponentType());
 
         switch (action) {
-            case "play" -> System.out.println("[PlayPage] Play tab clicked");
-            case "inventory" -> {System.out.println("[PlayPage] Stash tab clicked");
-                InventoryPage inventoryPage = new InventoryPage(playerRef, world);
-                inventoryPage.LineUpCameraForCamModel(store, ref, playerRef);
-               player.getPageManager().openCustomPage(ref, store, inventoryPage);
+            case "nav_play" -> {
+                player.getPageManager().openCustomPage(ref, store, new PlayPage(playerRef, world, selectedRoomCount));
             }
-            case "character" -> System.out.println("[PlayPage] Character tab clicked");
-            case "market" -> System.out.println("[PlayPage] Market tab clicked");
-            case "leaderboard" -> System.out.println("[PlayPage] Leaderboards tab clicked");
+            case "nav_inventory" -> {
+                player.getPageManager().openCustomPage(ref, store, new InventoryPage(playerRef, world));
+                InventoryPage.LineUpCameraForCamModel(store, ref, playerRef);
+            }
+            case "nav_character" -> {
+                player.getPageManager().openCustomPage(ref, store, new CharacterPage(playerRef, world));
+            }
+            case "nav_market" -> {
+                player.getPageManager().openCustomPage(ref, store, new MarketPage(playerRef, world));
+            }
+            case "nav_leaderboard" -> {
+                player.getPageManager().openCustomPage(ref, store, new LeaderboardPage(playerRef, world));
+            }
+            case "nav_close" -> {
+                player.getPageManager().setPage(ref, store, Page.None);
+                resetCamera(ref, store);
+            }
 
             case "small" -> player.getPageManager().openCustomPage(ref, store, new PlayPage(playerRef, world, 20));
             case "medium" -> player.getPageManager().openCustomPage(ref, store, new PlayPage(playerRef, world, 100));
@@ -145,7 +157,8 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
                 generateAndTeleport(ref, store);
                 resetCamera(ref, store);
             }
-            case "close" -> {player.getPageManager().setPage(ref, store, Page.None);
+            case "close" -> {
+                player.getPageManager().setPage(ref, store, Page.None);
                 resetCamera(ref, store);
             }
         }
@@ -173,7 +186,8 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         Player player = store.getComponent(ref, Player.getComponentType());
         player.getPageManager().setPage(ref, store, Page.None);
     }
-    void LineUpCameraForCamModel(Store<EntityStore> store, Ref<EntityStore> ref, PlayerRef playerRef){
+
+    public static void LineUpCameraForCamModel(Store<EntityStore> store, Ref<EntityStore> ref, PlayerRef playerRef) {
         float f3Pitch = (float) Math.toRadians(-11.9);
         float f3Yaw = (float) Math.toRadians(118.2);
         float f3Roll = 0.0f;
