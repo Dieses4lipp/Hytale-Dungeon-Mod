@@ -1,0 +1,26 @@
+Group {
+  LayoutMode: CenterMiddle;
+  Anchor: (Full: 0);
+  Background: #000000(0.6);
+
+  Group #ChestPanel {
+    Anchor: (Width: 600, Height: 400);
+    LayoutMode: Top;
+    Background: #0d1117(0.97);
+    Padding: (Horizontal: 30, Vertical: 30);
+
+    Label { Text: "CHEST"; Style: (FontSize: 32, TextColor: #f5c518, RenderBold: true, HorizontalAlignment: Center); Anchor: (Width: 540, Height: 50); }
+    Group { Anchor: (Width: 540, Height: 2); Background: #2a3040; }
+    Group { Anchor: (Height: 20); }
+
+    Label { Text: "Loot goes here"; Style: (FontSize: 18, TextColor: #aabbcc, HorizontalAlignment: Center); Anchor: (Width: 540, Height: 40); }
+
+    Group { FlexWeight: 1; }
+
+    TextButton #CloseBtn {
+      Anchor: (Width: 160, Height: 54);
+      Text: "CLOSE";
+      Style: (Default: (Background: #1c2333, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (Background: #2a344d, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)));
+    }
+  }
+}
