@@ -65,7 +65,7 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
     private SlotData resolveSlot(Player player, String action) {
         if (action.startsWith("slot_clicked_")) {
             short index = Short.parseShort(action.replace("slot_clicked_", ""));
-            return new SlotData(getPlayerInventory(player), index, false);
+            return new SlotData(getOrCreateEmptyStash(player.getUuid().toString()), index, false);
         }
 
         Inventory inv = player.getInventory();
@@ -100,56 +100,11 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
         this.world = world;
         this.playerRef = playerRef;
     }
+    // Gets or creates an empty stash without doing the vanilla transfer
+public static ItemContainer getOrCreateEmptyStash(String playerId) {
+    return player_inventorys.computeIfAbsent(playerId, id -> new SimpleItemContainer((short) 90));
+}
 
-    private ItemContainer getPlayerInventory(Player player) {
-        String playerId = player.getUuid().toString();
-
-        if (!player_inventorys.containsKey(playerId)) {
-            ItemContainer newStash = new SimpleItemContainer((short) 90);
-
-            Inventory vanillaInv = player.getInventory();
-            if (vanillaInv != null) {
-                ItemContainer vanillaStorage = vanillaInv.getStorage();
-
-                short stashIndex = 0;
-                short searchLimit = 36;
-
-                System.out.println("[Stash] Starting transfer from Vanilla Inventory...");
-
-                for (short i = 0; i < searchLimit; i++) {
-                    if (stashIndex >= 18) {
-                        System.out.println("[Stash] Successfully filled 18 slots. Stopping search.");
-                        break;
-                    }
-
-                    try {
-                        ItemStack item = vanillaStorage.getItemStack(i);
-
-                        if (item != null && !ItemStack.isEmpty(item)) {
-                            int amount = item.getQuantity();
-                            String itemId = item.getItem().getId();
-
-                            vanillaStorage.moveItemStackFromSlotToSlot(
-                                    i,
-                                    amount,
-                                    newStash,
-                                    stashIndex);
-                            System.out.println(
-                                    "[Stash] Moved " + amount + "x " + itemId + " to stash slot " + stashIndex);
-                            stashIndex++;
-                        }
-                    } catch (Exception e) {
-                        continue;
-                    }
-                }
-                System.out.println("[Stash] Transfer complete!");
-            }
-
-            player_inventorys.put(playerId, newStash);
-        }
-
-        return player_inventorys.get(playerId);
-    }
 
     private boolean isItemValidForSlot(ItemStack item, String action) {
         if (item == null || ItemStack.isEmpty(item))
@@ -209,7 +164,7 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
             }
 
             // Stash Slots
-            ItemContainer stash = getPlayerInventory(player);
+            ItemContainer stash = getOrCreateEmptyStash(playerId);
             for (short i = 0; i < 90; i++) {
                 String slotGroupId = "#Slot" + (i + 1);
                 String btnId = "Slot" + (i + 1) + "Btn";

@@ -68,10 +68,7 @@
     },
     "VariantRotation": "NESW",
     "ParticleColor": "#c7b885",
-    "InteractionHint": "server.interactionHints.openDoor",
-    "Interactions": {
-      "Use": "Root_ExtractionChest"
-    }
+    "InteractionHint": "server.interactionHints.openDoor"
   },
   "ResourceTypes": [
     {

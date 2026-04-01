@@ -12,7 +12,6 @@ import com.example.plugin.Npc.Testinteractionnpc.TalkToNPCInteraction;
 import com.example.plugin.doorsystem.ChestUseBlockSystem;
 import com.example.plugin.doorsystem.DoorNPCComponent;
 import com.example.plugin.doorsystem.MyUseBlockSystem;
-import com.example.plugin.doorsystem.OpenChestInteraction;
 import com.example.plugin.doorsystem.OpenDoorInteraction;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.event.events.ecs.UseBlockEvent;
@@ -62,10 +61,7 @@ public class HelloPlugin extends JavaPlugin {
                 "talk_to_npc_type",
                 TalkToNPCInteraction.class,
                 TalkToNPCInteraction.CODEC);
-        this.getCodecRegistry(Interaction.CODEC).register(
-                "open_chest_type",
-                OpenChestInteraction.class,
-                OpenChestInteraction.CODEC);
+            
                 this.getEntityStoreRegistry().registerSystem(new ChestUseBlockSystem());
         this.getEntityStoreRegistry().registerSystem(new com.example.plugin.DungeonGeneration.BossDeathSystem());
         this.getCommandRegistry().registerCommand(new GenerateDungeonCommand("test", "An example command", false));
