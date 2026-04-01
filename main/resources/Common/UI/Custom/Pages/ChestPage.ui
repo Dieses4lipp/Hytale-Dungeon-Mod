@@ -1,26 +1,84 @@
 Group {
   LayoutMode: CenterMiddle;
   Anchor: (Full: 0);
-  Background: #000000(0.6);
+  Background: #000000(0.0);
 
   Group #ChestPanel {
-    Anchor: (Width: 600, Height: 400);
+    Anchor: (Width: 780, Height: 680);
     LayoutMode: Top;
     Background: #0d1117(0.97);
-    Padding: (Horizontal: 30, Vertical: 30);
+    Padding: (Horizontal: 30, Vertical: 24);
 
-    Label { Text: "CHEST"; Style: (FontSize: 32, TextColor: #f5c518, RenderBold: true, HorizontalAlignment: Center); Anchor: (Width: 540, Height: 50); }
-    Group { Anchor: (Width: 540, Height: 2); Background: #2a3040; }
+    Label { Text: "EXTRACTION CHEST"; Style: (FontSize: 28, TextColor: #f5c518, RenderBold: true, HorizontalAlignment: Center); Anchor: (Width: 720, Height: 44); }
+    Group { Anchor: (Width: 720, Height: 2); Background: #2a3040; }
+    Group { Anchor: (Height: 16); }
+    Label { Text: "Select one item to deposit:"; Style: (FontSize: 15, TextColor: #8899aa, HorizontalAlignment: Center); Anchor: (Width: 720, Height: 28); }
+    Group { Anchor: (Height: 12); }
+
+    Group #InvRow1 { LayoutMode: Left; Anchor: (Width: 720, Height: 64);
+      Group #Slot1  { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot2  { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot3  { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot4  { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot5  { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot6  { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot7  { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot8  { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot9  { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); }
+    }
+    Group { Anchor: (Height: 8); }
+    Group #InvRow2 { LayoutMode: Left; Anchor: (Width: 720, Height: 64);
+      Group #Slot10 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot11 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot12 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot13 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot14 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot15 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot16 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot17 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot18 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); }
+    }
+    Group { Anchor: (Height: 8); }
+    Group #InvRow3 { LayoutMode: Left; Anchor: (Width: 720, Height: 64);
+      Group #Slot19 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot20 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot21 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot22 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot23 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot24 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot25 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot26 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot27 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); }
+    }
+    Group { Anchor: (Height: 8); }
+    Group #InvRow4 { LayoutMode: Left; Anchor: (Width: 720, Height: 64);
+      Group #Slot28 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot29 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot30 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot31 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot32 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot33 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot34 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot35 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+      Group #Slot36 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); }
+    }
+
+    Group { Anchor: (Height: 16); }
+    Group { Anchor: (Width: 720, Height: 2); Background: #2a3040; }
+    Group { Anchor: (Height: 12); }
+
+    Label { Text: "Selected:"; Style: (FontSize: 15, TextColor: #8899aa, HorizontalAlignment: Center); Anchor: (Width: 720, Height: 24); }
+    Group { Anchor: (Height: 8); }
+    Group #SelectedPreview { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
+
     Group { Anchor: (Height: 20); }
 
-    Label { Text: "Loot goes here"; Style: (FontSize: 18, TextColor: #aabbcc, HorizontalAlignment: Center); Anchor: (Width: 540, Height: 40); }
-
-    Group { FlexWeight: 1; }
-
-    TextButton #CloseBtn {
-      Anchor: (Width: 160, Height: 54);
-      Text: "CLOSE";
-      Style: (Default: (Background: #1c2333, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (Background: #2a344d, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)));
+    Group #ButtonRow { LayoutMode: Left; Anchor: (Width: 720, Height: 54);
+      Group { FlexWeight: 1; }
+      TextButton #DepositBtn { Anchor: (Width: 200, Height: 54); Text: "DEPOSIT & LOCK"; Padding: (Horizontal: 12); Style: (Default: (Background: #1a3a5c, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (Background: #254a75, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+      Group { Anchor: (Width: 16); }
+      TextButton #CancelBtn { Anchor: (Width: 140, Height: 54); Text: "CANCEL"; Padding: (Horizontal: 12); Style: (Default: (Background: #1c2333, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (Background: #2a344d, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+      Group { FlexWeight: 1; }
     }
   }
 }
