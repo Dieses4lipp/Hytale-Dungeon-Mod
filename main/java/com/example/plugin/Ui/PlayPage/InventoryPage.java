@@ -129,7 +129,12 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
     public void build(@Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder uiCommandBuilder,
             @Nonnull UIEventBuilder uiEventBuilder, @Nonnull Store<EntityStore> store) {
         uiCommandBuilder.append("Pages/InventoryPage.ui");
-
+                var stats = com.example.plugin.Stats.PlayerLevelComponent.getStats(store, ref);
+    int currentLevel = (stats != null) ? stats.level : 1;
+    int currentXp = (stats != null) ? stats.xp : 0;
+    int xpNeeded = currentLevel * 100;
+    uiCommandBuilder.set("#LevelLabel.Text", "Lv. " + currentLevel);
+    uiCommandBuilder.set("#XpLabel.Text", currentXp + " / " + xpNeeded + " XP");
         // Statische Bindings (Buttons oben/unten)
         uiEventBuilder.addEventBinding(
                 com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#PlayBtn",

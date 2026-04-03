@@ -85,8 +85,15 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
             uiCommandBuilder.append("Pages/PlayPage_Large.ui");
         } else {
             uiCommandBuilder.append("Pages/PlayPage_Small.ui");
-        }
-        
+        } 
+
+
+    var stats = com.example.plugin.Stats.PlayerLevelComponent.getStats(store, ref);
+    int currentLevel = (stats != null) ? stats.level : 1;
+    int currentXp = (stats != null) ? stats.xp : 0;
+    int xpNeeded = currentLevel * 100;
+    uiCommandBuilder.set("#LevelLabel.Text", "Lv. " + currentLevel);
+    uiCommandBuilder.set("#XpLabel.Text", currentXp + " / " + xpNeeded + " XP");
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#PlayBtn",
                 EventData.of("ButtonClicked", "nav_play"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#StashBtn",
@@ -200,7 +207,7 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         Teleport teleportComponent = Teleport.createForPlayer(currentPosition, newLookDirection);
 
         store.addComponent(ref, Teleport.getComponentType(), teleportComponent);
-        
+
         ServerCameraSettings camSettings = new ServerCameraSettings();
         camSettings.mouseInputTargetType = MouseInputTargetType.None;
         camSettings.isFirstPerson = false;

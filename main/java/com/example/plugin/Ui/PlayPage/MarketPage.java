@@ -31,7 +31,12 @@ public class MarketPage extends InteractiveCustomUIPage<MarketPage.Data> {
     @Override
     public void build(@Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder uiCommandBuilder, @Nonnull UIEventBuilder uiEventBuilder, @Nonnull Store<EntityStore> store) {
         uiCommandBuilder.append("Pages/MarketPage.ui");
-
+var stats = com.example.plugin.Stats.PlayerLevelComponent.getStats(store, ref);
+    int currentLevel = (stats != null) ? stats.level : 1;
+    int currentXp = (stats != null) ? stats.xp : 0;
+    int xpNeeded = currentLevel * 100;
+    uiCommandBuilder.set("#LevelLabel.Text", "Lv. " + currentLevel);
+    uiCommandBuilder.set("#XpLabel.Text", currentXp + " / " + xpNeeded + " XP");
         // Komplette Navi-Bindings
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#PlayBtn", EventData.of("ButtonClicked", "nav_play"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#StashBtn", EventData.of("ButtonClicked", "nav_inventory"), false);
