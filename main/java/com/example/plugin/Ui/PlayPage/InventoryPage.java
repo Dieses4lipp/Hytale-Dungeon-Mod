@@ -100,11 +100,11 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
         this.world = world;
         this.playerRef = playerRef;
     }
-    // Gets or creates an empty stash without doing the vanilla transfer
-public static ItemContainer getOrCreateEmptyStash(String playerId) {
-    return player_inventorys.computeIfAbsent(playerId, id -> new SimpleItemContainer((short) 90));
-}
 
+    // Gets or creates an empty stash without doing the vanilla transfer
+    public static ItemContainer getOrCreateEmptyStash(String playerId) {
+        return player_inventorys.computeIfAbsent(playerId, id -> new SimpleItemContainer((short) 90));
+    }
 
     private boolean isItemValidForSlot(ItemStack item, String action) {
         if (item == null || ItemStack.isEmpty(item))
@@ -126,23 +126,42 @@ public static ItemContainer getOrCreateEmptyStash(String playerId) {
     }
 
     @Override
-    public void build(@Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder uiCommandBuilder, @Nonnull UIEventBuilder uiEventBuilder, @Nonnull Store<EntityStore> store) {
+    public void build(@Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder uiCommandBuilder,
+            @Nonnull UIEventBuilder uiEventBuilder, @Nonnull Store<EntityStore> store) {
         uiCommandBuilder.append("Pages/InventoryPage.ui");
 
         // Statische Bindings (Buttons oben/unten)
-        uiEventBuilder.addEventBinding(com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#PlayBtn", EventData.of("ButtonClicked", "nav_play"), false);
-        uiEventBuilder.addEventBinding(com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#StashBtn", EventData.of("ButtonClicked", "nav_inventory"), false);
-        uiEventBuilder.addEventBinding(com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#CharacterBtn", EventData.of("ButtonClicked", "nav_character"), false);
-        uiEventBuilder.addEventBinding(com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#MarketBtn", EventData.of("ButtonClicked", "nav_market"), false);
-        uiEventBuilder.addEventBinding(com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#LeaderboardBtn", EventData.of("ButtonClicked", "nav_leaderboard"), false);
-        uiEventBuilder.addEventBinding(com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#CloseBtn", EventData.of("ButtonClicked", "nav_close"), false);
+        uiEventBuilder.addEventBinding(
+                com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#PlayBtn",
+                EventData.of("ButtonClicked", "nav_play"), false);
+        uiEventBuilder.addEventBinding(
+                com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#StashBtn",
+                EventData.of("ButtonClicked", "nav_inventory"), false);
+        uiEventBuilder.addEventBinding(
+                com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#CharacterBtn",
+                EventData.of("ButtonClicked", "nav_character"), false);
+        uiEventBuilder.addEventBinding(
+                com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#MarketBtn",
+                EventData.of("ButtonClicked", "nav_market"), false);
+        uiEventBuilder.addEventBinding(
+                com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#LeaderboardBtn",
+                EventData.of("ButtonClicked", "nav_leaderboard"), false);
+        uiEventBuilder.addEventBinding(
+                com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#CloseBtn",
+                EventData.of("ButtonClicked", "nav_close"), false);
         // Dynamische Equipment Bindings
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipHeadBtn", EventData.of("ButtonClicked", "equip_head"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipChestBtn", EventData.of("ButtonClicked", "equip_chest"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipGlovesBtn", EventData.of("ButtonClicked", "equip_gloves"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipPantsBtn", EventData.of("ButtonClicked", "equip_pants"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipWeaponBtn", EventData.of("ButtonClicked", "equip_weapon"), false);
-        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipShieldBtn", EventData.of("ButtonClicked", "equip_shield"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipHeadBtn",
+                EventData.of("ButtonClicked", "equip_head"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipChestBtn",
+                EventData.of("ButtonClicked", "equip_chest"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipGlovesBtn",
+                EventData.of("ButtonClicked", "equip_gloves"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipPantsBtn",
+                EventData.of("ButtonClicked", "equip_pants"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipWeaponBtn",
+                EventData.of("ButtonClicked", "equip_weapon"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipShieldBtn",
+                EventData.of("ButtonClicked", "equip_shield"), false);
 
         Player player = store.getComponent(ref, Player.getComponentType());
         if (player != null) {
@@ -153,14 +172,20 @@ public static ItemContainer getOrCreateEmptyStash(String playerId) {
             if (inventory != null) {
                 // Rüstung
                 ItemContainer armor = inventory.getArmor();
-                appendArmorSlot(uiCommandBuilder, armor, (short) 0, "#EquipHead", "EquipHeadBtn", "Head", currentSelection != null && currentSelection.equals("equip_head"));
-                appendArmorSlot(uiCommandBuilder, armor, (short) 1, "#EquipChest", "EquipChestBtn", "Chest", currentSelection != null && currentSelection.equals("equip_chest"));
-                appendArmorSlot(uiCommandBuilder, armor, (short) 2, "#EquipGloves", "EquipGlovesBtn", "Gloves", currentSelection != null && currentSelection.equals("equip_gloves"));
-                appendArmorSlot(uiCommandBuilder, armor, (short) 3, "#EquipPants", "EquipPantsBtn", "Pants", currentSelection != null && currentSelection.equals("equip_pants"));
-                
+                appendArmorSlot(uiCommandBuilder, armor, (short) 0, "#EquipHead", "EquipHeadBtn", "Head",
+                        currentSelection != null && currentSelection.equals("equip_head"));
+                appendArmorSlot(uiCommandBuilder, armor, (short) 1, "#EquipChest", "EquipChestBtn", "Chest",
+                        currentSelection != null && currentSelection.equals("equip_chest"));
+                appendArmorSlot(uiCommandBuilder, armor, (short) 2, "#EquipGloves", "EquipGlovesBtn", "Gloves",
+                        currentSelection != null && currentSelection.equals("equip_gloves"));
+                appendArmorSlot(uiCommandBuilder, armor, (short) 3, "#EquipPants", "EquipPantsBtn", "Pants",
+                        currentSelection != null && currentSelection.equals("equip_pants"));
+
                 // Waffen & Schild (100% gleiche Logik wie Rüstung)
-                appendArmorSlot(uiCommandBuilder, inventory.getHotbar(), (short) 0, "#EquipWeapon", "EquipWeaponBtn", "Weapon", currentSelection != null && currentSelection.equals("equip_weapon"));
-                appendArmorSlot(uiCommandBuilder, inventory.getUtility(), (short) 1, "#EquipShield", "EquipShieldBtn", "Shield", currentSelection != null && currentSelection.equals("equip_shield"));
+                appendArmorSlot(uiCommandBuilder, inventory.getHotbar(), (short) 0, "#EquipWeapon", "EquipWeaponBtn",
+                        "Weapon", currentSelection != null && currentSelection.equals("equip_weapon"));
+                appendArmorSlot(uiCommandBuilder, inventory.getUtility(), (short) 1, "#EquipShield", "EquipShieldBtn",
+                        "Shield", currentSelection != null && currentSelection.equals("equip_shield"));
             }
 
             // Stash Slots
@@ -171,56 +196,111 @@ public static ItemContainer getOrCreateEmptyStash(String playerId) {
                 var item = stash.getItemStack(i);
 
                 if (item != null && !ItemStack.isEmpty(item)) {
-                    uiCommandBuilder.appendInline(slotGroupId, "ItemSlot { ItemId: \"" + item.getItem().getId() + "\"; Anchor: (Full: 0); ShowQuantity: true; }");
-                    uiCommandBuilder.appendInline(slotGroupId, "TextButton #" + btnId + " { Anchor: (Full: 0); Text: \"\"; Background: #30435f(0.0); TooltipText: \"" + item.getItem().getId() + "\"; Style: (Hovered: (Background: #254a7588)); }");
+                    uiCommandBuilder.appendInline(slotGroupId, "ItemSlot { ItemId: \"" + item.getItem().getId()
+                            + "\"; Anchor: (Full: 0); ShowQuantity: true; }");
+                    uiCommandBuilder.appendInline(slotGroupId,
+                            "TextButton #" + btnId
+                                    + " { Anchor: (Full: 0); Text: \"\"; Background: #30435f(0.0); TooltipText: \""
+                                    + item.getItem().getId() + "\"; Style: (Hovered: (Background: #254a7588)); }");
                 } else {
-                    uiCommandBuilder.appendInline(slotGroupId, "TextButton #" + btnId + " { Anchor: (Full: 0); Text: \"\"; Background: #30435f(0.0); Style: (Hovered: (Background: #254a7588)); }");
+                    uiCommandBuilder.appendInline(slotGroupId, "TextButton #" + btnId
+                            + " { Anchor: (Full: 0); Text: \"\"; Background: #30435f(0.0); Style: (Hovered: (Background: #254a7588)); }");
                 }
 
                 if (currentSelection != null && currentSelection.equals("slot_clicked_" + i)) {
-                    uiCommandBuilder.appendInline(slotGroupId, "Group { Anchor: (Width: 64, Height: 4); Background: #f5c518; }");
+                    // Top Edge
+                    uiCommandBuilder.appendInline(slotGroupId,
+                            "Group { Anchor: (Top: 0, Left: 0, Right: 0, Height: 2); Background: #f5c518; }");
+                    // Bottom Edge
+                    uiCommandBuilder.appendInline(slotGroupId,
+                            "Group { Anchor: (Bottom: 0, Left: 0, Right: 0, Height: 2); Background: #f5c518; }");
+                    // Left Edge
+                    uiCommandBuilder.appendInline(slotGroupId,
+                            "Group { Anchor: (Left: 0, Top: 0, Bottom: 0, Width: 2); Background: #f5c518; }");
+                    // Right Edge
+                    uiCommandBuilder.appendInline(slotGroupId,
+                            "Group { Anchor: (Right: 0, Top: 0, Bottom: 0, Width: 2); Background: #f5c518; }");
                 }
-                uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#" + btnId, EventData.of("ButtonClicked", "slot_clicked_" + i), false);
+                uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#" + btnId,
+                        EventData.of("ButtonClicked", "slot_clicked_" + i), false);
             }
         }
     }
 
-    private void appendArmorSlot(UICommandBuilder cmd, ItemContainer container, short slot, String groupId, String btnId, String fallback, boolean isSelected) {
+    private void appendArmorSlot(UICommandBuilder cmd, ItemContainer container, short slot, String groupId,
+            String btnId, String fallback, boolean isSelected) {
         var item = container.getItemStack(slot);
         if (item != null && !ItemStack.isEmpty(item)) {
-            cmd.appendInline(groupId, "ItemSlot { ItemId: \"" + item.getItem().getId() + "\"; Anchor: (Full: 0); ShowQuantity: false; }");
-            cmd.appendInline(groupId, "TextButton #" + btnId + " { Anchor: (Full: 0); Text: \"\"; Background: #141c28(0.0); TooltipText: \"" + item.getItem().getId() + "\"; Style: (Hovered: (Background: #254a7588)); }");
+            cmd.appendInline(groupId,
+                    "ItemSlot { ItemId: \"" + item.getItem().getId() + "\"; Anchor: (Full: 0); ShowQuantity: false; }");
+            cmd.appendInline(groupId,
+                    "TextButton #" + btnId
+                            + " { Anchor: (Full: 0); Text: \"\"; Background: #141c28(0.0); TooltipText: \""
+                            + item.getItem().getId() + "\"; Style: (Hovered: (Background: #254a7588)); }");
         } else {
-            cmd.appendInline(groupId, "TextButton #" + btnId + " { Anchor: (Full: 0); Text: \"" + fallback + "\"; Background: #141c28(0.0); Style: (Hovered: (Background: #254a7588), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }");
+            cmd.appendInline(groupId, "TextButton #" + btnId + " { Anchor: (Full: 0); Text: \"" + fallback
+                    + "\"; Background: #141c28(0.0); Style: (Hovered: (Background: #254a7588), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }");
         }
         if (isSelected) {
-            cmd.appendInline(groupId, "Group { Anchor: (Width: 128, Height: 4); Background: #f5c518; }");
+            // Obere Linie
+            cmd.appendInline(groupId, "Group { Anchor: (Top: 0, Left: 0, Right: 0, Height: 2); Background: #f5c518; }");
+            // Untere Linie
+            cmd.appendInline(groupId,
+                    "Group { Anchor: (Bottom: 0, Left: 0, Right: 0, Height: 2); Background: #f5c518; }");
+            // Linke Linie
+            cmd.appendInline(groupId, "Group { Anchor: (Left: 0, Top: 0, Bottom: 0, Width: 2); Background: #f5c518; }");
+            // Rechte Linie
+            cmd.appendInline(groupId,
+                    "Group { Anchor: (Right: 0, Top: 0, Bottom: 0, Width: 2); Background: #f5c518; }");
         }
     }
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, Data data) {
         super.handleDataEvent(ref, store, data);
-        if (data.clickedButton == null) return;
+        if (data.clickedButton == null)
+            return;
         String action = data.clickedButton;
         data.clickedButton = null;
 
         Player player = store.getComponent(ref, Player.getComponentType());
-        if (player == null) return;
+        if (player == null)
+            return;
         String playerId = player.getUuid().toString();
 
-        if (action.equals("nav_play")) { player.getPageManager().openCustomPage(ref, store, new PlayPage(playerRef, world)); PlayPage.LineUpCameraForCamModel(store, ref, playerRef); return; }
-        if (action.equals("nav_inventory")) { player.getPageManager().openCustomPage(ref, store, new InventoryPage(playerRef, world)); return; }
-        if (action.equals("nav_character")) { player.getPageManager().openCustomPage(ref, store, new CharacterPage(playerRef, world)); return; }
-        if (action.equals("nav_market")) { player.getPageManager().openCustomPage(ref, store, new MarketPage(playerRef, world)); return; }
-        if (action.equals("nav_leaderboard")) { player.getPageManager().openCustomPage(ref, store, new LeaderboardPage(playerRef, world)); return; }
-        if (action.equals("nav_close")) { player.getPageManager().setPage(ref, store, Page.None); resetCamera(ref, store); return; }
+        if (action.equals("nav_play")) {
+            player.getPageManager().openCustomPage(ref, store, new PlayPage(playerRef, world));
+            PlayPage.LineUpCameraForCamModel(store, ref, playerRef);
+            return;
+        }
+        if (action.equals("nav_inventory")) {
+            player.getPageManager().openCustomPage(ref, store, new InventoryPage(playerRef, world));
+            return;
+        }
+        if (action.equals("nav_character")) {
+            player.getPageManager().openCustomPage(ref, store, new CharacterPage(playerRef, world));
+            return;
+        }
+        if (action.equals("nav_market")) {
+            player.getPageManager().openCustomPage(ref, store, new MarketPage(playerRef, world));
+            return;
+        }
+        if (action.equals("nav_leaderboard")) {
+            player.getPageManager().openCustomPage(ref, store, new LeaderboardPage(playerRef, world));
+            return;
+        }
+        if (action.equals("nav_close")) {
+            player.getPageManager().setPage(ref, store, Page.None);
+            resetCamera(ref, store);
+            return;
+        }
 
         if (action.startsWith("slot_clicked_") || action.startsWith("equip_")) {
             String currentSelection = selectedSlotAction.get(playerId);
             if (currentSelection == null) {
                 SlotData slot = resolveSlot(player, action);
-                if (slot != null && slot.container.getItemStack(slot.index) != null) selectedSlotAction.put(playerId, action);
+                if (slot != null && slot.container.getItemStack(slot.index) != null)
+                    selectedSlotAction.put(playerId, action);
             } else if (currentSelection.equals(action)) {
                 selectedSlotAction.remove(playerId);
             } else {
@@ -231,21 +311,33 @@ public static ItemContainer getOrCreateEmptyStash(String playerId) {
                     var itemB = b.container.getItemStack(b.index);
 
                     // Pre-Checks
-                    if (a.isArmorSlot && !isItemValidForSlot(itemB, currentSelection)) { selectedSlotAction.remove(playerId); refreshPage(player, ref, store); return; }
-                    if (b.isArmorSlot && !isItemValidForSlot(itemA, action)) { selectedSlotAction.remove(playerId); refreshPage(player, ref, store); return; }
+                    if (a.isArmorSlot && !isItemValidForSlot(itemB, currentSelection)) {
+                        selectedSlotAction.remove(playerId);
+                        refreshPage(player, ref, store);
+                        return;
+                    }
+                    if (b.isArmorSlot && !isItemValidForSlot(itemA, action)) {
+                        selectedSlotAction.remove(playerId);
+                        refreshPage(player, ref, store);
+                        return;
+                    }
 
                     // Swap
                     ItemContainer temp = new SimpleItemContainer((short) 1);
-                    if (itemA != null) a.container.moveItemStackFromSlotToSlot(a.index, itemA.getQuantity(), temp, (short) 0);
-                    if (itemB != null) b.container.moveItemStackFromSlotToSlot(b.index, itemB.getQuantity(), a.container, a.index);
+                    if (itemA != null)
+                        a.container.moveItemStackFromSlotToSlot(a.index, itemA.getQuantity(), temp, (short) 0);
+                    if (itemB != null)
+                        b.container.moveItemStackFromSlotToSlot(b.index, itemB.getQuantity(), a.container, a.index);
                     var tItem = temp.getItemStack((short) 0);
-                    if (tItem != null) temp.moveItemStackFromSlotToSlot((short) 0, tItem.getQuantity(), b.container, b.index);
+                    if (tItem != null)
+                        temp.moveItemStackFromSlotToSlot((short) 0, tItem.getQuantity(), b.container, b.index);
                 }
                 selectedSlotAction.remove(playerId);
             }
-            refreshPage(player, ref, store);}
-            
+            refreshPage(player, ref, store);
         }
+
+    }
 
     private void refreshPage(Player player, Ref<EntityStore> ref, Store<EntityStore> store) {
         player.getPageManager().openCustomPage(ref, store, new InventoryPage(this.playerRef, this.world));

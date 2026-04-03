@@ -14,15 +14,21 @@ import com.example.plugin.doorsystem.DoorNPCComponent;
 import com.example.plugin.doorsystem.MyUseBlockSystem;
 import com.example.plugin.doorsystem.OpenDoorInteraction;
 import com.hypixel.hytale.component.ComponentType;
+import com.hypixel.hytale.protocol.packets.player.JoinWorld;
 import com.hypixel.hytale.server.core.event.events.ecs.UseBlockEvent;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.example.plugin.Stats.PlayerLevelComponent;
+import com.example.plugin.DungeonGeneration.MobDeathAndXPSystem;
+import com.hypixel.hytale.component.ComponentType;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import java.io.InputStream;
 
 import javax.annotation.Nonnull;
+import javax.security.auth.spi.LoginModule;
 
 public class HelloPlugin extends JavaPlugin {
 
@@ -33,18 +39,25 @@ public class HelloPlugin extends JavaPlugin {
     @Override
     protected void setup() {
         super.setup();
+        ComponentType<EntityStore, PlayerLevelComponent> playerLevelType = this.getEntityStoreRegistry().registerComponent(
+                PlayerLevelComponent.class,
+                PlayerLevelComponent::new
+        );
+        PlayerLevelComponent.setComponentType(playerLevelType);
+
+        // 2. Register the System
+        this.getEntityStoreRegistry().registerSystem(new MobDeathAndXPSystem());
         InputStream configStream = getClass().getResourceAsStream("/dungeon_config.json");
         if (configStream == null) {
             System.out.println("Failed to load dungeon_config.json");
         }
         DungeonConfig.load(configStream);
-
         new DungeonManager();
         ComponentType<EntityStore, NPCSetupPending> setupPendingType = this.getEntityStoreRegistry().registerComponent(
                 NPCSetupPending.class,
                 NPCSetupPending::new);
         NPCSetupPending.setComponentType(setupPendingType);
-
+this.getEntityStoreRegistry().registerSystem(new com.example.plugin.Stats.PlayerLevelSetupSystem());
         this.getEntityStoreRegistry().registerSystem(
                 new NPCInteractionSetupSystem(NPCSetupPending.getComponentType()));// Register DoorNPCComponent
         ComponentType<EntityStore, DoorNPCComponent> doorNPCType = this.getEntityStoreRegistry().registerComponent(

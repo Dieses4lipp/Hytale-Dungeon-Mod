@@ -28,11 +28,12 @@ public void handle(int index, ArchetypeChunk<EntityStore> chunk,
     String blockId = event.getBlockType().getId();
     if (!blockId.equals("Furniture_Temple_Emerald_Chest_Small")
             && !blockId.equals("Furniture_Temple_Emerald_Chest_Large")) return;
-
+    event.setCancelled(true);
     Vector3i pos = event.getTargetBlock();
 
     if (ChestRegistry.isLocked(pos)) {
         System.out.println("[ChestSystem] Chest is locked at " + pos.x + "," + pos.y + "," + pos.z);
+
         return;
     }
 

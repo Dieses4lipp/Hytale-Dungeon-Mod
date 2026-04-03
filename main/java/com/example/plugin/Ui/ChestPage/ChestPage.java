@@ -87,7 +87,14 @@ public class ChestPage extends InteractiveCustomUIPage<ChestPage.Data> {
             }
 
             if (currentSelection != null && currentSelection == i) {
-                cmd.appendInline(groupId, "Group { Anchor: (Width: 64, Height: 4); Background: #f5c518; }");
+                // Obere Linie
+            cmd.appendInline(groupId, "Group { Anchor: (Top: 0, Left: 0, Right: 0, Height: 2); Background: #f5c518; }");
+            // Untere Linie
+            cmd.appendInline(groupId, "Group { Anchor: (Bottom: 0, Left: 0, Right: 0, Height: 2); Background: #f5c518; }");
+            // Linke Linie
+            cmd.appendInline(groupId, "Group { Anchor: (Left: 0, Top: 0, Bottom: 0, Width: 2); Background: #f5c518; }");
+            // Rechte Linie
+            cmd.appendInline(groupId, "Group { Anchor: (Right: 0, Top: 0, Bottom: 0, Width: 2); Background: #f5c518; }");
             }
 
             evt.addEventBinding(CustomUIEventBindingType.Activating, "#" + btnId,
