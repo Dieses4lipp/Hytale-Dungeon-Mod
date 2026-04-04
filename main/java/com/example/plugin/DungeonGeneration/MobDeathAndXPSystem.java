@@ -6,9 +6,12 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.server.core.modules.entity.damage.DeathComponent;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.entity.damage.Damage;
 import com.hypixel.hytale.server.core.modules.entity.damage.DeathSystems;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.example.plugin.Ui.Hud.LevelHud;
 
 import javax.annotation.Nonnull;
 
@@ -30,7 +33,6 @@ public class MobDeathAndXPSystem extends DeathSystems.OnDeathSystem {
         System.out.println("\n[DungeonMod] === MOB DEATH EVENT TRIGGERED ===");
         System.out.println("[DungeonMod] Dead Entity Ref: " + ref);
 
-        // --- 1. IDENTIFY THE KILLER ---
         Damage damageInfo = deathComponent.getDeathInfo();
         if (damageInfo == null) {
             System.out.println("[DungeonMod] Result: No Damage info found (Entity died from something else).");
@@ -40,7 +42,6 @@ public class MobDeathAndXPSystem extends DeathSystems.OnDeathSystem {
         Damage.Source source = damageInfo.getSource();
         Ref killerRef = null;
 
-        // Check if the source of the damage was an entity (melee or projectile)
         if (source instanceof Damage.EntitySource) {
             killerRef = ((Damage.EntitySource) source).getRef();
             System.out.println("[DungeonMod] Killer identified! Killer Ref: " + killerRef);
@@ -48,9 +49,7 @@ public class MobDeathAndXPSystem extends DeathSystems.OnDeathSystem {
             System.out.println("[DungeonMod] Entity died, but not by another entity. Source: " + source.getClass().getSimpleName());
         }
 
-        // --- 2. APPLY XP TO THE PLAYER ---
         if (killerRef != null) {
-            // Check if the killer actually has the level component
             if (store.getArchetype(killerRef).contains(PlayerLevelComponent.getComponentType())) {
                 
                 PlayerLevelComponent stats = (PlayerLevelComponent) store.getComponent(killerRef, PlayerLevelComponent.getComponentType());
@@ -58,8 +57,8 @@ public class MobDeathAndXPSystem extends DeathSystems.OnDeathSystem {
                 if (stats != null) {
                     System.out.println("[DungeonMod] Killer Stats BEFORE: Level " + stats.level + " | XP: " + stats.xp);
                     
-                    stats.xp += 25; // Grant XP
-                    int xpNeeded = stats.level * 100; // Next level requires (CurrentLevel * 100) XP
+                    stats.xp += 25; 
+                    int xpNeeded = stats.level * 100; 
                     
                     System.out.println("[DungeonMod] Added 25 XP. Killer Stats AFTER: Level " + stats.level + " | XP: " + stats.xp + " / " + xpNeeded);
                     
@@ -68,6 +67,17 @@ public class MobDeathAndXPSystem extends DeathSystems.OnDeathSystem {
                         stats.level++;
                         System.out.println("[DungeonMod] *** LEVEL UP! ***");
                         System.out.println("[RPG] Player " + killerRef + " leveled up to Level " + stats.level + "! (Rollover XP: " + stats.xp + ")");
+                    }
+                    try {
+                        Player player = (Player) store.getComponent(killerRef, Player.getComponentType());
+                        PlayerRef playerRef = (PlayerRef) store.getComponent(killerRef, PlayerRef.getComponentType());
+
+                        if (player != null && playerRef != null) {
+                            LevelHud refreshedHud = new LevelHud(playerRef, store, killerRef);
+                            player.getHudManager().setCustomHud(playerRef, refreshedHud);
+                        }
+                    } catch (Exception e) {
+                        System.out.println("[DungeonMod] Error refreshing HUD: " + e.getMessage());
                     }
                 }
             } else {

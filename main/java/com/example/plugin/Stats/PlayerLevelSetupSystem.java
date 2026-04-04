@@ -13,6 +13,7 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.example.plugin.Ui.Hud.LevelHud;
 
 public class PlayerLevelSetupSystem extends EntityTickingSystem<EntityStore> {
 
@@ -30,13 +31,26 @@ public class PlayerLevelSetupSystem extends EntityTickingSystem<EntityStore> {
             @Nonnull Store<EntityStore> store, 
             @Nonnull CommandBuffer<EntityStore> commandBuffer) {
 
-        // Get the entity reference
         Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
 
         if (!store.getArchetype(ref).contains(playerLevelType)) {
+            
             PlayerLevelComponent newStats = new PlayerLevelComponent();
             commandBuffer.addComponent(ref, playerLevelType, newStats);
             System.out.println("[DungeonMod] ECS automatically attached PlayerLevelComponent to new Player Ref: " + ref);
+
+            try {
+                com.hypixel.hytale.server.core.entity.entities.Player player = store.getComponent(ref, com.hypixel.hytale.server.core.entity.entities.Player.getComponentType());
+                PlayerRef playerRef = store.getComponent(ref, playerRefType);
+
+                if (player != null && playerRef != null) {
+                    LevelHud hudPage = new LevelHud(playerRef, store, ref);
+player.getHudManager().setCustomHud(playerRef, hudPage);
+                    System.out.println("[DungeonMod] Persistent Level HUD opened for player.");
+                }
+            } catch (Exception e) {
+                System.out.println("[DungeonMod] Error opening HUD during setup: " + e.getMessage());
+            }
         }
     }
 
@@ -49,7 +63,6 @@ public class PlayerLevelSetupSystem extends EntityTickingSystem<EntityStore> {
     @Nonnull
     @Override
     public Query<EntityStore> getQuery() {
-        // Query: Grab all entities that are Players
         return Query.and(playerRefType);
     }
 }

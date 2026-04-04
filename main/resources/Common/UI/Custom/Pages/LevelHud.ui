@@ -1,0 +1,40 @@
+Group {
+  LayoutMode: Top;
+  Anchor: (Full: 0);
+  Background: #000000(0.0);
+
+  Group #TopSpacer {
+    FlexWeight: 1;
+  }
+
+  Group #HudContainer {
+    Anchor: (Full: 0, Height: 80);
+    LayoutMode: Top;
+
+    Label #HudLevelLabel { 
+      Style: (FontSize: 18, TextColor: #ffffff, HorizontalAlignment: Center, RenderBold: true); 
+      Anchor: (Full: 0, Height: 24); 
+      Text: "Lv. 1"; 
+    }
+
+    Group { Anchor: (Height: 4); }
+
+    Label #HudVisualBar { 
+      Style: (FontSize: 16, TextColor: #5bc8f5, HorizontalAlignment: Center, RenderBold: true); 
+      Anchor: (Full: 0, Height: 18); 
+      Text: "[--------------------]"; 
+    }
+
+    Group { Anchor: (Height: 4); }
+
+    Label #HudXpLabel { 
+      Style: (FontSize: 12, TextColor: #ffffff, HorizontalAlignment: Center); 
+      Anchor: (Full: 0, Height: 16); 
+      Text: "0 / 100 XP"; 
+    }
+  }
+
+  Group #BottomSpacer { 
+    Anchor: (Full: 0, Height: 130);
+  }
+}
