@@ -217,7 +217,7 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         camSettings.rotationLerpSpeed = 0.15f;
         camSettings.attachedToType = AttachedToType.LocalPlayer;
         camSettings.rotationType = RotationType.AttachedToPlusOffset;
-        camSettings.rotationOffset = new Direction((float) Math.PI, 0.7f, 0.3f);
+        camSettings.rotationOffset = new Direction((float) Math.PI, 0.7f, 0f);
         camSettings.allowPitchControls = false;
         camSettings.sendMouseMotion = false;
         camSettings.mouseInputTargetType = MouseInputTargetType.None;

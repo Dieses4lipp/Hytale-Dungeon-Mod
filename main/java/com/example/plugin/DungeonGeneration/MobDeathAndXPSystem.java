@@ -17,7 +17,7 @@ public class MobDeathAndXPSystem extends DeathSystems.OnDeathSystem {
     @Nonnull
     @Override
     public Query<EntityStore> getQuery() {
-        return Query.and(); 
+     return Query.not(PlayerLevelComponent.getComponentType());
     }
 
     @Override

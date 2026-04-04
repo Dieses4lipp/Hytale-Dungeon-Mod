@@ -4,8 +4,6 @@ import com.example.plugin.Commands.DestroyDungeonCommand;
 import com.example.plugin.Commands.GenerateDungeonCommand;
 import com.example.plugin.Commands.OpenPlayPageCommand;
 import com.example.plugin.Commands.SpawnNPCCommand;
-import com.example.plugin.DungeonGeneration.DungeonConfig;
-import com.example.plugin.DungeonGeneration.DungeonManager;
 import com.example.plugin.Npc.Testinteractionnpc.NPCInteractionSetupSystem;
 import com.example.plugin.Npc.Testinteractionnpc.NPCSetupPending;
 import com.example.plugin.Npc.Testinteractionnpc.TalkToNPCInteraction;
@@ -21,9 +19,9 @@ import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.example.plugin.Stats.PlayerLevelComponent;
-import com.example.plugin.DungeonGeneration.MobDeathAndXPSystem;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.example.plugin.DungeonGeneration.*;
 
 import java.io.InputStream;
 
@@ -76,7 +74,8 @@ this.getEntityStoreRegistry().registerSystem(new com.example.plugin.Stats.Player
                 TalkToNPCInteraction.CODEC);
             
                 this.getEntityStoreRegistry().registerSystem(new ChestUseBlockSystem());
-        this.getEntityStoreRegistry().registerSystem(new com.example.plugin.DungeonGeneration.BossDeathSystem());
+        this.getEntityStoreRegistry().registerSystem(new BossDeathSystem());
+       this.getEntityStoreRegistry().registerSystem(new PlayerDeathDungeonSystem());
         this.getCommandRegistry().registerCommand(new GenerateDungeonCommand("test", "An example command", false));
         this.getCommandRegistry().registerCommand(new SpawnNPCCommand());
         this.getCommandRegistry().registerCommand(new OpenPlayPageCommand());
