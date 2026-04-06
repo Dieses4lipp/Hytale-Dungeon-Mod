@@ -131,7 +131,7 @@ public class DungeonGenerator {
         }
         Ref<EntityStore> npcRef = result.first();
         store.addComponent(npcRef, DoorNPCComponent.getComponentType(),
-                new DoorNPCComponent(pos, orientation, world));
+                new DoorNPCComponent(pos, orientation));
 
         store.addComponent(npcRef, NPCSetupPending.getComponentType(),
                 new NPCSetupPending("Root_OpenDoor", "Open"));

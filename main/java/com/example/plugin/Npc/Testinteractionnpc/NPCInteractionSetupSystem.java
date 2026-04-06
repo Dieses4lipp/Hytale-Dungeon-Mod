@@ -37,30 +37,26 @@ public class NPCInteractionSetupSystem extends EntityTickingSystem<EntityStore> 
         // Get our marker component with setup configuration
         NPCSetupPending setupPending = archetypeChunk.getComponent(index, setupPendingType);
 
-        // Create and configure the Interactions component
         Interactions interactions = new Interactions();
         interactions.setInteractionId(InteractionType.Use, setupPending.getInteractionId());
         interactions.setInteractionHint(setupPending.getInteractionHint());
         
-        // Use CommandBuffer to add the Interactions component
         commandBuffer.putComponent(ref, interactionsType, interactions);
-                // Get or create NavigationComponent
-        
-        // Remove the marker component - setup is complete
-        commandBuffer.removeComponent(ref, setupPendingType);
+    boolean hasInteractions = archetypeChunk.getComponent(index, interactionsType) != null;
+    // DEBUG LOGGING
+    System.out.println("[DoorDebug] Checking NPC at index " + index 
+        + " | Has Interaction Component: " + hasInteractions);
     }
 
     @Nullable
     @Override
     public SystemGroup<EntityStore> getGroup() {
-        // Run in default group (null) or specify a group if needed
         return null;
     }
 
     @Nonnull
     @Override
     public Query<EntityStore> getQuery() {
-        // Only process entities that have NPCSetupPending component
         return Query.and(setupPendingType);
     }
 }

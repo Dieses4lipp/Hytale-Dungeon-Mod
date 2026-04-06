@@ -46,8 +46,7 @@ public class HelloPlugin extends JavaPlugin {
         );
         PlayerLevelComponent.setComponentType(playerLevelType);
 
-        // 2. Register the System
-        this.getEntityStoreRegistry().registerSystem(new MobDeathAndXPSystem());
+        
         InputStream configStream = getClass().getResourceAsStream("/dungeon_config.json");
         if (configStream == null) {
             System.out.println("Failed to load dungeon_config.json");
@@ -56,17 +55,18 @@ public class HelloPlugin extends JavaPlugin {
         new DungeonManager();
         ComponentType<EntityStore, NPCSetupPending> setupPendingType = this.getEntityStoreRegistry().registerComponent(
                 NPCSetupPending.class,
-                NPCSetupPending::new);
+                "dungeon_mod:npc_setup_pending",
+                NPCSetupPending.CODEC);
         NPCSetupPending.setComponentType(setupPendingType);
-this.getEntityStoreRegistry().registerSystem(new com.example.plugin.Stats.PlayerLevelSetupSystem());
-        this.getEntityStoreRegistry().registerSystem(
-                new NPCInteractionSetupSystem(NPCSetupPending.getComponentType()));// Register DoorNPCComponent
-        ComponentType<EntityStore, DoorNPCComponent> doorNPCType = this.getEntityStoreRegistry().registerComponent(
-                DoorNPCComponent.class,
-                DoorNPCComponent::new);
-        DoorNPCComponent.setComponentType(doorNPCType);
 
-        // Register OpenDoorInteraction codec
+        this.getEntityStoreRegistry().registerSystem(
+                new NPCInteractionSetupSystem(NPCSetupPending.getComponentType()));
+        ComponentType<EntityStore, DoorNPCComponent> doorNPCType = this.getEntityStoreRegistry().registerComponent(
+            DoorNPCComponent.class,
+            "dungeon_mod:door_npc", 
+            DoorNPCComponent.CODEC); 
+    DoorNPCComponent.setComponentType(doorNPCType);
+
         this.getCodecRegistry(Interaction.CODEC).register(
                 "open_door_type",
                 OpenDoorInteraction.class,
@@ -75,10 +75,13 @@ this.getEntityStoreRegistry().registerSystem(new com.example.plugin.Stats.Player
                 "talk_to_npc_type",
                 TalkToNPCInteraction.class,
                 TalkToNPCInteraction.CODEC);
-            
-                this.getEntityStoreRegistry().registerSystem(new ChestUseBlockSystem());
+        
+        this.getEntityStoreRegistry().registerSystem(new com.example.plugin.Stats.PlayerLevelSetupSystem());
+        this.getEntityStoreRegistry().registerSystem(new MobDeathAndXPSystem());
+        this.getEntityStoreRegistry().registerSystem(new ChestUseBlockSystem());
         this.getEntityStoreRegistry().registerSystem(new BossDeathSystem());
-       this.getEntityStoreRegistry().registerSystem(new PlayerDeathDungeonSystem());
+        this.getEntityStoreRegistry().registerSystem(new PlayerDeathDungeonSystem());
+
         this.getCommandRegistry().registerCommand(new GenerateDungeonCommand("test", "An example command", false));
         this.getCommandRegistry().registerCommand(new SpawnNPCCommand());
         this.getCommandRegistry().registerCommand(new OpenPlayPageCommand());
