@@ -23,6 +23,7 @@ import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.example.plugin.DungeonGeneration.*;
 
+import java.io.File;
 import java.io.InputStream;
 
 import javax.annotation.Nonnull;
@@ -37,6 +38,8 @@ public class HelloPlugin extends JavaPlugin {
     @Override
     protected void setup() {
         super.setup();
+        DatabaseManager.initialize(new File("plugins/HytaleDungeonMod"));
+        
         ComponentType<EntityStore, PlayerLevelComponent> playerLevelType = this.getEntityStoreRegistry().registerComponent(
                 PlayerLevelComponent.class,
                 PlayerLevelComponent::new
@@ -88,4 +91,6 @@ this.getEntityStoreRegistry().registerSystem(new com.example.plugin.Stats.Player
     protected void shutdown() {
         System.out.println("Plugin shutdown");
     }
+
+
 }

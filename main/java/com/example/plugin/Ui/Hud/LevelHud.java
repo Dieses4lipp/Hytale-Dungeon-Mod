@@ -1,37 +1,33 @@
 package com.example.plugin.Ui.Hud; 
 
 import javax.annotation.Nonnull;
-import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
-import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 public class LevelHud extends CustomUIHud {
 
-    private final Store<EntityStore> store;
-    private final Ref<EntityStore> ref;
+    // 1. Store the raw stats directly
+    private final int level;
+    private final int xp;
 
-    public LevelHud(PlayerRef playerRef, Store<EntityStore> store, Ref<EntityStore> ref) {
+    // 2. Ask for the stats in the constructor instead of the store!
+    public LevelHud(PlayerRef playerRef, int level, int xp) {
         super(playerRef); 
-        this.store = store;
-        this.ref = ref;
+        this.level = level;
+        this.xp = xp;
     }
 
     @Override
     protected void build(@Nonnull UICommandBuilder uiCommandBuilder) {
-         uiCommandBuilder.append("Pages/LevelHud.ui"); 
+        uiCommandBuilder.append("Pages/LevelHud.ui"); 
         
-        // 3. Now this works perfectly because store and ref are saved in the class!
-        var stats = com.example.plugin.Stats.PlayerLevelComponent.getStats(this.store, this.ref);
-        int currentLevel = (stats != null) ? stats.level : 1;
-        int currentXp = (stats != null) ? stats.xp : 0;
-        int xpNeeded = currentLevel * 100;
+        // 3. We don't need to look in the store anymore! Just use the variables.
+        int xpNeeded = this.level * 100;
 
         // --- Generate Text Progress Bar ---
         int totalBars = 20; 
-        int filledBars = (int) Math.round(((double) currentXp / xpNeeded) * totalBars);
+        int filledBars = (int) Math.round(((double) this.xp / xpNeeded) * totalBars);
         if (filledBars > totalBars) filledBars = totalBars;
 
         StringBuilder barBuilder = new StringBuilder("[");
@@ -45,9 +41,9 @@ public class LevelHud extends CustomUIHud {
         barBuilder.append("]");
         // ----------------------------------
 
-        // Update the UI
-        uiCommandBuilder.set("#HudLevelLabel.Text", "Lv. " + currentLevel);
-        uiCommandBuilder.set("#HudXpLabel.Text", currentXp + " / " + xpNeeded + " XP");
+        // Update the UI using our direct variables
+        uiCommandBuilder.set("#HudLevelLabel.Text", "Lv. " + this.level);
+        uiCommandBuilder.set("#HudXpLabel.Text", this.xp + " / " + xpNeeded + " XP");
         uiCommandBuilder.set("#HudVisualBar.Text", barBuilder.toString()); 
     }
 }

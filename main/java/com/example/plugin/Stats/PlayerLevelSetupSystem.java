@@ -1,7 +1,8 @@
-package com.example.plugin.Stats; // Adjust if your package is different!
+package com.example.plugin.Stats;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.sql.*;
 
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -14,6 +15,7 @@ import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.example.plugin.Ui.Hud.LevelHud;
+import com.example.plugin.DatabaseManager;
 
 public class PlayerLevelSetupSystem extends EntityTickingSystem<EntityStore> {
 
@@ -35,34 +37,54 @@ public class PlayerLevelSetupSystem extends EntityTickingSystem<EntityStore> {
 
         if (!store.getArchetype(ref).contains(playerLevelType)) {
             
-            PlayerLevelComponent newStats = new PlayerLevelComponent();
-            commandBuffer.addComponent(ref, playerLevelType, newStats);
-            System.out.println("[DungeonMod] ECS automatically attached PlayerLevelComponent to new Player Ref: " + ref);
+            PlayerLevelComponent stats = new PlayerLevelComponent();
+            PlayerRef playerRef = store.getComponent(ref, playerRefType);
+            
+            if (playerRef != null) {
+                String uuid = playerRef.getUuid().toString();
 
+                try (PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement(
+                        "SELECT level, xp FROM player_levels WHERE uuid = ?")) {
+                    pstmt.setString(1, uuid);
+                    ResultSet rs = pstmt.executeQuery();
+
+                    if (rs.next()) {
+                        stats.level = rs.getInt("level");
+                        stats.xp = rs.getInt("xp");
+                        System.out.println("[DungeonMod] Daten geladen für " + uuid + ": Level " + stats.level);
+                    } else {
+                        try (PreparedStatement insert = DatabaseManager.getConnection().prepareStatement(
+                                "INSERT INTO player_levels (uuid, level, xp) VALUES (?, 1, 0)")) {
+                            insert.setString(1, uuid);
+                            insert.executeUpdate();
+                            System.out.println("[DungeonMod] Neuer Spieler in Datenbank registriert: " + uuid);
+                        }
+                    }
+                } catch (SQLException e) {
+                    System.err.println("[DungeonMod] Fehler beim Laden der Spielerdaten: " + e.getMessage());
+                }
+            }
+
+            commandBuffer.addComponent(ref, playerLevelType, stats);
+
+            // HUD Initialisierung
             try {
                 com.hypixel.hytale.server.core.entity.entities.Player player = store.getComponent(ref, com.hypixel.hytale.server.core.entity.entities.Player.getComponentType());
-                PlayerRef playerRef = store.getComponent(ref, playerRefType);
-
                 if (player != null && playerRef != null) {
-                    LevelHud hudPage = new LevelHud(playerRef, store, ref);
-player.getHudManager().setCustomHud(playerRef, hudPage);
-                    System.out.println("[DungeonMod] Persistent Level HUD opened for player.");
+                   LevelHud hudPage = new LevelHud(playerRef, stats.level, stats.xp);
+                    player.getHudManager().setCustomHud(playerRef, hudPage);
                 }
             } catch (Exception e) {
-                System.out.println("[DungeonMod] Error opening HUD during setup: " + e.getMessage());
+                System.out.println("[DungeonMod] Fehler beim HUD-Setup: " + e.getMessage());
             }
         }
     }
 
     @Nullable
     @Override
-    public SystemGroup<EntityStore> getGroup() {
-        return null;
-    }
+    public SystemGroup<EntityStore> getGroup() { return null; }
 
     @Nonnull
     @Override
-    public Query<EntityStore> getQuery() {
-        return Query.and(playerRefType);
-    }
+    public Query<EntityStore> getQuery() { return Query.and(playerRefType); }
 }

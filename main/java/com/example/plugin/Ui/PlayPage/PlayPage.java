@@ -207,7 +207,6 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         Teleport teleportComponent = Teleport.createForPlayer(currentPosition, newLookDirection);
 
         store.addComponent(ref, Teleport.getComponentType(), teleportComponent);
-
         ServerCameraSettings camSettings = new ServerCameraSettings();
         camSettings.mouseInputTargetType = MouseInputTargetType.None;
         camSettings.isFirstPerson = false;
@@ -226,7 +225,6 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         camSettings.displayReticle = false;
         camSettings.lookMultiplier = new Vector2f(0.0f, 0.0f);
         camSettings.skipCharacterPhysics = false;
-
         camSettings.eyeOffset = true;
         camSettings.positionDistanceOffsetType = PositionDistanceOffsetType.DistanceOffsetRaycast;
 
