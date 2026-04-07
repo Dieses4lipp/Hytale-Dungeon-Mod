@@ -18,10 +18,10 @@ Group {
     TextButton #CharacterBtn { Anchor: (Width: 180, Height: 64); Text: "CHARACTER"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
     Group { Anchor: (Width: 8); }
     
-    TextButton #MarketBtn { Anchor: (Width: 140, Height: 64); Text: "MARKET"; Padding: (Horizontal: 14); Background: #1c3a5c; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+    TextButton #MarketBtn { Anchor: (Width: 140, Height: 64); Text: "MARKET"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
     Group { Anchor: (Width: 8); }
     
-    TextButton #LeaderboardBtn { Anchor: (Width: 200, Height: 64); Text: "LEADERBOARDS"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
+    TextButton #LeaderboardBtn { Anchor: (Width: 200, Height: 64); Text: "LEADERBOARDS"; Padding: (Horizontal: 14); Background: #1c3a5c; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
   }
 
   Group #NavSpacer { Anchor: (Full: 0, Height: 18); Background: #060809; }

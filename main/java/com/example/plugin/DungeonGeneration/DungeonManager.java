@@ -1,5 +1,6 @@
 package com.example.plugin.DungeonGeneration;
 
+import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.packets.worldmap.MapImage;
 import com.hypixel.hytale.protocol.packets.worldmap.MapMarker;
@@ -18,7 +19,7 @@ public class DungeonManager {
     private final int spacing     = DungeonConfig.get().manager.spacing;
     private final int slotSize    = gridsize * spacing;
     private final int slotsPerRow = DungeonConfig.get().manager.slotsPerRow;
-
+    public World activeWorld;
     private int nextSlot = 0;
     private final Queue<Integer> freeSlots = new LinkedList<>();
     private final Map<Integer, DungeonInstance> activeBySlot = new HashMap<>();
@@ -26,6 +27,7 @@ public class DungeonManager {
     public DungeonManager() { instance = this; }
 
     public DungeonInstance createDungeon(World world, int roomCount, Store<EntityStore> store) {
+        this.activeWorld = world;
         int slot = freeSlots.isEmpty() ? nextSlot++ : freeSlots.poll();
 
         int slotCol = slot % slotsPerRow;
@@ -51,8 +53,8 @@ public class DungeonManager {
         return inst;
     }
 
-    public void destroyDungeon(Store<EntityStore> store,World world, DungeonInstance inst) {
-        inst.cleanup(store); 
+    public void destroyDungeon(Store<EntityStore> store, CommandBuffer commandBuffer,World world, DungeonInstance inst) {
+        inst.cleanup(store, commandBuffer); 
         DungeonGenerator generator = new DungeonGenerator();
         generator.clearDungeon(world, inst);
         activeBySlot.remove(inst.slot);

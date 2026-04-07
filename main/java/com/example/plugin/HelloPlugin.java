@@ -4,8 +4,6 @@ import com.example.plugin.Commands.DestroyDungeonCommand;
 import com.example.plugin.Commands.GenerateDungeonCommand;
 import com.example.plugin.Commands.OpenPlayPageCommand;
 import com.example.plugin.Commands.SpawnNPCCommand;
-import com.example.plugin.DungeonGeneration.DungeonConfig;
-import com.example.plugin.DungeonGeneration.DungeonManager;
 import com.example.plugin.Npc.Testinteractionnpc.NPCInteractionSetupSystem;
 import com.example.plugin.Npc.Testinteractionnpc.NPCSetupPending;
 import com.example.plugin.Npc.Testinteractionnpc.TalkToNPCInteraction;
@@ -14,15 +12,22 @@ import com.example.plugin.doorsystem.DoorNPCComponent;
 import com.example.plugin.doorsystem.MyUseBlockSystem;
 import com.example.plugin.doorsystem.OpenDoorInteraction;
 import com.hypixel.hytale.component.ComponentType;
+import com.hypixel.hytale.protocol.packets.player.JoinWorld;
 import com.hypixel.hytale.server.core.event.events.ecs.UseBlockEvent;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.example.plugin.Stats.PlayerLevelComponent;
+import com.hypixel.hytale.component.ComponentType;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.example.plugin.DungeonGeneration.*;
 
+import java.io.File;
 import java.io.InputStream;
 
 import javax.annotation.Nonnull;
+import javax.security.auth.spi.LoginModule;
 
 public class HelloPlugin extends JavaPlugin {
 
@@ -33,26 +38,35 @@ public class HelloPlugin extends JavaPlugin {
     @Override
     protected void setup() {
         super.setup();
+        DatabaseManager.initialize(new File("plugins/HytaleDungeonMod"));
+        
+        ComponentType<EntityStore, PlayerLevelComponent> playerLevelType = this.getEntityStoreRegistry().registerComponent(
+                PlayerLevelComponent.class,
+                PlayerLevelComponent::new
+        );
+        PlayerLevelComponent.setComponentType(playerLevelType);
+
+        
         InputStream configStream = getClass().getResourceAsStream("/dungeon_config.json");
         if (configStream == null) {
             System.out.println("Failed to load dungeon_config.json");
         }
         DungeonConfig.load(configStream);
-
         new DungeonManager();
         ComponentType<EntityStore, NPCSetupPending> setupPendingType = this.getEntityStoreRegistry().registerComponent(
                 NPCSetupPending.class,
-                NPCSetupPending::new);
+                "dungeon_mod:npc_setup_pending",
+                NPCSetupPending.CODEC);
         NPCSetupPending.setComponentType(setupPendingType);
 
         this.getEntityStoreRegistry().registerSystem(
-                new NPCInteractionSetupSystem(NPCSetupPending.getComponentType()));// Register DoorNPCComponent
+                new NPCInteractionSetupSystem(NPCSetupPending.getComponentType()));
         ComponentType<EntityStore, DoorNPCComponent> doorNPCType = this.getEntityStoreRegistry().registerComponent(
-                DoorNPCComponent.class,
-                DoorNPCComponent::new);
-        DoorNPCComponent.setComponentType(doorNPCType);
+            DoorNPCComponent.class,
+            "dungeon_mod:door_npc", 
+            DoorNPCComponent.CODEC); 
+    DoorNPCComponent.setComponentType(doorNPCType);
 
-        // Register OpenDoorInteraction codec
         this.getCodecRegistry(Interaction.CODEC).register(
                 "open_door_type",
                 OpenDoorInteraction.class,
@@ -61,9 +75,13 @@ public class HelloPlugin extends JavaPlugin {
                 "talk_to_npc_type",
                 TalkToNPCInteraction.class,
                 TalkToNPCInteraction.CODEC);
-            
-                this.getEntityStoreRegistry().registerSystem(new ChestUseBlockSystem());
-        this.getEntityStoreRegistry().registerSystem(new com.example.plugin.DungeonGeneration.BossDeathSystem());
+        
+        this.getEntityStoreRegistry().registerSystem(new com.example.plugin.Stats.PlayerLevelSetupSystem());
+        this.getEntityStoreRegistry().registerSystem(new MobDeathAndXPSystem());
+        this.getEntityStoreRegistry().registerSystem(new ChestUseBlockSystem());
+        this.getEntityStoreRegistry().registerSystem(new BossDeathSystem());
+        this.getEntityStoreRegistry().registerSystem(new PlayerDeathDungeonSystem());
+
         this.getCommandRegistry().registerCommand(new GenerateDungeonCommand("test", "An example command", false));
         this.getCommandRegistry().registerCommand(new SpawnNPCCommand());
         this.getCommandRegistry().registerCommand(new OpenPlayPageCommand());
@@ -76,4 +94,6 @@ public class HelloPlugin extends JavaPlugin {
     protected void shutdown() {
         System.out.println("Plugin shutdown");
     }
+
+
 }

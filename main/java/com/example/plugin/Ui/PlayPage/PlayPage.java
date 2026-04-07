@@ -14,6 +14,7 @@ import com.hypixel.hytale.math.vector.Transform;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.protocol.AttachedToType;
+import com.hypixel.hytale.protocol.CameraInteraction;
 import com.hypixel.hytale.protocol.ClientCameraView;
 import com.hypixel.hytale.protocol.Direction;
 import com.hypixel.hytale.protocol.MouseInputTargetType;
@@ -84,8 +85,15 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
             uiCommandBuilder.append("Pages/PlayPage_Large.ui");
         } else {
             uiCommandBuilder.append("Pages/PlayPage_Small.ui");
-        }
-        
+        } 
+
+
+    var stats = com.example.plugin.Stats.PlayerLevelComponent.getStats(store, ref);
+    int currentLevel = (stats != null) ? stats.level : 1;
+    int currentXp = (stats != null) ? stats.xp : 0;
+    int xpNeeded = currentLevel * 100;
+    uiCommandBuilder.set("#LevelLabel.Text", "Lv. " + currentLevel);
+    uiCommandBuilder.set("#XpLabel.Text", currentXp + " / " + xpNeeded + " XP");
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#PlayBtn",
                 EventData.of("ButtonClicked", "nav_play"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#StashBtn",
@@ -199,8 +207,8 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         Teleport teleportComponent = Teleport.createForPlayer(currentPosition, newLookDirection);
 
         store.addComponent(ref, Teleport.getComponentType(), teleportComponent);
-
         ServerCameraSettings camSettings = new ServerCameraSettings();
+        camSettings.mouseInputTargetType = MouseInputTargetType.None;
         camSettings.isFirstPerson = false;
         camSettings.distance = 1.4f;
         camSettings.positionOffset = new Position(-0.8, -0.7, 0);
@@ -208,16 +216,15 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         camSettings.rotationLerpSpeed = 0.15f;
         camSettings.attachedToType = AttachedToType.LocalPlayer;
         camSettings.rotationType = RotationType.AttachedToPlusOffset;
-        camSettings.rotationOffset = new Direction((float) Math.PI, 0.7f, 0.3f);
+        camSettings.rotationOffset = new Direction((float) Math.PI, 0.7f, 0f);
         camSettings.allowPitchControls = false;
         camSettings.sendMouseMotion = false;
+        camSettings.mouseInputTargetType = MouseInputTargetType.None;
         camSettings.mouseInputType = MouseInputType.LookAtTargetEntity;
         camSettings.displayCursor = true;
         camSettings.displayReticle = false;
         camSettings.lookMultiplier = new Vector2f(0.0f, 0.0f);
-        camSettings.mouseInputTargetType = MouseInputTargetType.None;
         camSettings.skipCharacterPhysics = false;
-
         camSettings.eyeOffset = true;
         camSettings.positionDistanceOffsetType = PositionDistanceOffsetType.DistanceOffsetRaycast;
 

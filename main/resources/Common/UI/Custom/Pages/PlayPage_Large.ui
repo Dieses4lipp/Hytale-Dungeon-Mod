@@ -85,8 +85,8 @@ Group {
     Anchor: (Full: 0, Height: 100); LayoutMode: CenterMiddle; Background: #0d1117(0.97);
     Group #BottomBarContent {
       Anchor: (Width: 860, Height: 70); LayoutMode: Left;
-      Label #LevelLabel { Style: (FontSize: 18, TextColor: #ffffff, HorizontalAlignment: Center, RenderBold: true); Anchor: (Width: 120, Height: 60); Text: "Lv. 3"; Padding: (Full: 8); }
-      Label #XpLabel { Style: (FontSize: 15, TextColor: #8899aa, HorizontalAlignment: Center); Anchor: (Width: 180, Height: 60); Text: "86 / 335 XP"; Padding: (Full: 8); }
+      Label #LevelLabel { Style: (FontSize: 18, TextColor: #ffffff, HorizontalAlignment: Center, RenderBold: true); Anchor: (Width: 120, Height: 60); Text: ""; Padding: (Full: 8); }
+      Label #XpLabel { Style: (FontSize: 15, TextColor: #8899aa, HorizontalAlignment: Center); Anchor: (Width: 180, Height: 60); Text: ""; Padding: (Full: 8); }
       TextButton #EnterBtn { Anchor: (Width: 240, Height: 54); Text: "ENTER DUNGEON"; Padding: (Horizontal: 12); Style: (Default: (Background: #1a3a5c, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (Background: #254a75, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Pressed: (Background: #0f151e, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
       Group { Anchor: (Width: 16); }
       TextButton #CloseBtn { Anchor: (Width: 140, Height: 54); Text: "CLOSE"; Padding: (Horizontal: 12); Style: (Default: (Background: #1c2333, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (Background: #2a344d, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Pressed: (Background: #0f151e, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }

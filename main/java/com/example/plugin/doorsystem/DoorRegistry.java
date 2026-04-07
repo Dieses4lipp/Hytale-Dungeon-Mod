@@ -9,10 +9,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DoorRegistry {
 
+    
     public enum Orientation {
         SN, WE
     }
-
+    
     private static final Map<String, Orientation> doors = new ConcurrentHashMap<>();
 
     public static void register(Vector3i pos, Orientation orientation) {

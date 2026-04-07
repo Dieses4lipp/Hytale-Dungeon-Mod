@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.example.plugin.doorsystem.DoorNPCComponent;
 import com.example.plugin.doorsystem.DoorRegistry;
+import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
@@ -42,7 +43,10 @@ public class DungeonInstance {
 
     public List<Ref<EntityStore>> spawnedEnemies = new ArrayList<>();
 
-    public void cleanup(Store<EntityStore> store) {
+    public void cleanup(Store<EntityStore> store, CommandBuffer commandBuffer) {
+        
+        java.util.Set<Ref<EntityStore>> entitiesToDelete = new java.util.HashSet<>();
+
         for (Ref<EntityStore> ref : npcDoorRefs) {
             if (ref != null && ref.isValid()) {
                 try {
@@ -50,9 +54,7 @@ public class DungeonInstance {
                     if (doorData != null) {
                         DoorRegistry.remove(doorData.getDoorPos());
                     }
-                    if (store.getComponent(ref, DeathComponent.getComponentType()) == null) {
-                    store.addComponent(ref, DeathComponent.getComponentType()); 
-                }
+                    entitiesToDelete.add(ref); 
 
                 } catch (Exception e) {
                     System.out.println("[DungeonInstance] Error removing Door NPC: " + e.getMessage());
@@ -61,26 +63,29 @@ public class DungeonInstance {
         }
         npcDoorRefs.clear();
 
-        int mobsCleared = 0;
-
+        // 2. Clean up Enemies
         for (Ref<EntityStore> enemyRef : spawnedEnemies) {
             if (enemyRef != null && enemyRef.isValid()) {
-                if (store.getComponent(enemyRef, DeathComponent.getComponentType()) == null) {
-                    store.addComponent(enemyRef, DeathComponent.getComponentType()); 
-                }
-                mobsCleared++;
+                entitiesToDelete.add(enemyRef);
             }
         }
         spawnedEnemies.clear();
 
+        // 3. Clean up Boss
         if (bossRef != null && bossRef.isValid()) {
-             if (store.getComponent(bossRef, DeathComponent.getComponentType()) == null) {
-                    store.addComponent(bossRef, DeathComponent.getComponentType()); 
-                }
+            entitiesToDelete.add(bossRef); 
             bossRef = null;
         }
 
-        System.out.println("[DungeonInstance] Cleanup finished. Mobs killed: " + mobsCleared);
+        for (Ref<EntityStore> entity : entitiesToDelete) {
+            if (commandBuffer != null) {
+                commandBuffer.removeEntity(entity, RemoveReason.REMOVE); 
+            } else {
+                store.removeEntity(entity, RemoveReason.REMOVE); 
+            }
+        }
+
+        System.out.println("[DungeonInstance] Cleanup finished. Entities silently despawned: " + entitiesToDelete.size());
     }
 
     public int getId() {

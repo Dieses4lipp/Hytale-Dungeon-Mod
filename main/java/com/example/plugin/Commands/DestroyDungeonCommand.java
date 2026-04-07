@@ -39,7 +39,7 @@ public class DestroyDungeonCommand extends AbstractPlayerCommand {
             return;
         }
 
-        DungeonManager.get().destroyDungeon(store, world, inst);
+        DungeonManager.get().destroyDungeon(store, null ,world, inst);
         playerRef.sendMessage(Message.raw("Dungeon slot " + slot + " destroyed."));
     }
 

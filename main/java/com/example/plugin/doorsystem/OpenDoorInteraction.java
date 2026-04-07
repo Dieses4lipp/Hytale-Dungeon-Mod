@@ -50,7 +50,7 @@ public class OpenDoorInteraction extends SimpleInstantInteraction {
             return;
         }
 
-        World world = doorData.getWorld();
+        World world = com.example.plugin.DungeonGeneration.DungeonManager.get().activeWorld;
         if (world == null) {
             System.out.println("[DoorSystem] ERROR: World is null in DoorNPCComponent");
             interactionContext.getState().state = InteractionState.Failed;
