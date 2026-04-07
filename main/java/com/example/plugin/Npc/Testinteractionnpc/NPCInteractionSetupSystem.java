@@ -31,10 +31,8 @@ public class NPCInteractionSetupSystem extends EntityTickingSystem<EntityStore> 
             @Nonnull Store<EntityStore> store, 
             @Nonnull CommandBuffer<EntityStore> commandBuffer) {
 
-        // Get the entity reference
         Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
 
-        // Get our marker component with setup configuration
         NPCSetupPending setupPending = archetypeChunk.getComponent(index, setupPendingType);
 
         Interactions interactions = new Interactions();
@@ -42,11 +40,7 @@ public class NPCInteractionSetupSystem extends EntityTickingSystem<EntityStore> 
         interactions.setInteractionHint(setupPending.getInteractionHint());
         
         commandBuffer.putComponent(ref, interactionsType, interactions);
-    boolean hasInteractions = archetypeChunk.getComponent(index, interactionsType) != null;
-    // DEBUG LOGGING
-    System.out.println("[DoorDebug] Checking NPC at index " + index 
-        + " | Has Interaction Component: " + hasInteractions);
-    }
+}
 
     @Nullable
     @Override

@@ -1,0 +1,25 @@
+{
+    "mobs": {
+        "default_room": {
+            "Skeleton_Sand_Guard": { "weight": 50, "xp": 15 },
+            "Skeleton_Archmage": { "weight": 30, "xp": 25 },
+            "Skeleton_Burnt_Gunner": { "weight": 20, "xp": 20 }
+        },
+        "boss_room": {
+            "Trork_Sentry": { "weight": 60, "xp": 50 },
+            "Trork_Chieftain": { "weight": 100, "xp": 150 }
+        }
+    },
+    "loot": {
+        "wooden_chest": {
+            "Weapon_Axe_Bone": 40,
+            "Weapon_Gun": 50,
+            "Health_Potion": 10
+        },
+        "gold_chest": {
+            "Rock_Gem_Emerald": 30,
+            "Ingredient_Bar_Gold": 10,
+            "Ore_Gold": 5
+        }
+    }
+}

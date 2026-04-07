@@ -11,7 +11,8 @@ import com.hypixel.hytale.server.core.modules.entity.damage.DeathSystems;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
-import com.example.plugin.Stats.PlayerLevelComponent; 
+import com.example.plugin.Stats.PlayerLevelComponent;
+import com.example.plugin.doorsystem.OpenDoorInteraction;
 
 import javax.annotation.Nonnull;
 

@@ -10,6 +10,8 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 
 import it.unimi.dsi.fastutil.Pair;
+
+import java.util.Map;
 import java.util.Random;
 
 public class EnemySpawner {
@@ -26,7 +28,7 @@ public class EnemySpawner {
             for (int y = 0; y < instance.grid[x].length; y++) {
 
                 Room room = instance.grid[x][y];
-                if (room == null){
+                if (room == null) {
                     continue;
                 }
                 RoomType type = room.getType();
@@ -34,7 +36,7 @@ public class EnemySpawner {
                         || type == RoomType.SHOP || room.isSatellite()) {
                     continue;
                 }
-                
+
                 if (x == instance.startX && y == instance.startY)
                     continue;
 
@@ -65,6 +67,8 @@ public class EnemySpawner {
             int y, int minZ, int maxZ) {
         int enemyCount = 3 + random.nextInt(3);
 
+        Map<String, DungeonTables.MobStats> mobPool = DungeonTables.get().mobs.get("default_room");
+
         for (int i = 0; i < enemyCount; i++) {
             int spawnX = minX + random.nextInt(maxX - minX);
             int spawnZ = minZ + random.nextInt(maxZ - minZ);
@@ -72,9 +76,15 @@ public class EnemySpawner {
             Vector3d spawnPos = new Vector3d(spawnX, y, spawnZ);
             Vector3f rotation = new Vector3f(0, random.nextFloat() * 360f, 0);
 
-            // Make sure this is the EXACT string your command uses
-            String prefabToSpawn = "Skeleton_Sand_Guard";
+            String prefabToSpawn = DungeonTables.get().getRandomMob(mobPool);
+            if (prefabToSpawn == null) {
+                prefabToSpawn = "Skeleton_Sand_Guard";
+            }
 
+            int xpBounty = 25;
+            if (mobPool.containsKey(prefabToSpawn)) {
+                xpBounty = mobPool.get(prefabToSpawn).xp;
+            }
             Pair<Ref<EntityStore>, INonPlayerCharacter> result = NPCPlugin.get().spawnNPC(
                     store,
                     prefabToSpawn,
@@ -84,11 +94,7 @@ public class EnemySpawner {
 
             if (result != null) {
                 instance.spawnedEnemies.add(result.first());
-                System.out.println("[EnemySpawner] SUCCESS: Spawned " + prefabToSpawn + " at " + spawnX + ", " + y
-                        + ", " + spawnZ);
-            } else {
-                System.out.println("[EnemySpawner] FAILED: spawnNPC returned null for " + prefabToSpawn + " at "
-                        + spawnX + ", " + y + ", " + spawnZ + ". (Is the prefab ID correct? Are chunks loaded?)");
+                DungeonManager.get().mobXpRewards.put(result.first(), xpBounty);
             }
         }
     }
@@ -97,12 +103,18 @@ public class EnemySpawner {
             int minZ, int maxZ) {
         int centerX = minX + ((maxX - minX) / 2);
         int centerZ = minZ + ((maxZ - minZ) / 2);
+        Map<String, DungeonTables.MobStats> mobPool = DungeonTables.get().mobs.get("boss_room");
 
         Vector3d spawnPos = new Vector3d(centerX, y, centerZ);
         Vector3f rotation = new Vector3f(0, 0, 0);
 
-        String prefabToSpawn = "Klops_Merchant";
+            String prefabToSpawn = DungeonTables.get().getRandomMob(mobPool);
+            if (prefabToSpawn == null) {
+                prefabToSpawn = "Klops_Merchant";
+            }
 
+            DungeonTables.MobStats stats = mobPool.get(prefabToSpawn);
+    int xpBounty = (stats != null) ? stats.xp : 150;
         Pair<Ref<EntityStore>, INonPlayerCharacter> result = NPCPlugin.get().spawnNPC(
                 store,
                 prefabToSpawn,
@@ -112,9 +124,10 @@ public class EnemySpawner {
 
         if (result != null) {
             instance.spawnedEnemies.add(result.first());
+            DungeonManager.get().mobXpRewards.put(result.first(), xpBounty);
             System.out.println("[EnemySpawner] SUCCESS: Spawned BOSS " + prefabToSpawn + " at " + centerX + ", " + y
                     + ", " + centerZ);
-                    instance.bossRef = result.first();
+            instance.bossRef = result.first();
         } else {
             System.out.println("[EnemySpawner] FAILED: BOSS spawnNPC returned null for " + prefabToSpawn
                     + ". (Prefab ID wrong or chunks unloaded?)");

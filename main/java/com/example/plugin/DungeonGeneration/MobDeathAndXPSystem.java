@@ -50,8 +50,13 @@ public class MobDeathAndXPSystem extends DeathSystems.OnDeathSystem {
                 PlayerRef pRef = store.getComponent(killerRef, PlayerRef.getComponentType());
                 
                 if (stats != null && pRef != null) {
-                    // XP Berechnung
-                    stats.xp += 25; 
+                    
+                    int xpGained = 25;
+                    if (DungeonManager.get().mobXpRewards.containsKey(ref)) {
+                        xpGained = DungeonManager.get().mobXpRewards.remove(ref); 
+                    }
+
+                    stats.xp += xpGained;
                     int xpNeeded = stats.level * 100; 
                     
                     if (stats.xp >= xpNeeded) {
@@ -60,7 +65,6 @@ public class MobDeathAndXPSystem extends DeathSystems.OnDeathSystem {
                         System.out.println("[DungeonMod] Level Up gespeichert!");
                     }
 
-                    // DATENBANK-LOGIK: Fortschritt sofort sichern
                     try (PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement(
                             "UPDATE player_levels SET level = ?, xp = ? WHERE uuid = ?")) {
                         pstmt.setInt(1, stats.level);

@@ -1,6 +1,7 @@
 package com.example.plugin.DungeonGeneration;
 
 import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.packets.worldmap.MapImage;
 import com.hypixel.hytale.protocol.packets.worldmap.MapMarker;
@@ -10,11 +11,12 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.universe.world.worldmap.markers.MapMarkerBuilder;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DungeonManager {
     private static DungeonManager instance;
     public static DungeonManager get() { return instance; }
-
+    public Map<Ref<EntityStore>, Integer> mobXpRewards = new ConcurrentHashMap<>();
     private final int gridsize    = DungeonConfig.get().layout.gridsize;
     private final int spacing     = DungeonConfig.get().manager.spacing;
     private final int slotSize    = gridsize * spacing;
