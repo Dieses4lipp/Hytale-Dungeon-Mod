@@ -57,10 +57,6 @@ public class MyUseBlockSystem extends EntityEventSystem<EntityStore, UseBlockEve
         System.out.println("[DoorSystem] Placing open prefab: " + openPath);
 
         BlockSelection openPrefab = PrefabStore.get().getPrefab(openPath);
-        if (openPrefab == null) {
-            System.out.println("[DoorSystem] ERROR: Open prefab not found at path: " + openPath);
-            return;
-        }
 
         openPrefab.placeNoReturn(world, pos, null);
         DoorRegistry.remove(pos);

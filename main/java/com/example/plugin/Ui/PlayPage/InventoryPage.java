@@ -135,7 +135,6 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
     int xpNeeded = currentLevel * 100;
     uiCommandBuilder.set("#LevelLabel.Text", "Lv. " + currentLevel);
     uiCommandBuilder.set("#XpLabel.Text", currentXp + " / " + xpNeeded + " XP");
-        // Statische Bindings (Buttons oben/unten)
         uiEventBuilder.addEventBinding(
                 com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#PlayBtn",
                 EventData.of("ButtonClicked", "nav_play"), false);

@@ -12,14 +12,14 @@
     },
     "loot": {
         "wooden_chest": {
-            "Weapon_Axe_Bone": 40,
-            "Weapon_Gun": 50,
-            "Health_Potion": 10
+            "Weapon_Axe_Bone": { "weight": 100, "Quantity": 1 },
+            "Weapon_Gun": { "weight": 50, "Quantity": 1 },
+            "Health_Potion": { "weight": 10, "Quantity": 2 }
         },
         "gold_chest": {
-            "Rock_Gem_Emerald": 30,
-            "Ingredient_Bar_Gold": 10,
-            "Ore_Gold": 5
+            "Rock_Gem_Emerald": { "weight": 30, "Quantity": 1 },
+            "Ingredient_Bar_Gold": { "weight": 10, "Quantity": 1 },
+            "Ore_Gold": { "weight": 5, "Quantity": 1 }
         }
     }
 }
