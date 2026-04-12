@@ -27,7 +27,8 @@ public class DatabaseManager {
                 stmt.execute("CREATE TABLE IF NOT EXISTS player_levels (" +
                              "uuid TEXT PRIMARY KEY, " +
                              "level INTEGER DEFAULT 1, " +
-                             "xp INTEGER DEFAULT 0)");
+                             "xp INTEGER DEFAULT 0, " +
+                             "gold INTEGER DEFAULT 0)");
                 System.out.println("[Database] SQLite Tables verified.");
             }
         } catch (Exception e) {

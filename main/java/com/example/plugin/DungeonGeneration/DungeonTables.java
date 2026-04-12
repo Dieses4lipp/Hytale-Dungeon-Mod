@@ -1,5 +1,6 @@
 package com.example.plugin.DungeonGeneration;
 
+import com.example.plugin.DungeonGeneration.DungeonTables.LootEntry;
 import com.google.gson.Gson;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -28,9 +29,15 @@ public class DungeonTables {
 
     public Map<String, Map<String, LootEntry>> loot = new HashMap<>();
 
+    public Map<String, Integer> sellValues = new HashMap<>();
+
     public static DungeonTables load(InputStream stream) {
         instance = new Gson().fromJson(new InputStreamReader(stream), DungeonTables.class);
         return instance;
+    }
+
+    public int GetSellValue(String itemId) {
+        return this.sellValues.getOrDefault(itemId, 0);
     }
 
     public Map.Entry<String, LootEntry> getRandomLootEntry(Map<String, LootEntry> table) {

@@ -51,14 +51,16 @@ public class ChestUseBlockSystem extends EntityEventSystem<EntityStore, UseBlock
 
         Vector3i pos = event.getTargetBlock();
         String blockId = event.getBlockType().getId();
-
+                
         boolean isEpicDungeonChest = blockId.equals("Furniture_Dungeon_Chest_Epic");
-        boolean isEmeraldChest = blockId.equals("Furniture_Temple_Emerald_Chest_Small")
+        boolean isCommonDungeonChest = blockId.equals("Furniture_Human_Ruins_Chest_Small");
+
+        boolean isStashChest = blockId.equals("Furniture_Temple_Emerald_Chest_Small")
                 || blockId.equals("Furniture_Temple_Emerald_Chest_Large");
 
-        if (!isEpicDungeonChest && !isEmeraldChest)
+        if (!isEpicDungeonChest && !isCommonDungeonChest && !isStashChest)
             return;
-        if (isEmeraldChest) {
+        if (isStashChest) {
             event.setCancelled(true);
 
             if (ChestRegistry.isLocked(pos)) {
@@ -74,8 +76,67 @@ public class ChestUseBlockSystem extends EntityEventSystem<EntityStore, UseBlock
             player.getPageManager().openCustomPage(ref, store, new ChestPage(playerRef, pos));
         } else if (isEpicDungeonChest) {
             if (!ChestRegistry.isOpened(pos)) {
-                System.out.println("[ChestSystem] First time opening chest at "
-                        + pos.x + "," + pos.y + "," + pos.z + " - GENERATING LOOT");
+                try {
+                    World world = store.getExternalData().getWorld();
+                    long chunkIndex = ChunkUtil.indexChunkFromBlock(pos.x, pos.z);
+                    WorldChunk worldChunk = world.getChunkIfLoaded(chunkIndex);
+
+                    if (worldChunk != null) {
+                        Ref<ChunkStore> blockRef = worldChunk.getBlockComponentEntity(pos.x, pos.y, pos.z);
+
+                        if (blockRef != null && blockRef.isValid()) {
+                            Store<ChunkStore> chunkComponentStore = blockRef.getStore();
+                            ItemContainerBlock containerBlock = chunkComponentStore.getComponent(
+                                    blockRef, ItemContainerBlock.getComponentType());
+
+                            if (containerBlock != null) {
+                                Map<String, DungeonTables.LootEntry> lootTable = DungeonTables.get().loot
+                                        .get("epic_chest");
+
+                                Random random = new Random();
+                                short capacity = containerBlock.getItemContainer().getCapacity();
+
+                                List<Short> slots = new ArrayList<>();
+                                for (short s = 0; s < capacity; s++)
+                                    slots.add(s);
+                                Collections.shuffle(slots, random);
+
+                                int rollCount = 3 + random.nextInt(3); // 3 to 5 items
+                                System.out.println("[ChestSystem] Rolling " + rollCount + " items");
+
+                                for (int i = 0; i < rollCount && i < slots.size(); i++) {
+                                    Map.Entry<String, DungeonTables.LootEntry> rolled = DungeonTables.get()
+                                            .getRandomLootEntry(lootTable);
+
+                                    if (rolled != null) {
+                                        short slot = slots.get(i);
+                                        ItemStack lootItem = new ItemStack(
+                                                rolled.getKey(), rolled.getValue().Quantity);
+                                        containerBlock.getItemContainer()
+                                                .setItemStackForSlot(slot, lootItem);
+                                        System.out.println("[ChestSystem] Slot " + slot + ": "
+                                                + rolled.getKey() + " x" + rolled.getValue().Quantity);
+                                    }
+                                }
+                            } else {
+                                System.out.println("[ChestSystem] No ItemContainerBlock found.");
+                            }
+                        } else {
+                            System.out.println("[ChestSystem] No block component entity at pos.");
+                        }
+                    } else {
+                        System.out.println("[ChestSystem] Chunk not loaded.");
+                    }
+
+                } catch (Exception e) {
+                    System.out.println("[ChestSystem] Error: " + e.getMessage());
+                    e.printStackTrace();
+                }
+
+                ChestRegistry.markOpened(pos);
+            }
+        } else if (isCommonDungeonChest) {
+            if (!ChestRegistry.isOpened(pos)) {
 
                 try {
                     World world = store.getExternalData().getWorld();
@@ -92,7 +153,7 @@ public class ChestUseBlockSystem extends EntityEventSystem<EntityStore, UseBlock
 
                             if (containerBlock != null) {
                                 Map<String, DungeonTables.LootEntry> lootTable = DungeonTables.get().loot
-                                        .get("wooden_chest");
+                                        .get("common_chest");
 
                                 Random random = new Random();
                                 short capacity = containerBlock.getItemContainer().getCapacity();

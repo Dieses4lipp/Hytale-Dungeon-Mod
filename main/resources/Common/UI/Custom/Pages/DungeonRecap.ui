@@ -1,0 +1,66 @@
+Group {
+  LayoutMode: Center;
+  Anchor: (Full: 0);
+  Background: #000000(0.8); // Dark semi-transparent background overlay
+
+  Group #RecapPanel {
+    LayoutMode: Top;
+    Anchor: (Width: 500, Height: 400);
+    Background: #0d1117(0.95); // Matches your main inventory panel background
+    Padding: (Horizontal: 30, Vertical: 20);
+
+    // Main Title
+    Label { 
+      Text: "DUNGEON RECAP"; 
+      Style: (FontSize: 28, TextColor: #5bc8f5, HorizontalAlignment: Center, VerticalAlignment: Center, RenderBold: true);
+      Anchor: (Top: 0, Width: 440, Height: 50); 
+    }
+
+    // Horizontal Divider (Matches #DividerInv from your style)
+    Group #Divider { Anchor: (Width: 440, Height: 2); Background: #2a3040; }
+    
+    Group { Anchor: (Height: 20); } // Spacer
+
+    // Subtitle
+    Label { 
+      Text: "Boss Defeated!"; 
+      Style: (FontSize: 20, TextColor: #00FF00, HorizontalAlignment: Center);
+      Anchor: (Full: 0, Height: 30);
+    }
+
+    Group { Anchor: (Height: 20); } // Spacer
+
+    // Stats Box (Uses your equipment/slot background color)
+    Group #StatsBox {
+      LayoutMode: CenterMiddle;
+      Anchor: (Width: 440, Height: 120);
+      Background: #30435f(0.4); 
+
+      // The all-important #StatsLabel for your Java code
+      Label #StatsLabel { 
+        Text: "Loading stats..."; 
+        Style: (FontSize: 16, TextColor: #8899aa, HorizontalAlignment: Center, VerticalAlignment: Center);
+        Anchor: (Full: 0);
+      }
+    }
+
+    Group { FlexWeight: 1; } // Flexible spacer to push the button down to the bottom
+
+    // Close/Continue Button (Styled exactly like your #CloseBtn)
+    Group {
+      LayoutMode: CenterMiddle;
+      Anchor: (Width: 440, Height: 60);
+
+      TextButton #CloseBtn { 
+        Anchor: (Width: 160, Height: 54); 
+        Text: "CONTINUE"; 
+        Padding: (Horizontal: 12); 
+        Style: (
+          Default: (Background: #1c2333, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), 
+          Hovered: (Background: #2a344d, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), 
+          Pressed: (Background: #0f151e, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))
+        ); 
+      }
+    }
+  }
+}

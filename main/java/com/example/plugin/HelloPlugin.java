@@ -19,15 +19,12 @@ import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.example.plugin.Stats.PlayerLevelComponent;
-import com.hypixel.hytale.component.ComponentType;
-import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.example.plugin.DungeonGeneration.*;
 
 import java.io.File;
 import java.io.InputStream;
 
 import javax.annotation.Nonnull;
-import javax.security.auth.spi.LoginModule;
 
 public class HelloPlugin extends JavaPlugin {
 
@@ -46,12 +43,18 @@ public class HelloPlugin extends JavaPlugin {
                         PlayerLevelComponent::new);
         PlayerLevelComponent.setComponentType(playerLevelType);
 
+        ComponentType<EntityStore, BossDeathTimerComponent> bossDeathTimerType = this.getEntityStoreRegistry()
+                .registerComponent(
+                        BossDeathTimerComponent.class,
+                        BossDeathTimerComponent::new);
+        BossDeathTimerComponent.setComponentType(bossDeathTimerType);
+
         InputStream configStream = getClass().getResourceAsStream("/dungeon_config.json");
         if (configStream == null) {
             System.out.println("Failed to load dungeon_config.json");
         }
         DungeonConfig.load(configStream);
-
+        
         InputStream tablesStream = getClass().getResourceAsStream("/dungeon_tables.json");
         if(tablesStream == null) {
             System.out.println("Failed to load dungeon_tables.json");
@@ -83,23 +86,22 @@ public class HelloPlugin extends JavaPlugin {
                 TalkToNPCInteraction.class,
                 TalkToNPCInteraction.CODEC);
 
-        this.getEntityStoreRegistry().registerSystem(new com.example.plugin.Stats.PlayerLevelSetupSystem());
+        this.getEntityStoreRegistry().registerSystem(new com.example.plugin.Stats.PlayerDatabaseSetupSystem());
         this.getEntityStoreRegistry().registerSystem(new MobDeathAndXPSystem());
         this.getEntityStoreRegistry().registerSystem(new ChestUseBlockSystem());
         this.getEntityStoreRegistry().registerSystem(new BossDeathSystem());
         this.getEntityStoreRegistry().registerSystem(new PlayerDeathDungeonSystem());
-
+        this.getEntityStoreRegistry().registerSystem(new BossDeathTimerSystem());
         this.getCommandRegistry().registerCommand(new GenerateDungeonCommand("test", "An example command", false));
         this.getCommandRegistry().registerCommand(new SpawnNPCCommand());
         this.getCommandRegistry().registerCommand(new OpenPlayPageCommand());
         this.getCommandRegistry().registerCommand(new DestroyDungeonCommand());
+        
         System.out.println("Plugin loaded");
-
     }
 
     @Override
     protected void shutdown() {
         System.out.println("Plugin shutdown");
     }
-
 }
