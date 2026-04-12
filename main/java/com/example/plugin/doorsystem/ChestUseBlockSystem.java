@@ -1,5 +1,7 @@
 package com.example.plugin.doorsystem;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
 import com.example.plugin.DungeonGeneration.DungeonTables;
@@ -31,6 +33,10 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.component.Ref;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class ChestUseBlockSystem extends EntityEventSystem<EntityStore, UseBlockEvent.Pre> {
 
@@ -87,17 +93,34 @@ public class ChestUseBlockSystem extends EntityEventSystem<EntityStore, UseBlock
                             if (containerBlock != null) {
                                 Map<String, DungeonTables.LootEntry> lootTable = DungeonTables.get().loot
                                         .get("wooden_chest");
-                                Map.Entry<String, DungeonTables.LootEntry> rolled = DungeonTables.get()
-                                        .getRandomLootEntry(lootTable);
 
-                                if (rolled != null) {
-                                    ItemStack lootItem = new ItemStack(rolled.getKey(), rolled.getValue().Quantity);
-                                    containerBlock.getItemContainer().addItemStack(lootItem);
-                                    System.out.println("[ChestSystem] Placed " + rolled.getKey()
-                                            + " x" + rolled.getValue().Quantity + " into chest!");
-                                } else {
-                                    System.out.println("[ChestSystem] Loot table empty or missing.");
+                                Random random = new Random();
+                                short capacity = containerBlock.getItemContainer().getCapacity();
+
+                                List<Short> slots = new ArrayList<>();
+                                for (short s = 0; s < capacity; s++)
+                                    slots.add(s);
+                                Collections.shuffle(slots, random);
+
+                                int rollCount = 3 + random.nextInt(3); // 3 to 5 items
+                                System.out.println("[ChestSystem] Rolling " + rollCount + " items");
+
+                                for (int i = 0; i < rollCount && i < slots.size(); i++) {
+                                    Map.Entry<String, DungeonTables.LootEntry> rolled = DungeonTables.get()
+                                            .getRandomLootEntry(lootTable);
+
+                                    if (rolled != null) {
+                                        short slot = slots.get(i);
+                                        ItemStack lootItem = new ItemStack(
+                                                rolled.getKey(), rolled.getValue().Quantity);
+                                        containerBlock.getItemContainer()
+                                                .setItemStackForSlot(slot, lootItem);
+                                        System.out.println("[ChestSystem] Slot " + slot + ": "
+                                                + rolled.getKey() + " x" + rolled.getValue().Quantity);
+                                    }
                                 }
+                            } else {
+                                System.out.println("[ChestSystem] No ItemContainerBlock found.");
                             }
                         } else {
                             System.out.println("[ChestSystem] No block component entity at pos.");
