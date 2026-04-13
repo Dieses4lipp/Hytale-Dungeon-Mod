@@ -52,7 +52,8 @@ public class PlayerDatabaseSetupSystem extends EntityTickingSystem<EntityStore> 
                         stats.level = rs.getInt("level");
                         stats.xp = rs.getInt("xp");
                         stats.gold = rs.getInt("gold");
-                        
+                            com.example.plugin.Ui.PlayPage.InventoryPage.getOrCreateEmptyStash(uuid); 
+    com.example.plugin.Stats.SellConfig.loadStashFromDatabase(uuid, com.example.plugin.Ui.PlayPage.InventoryPage.getOrCreateEmptyStash(uuid));
                         System.out.println("[DungeonMod] Daten geladen für " + uuid + ": Level " + stats.level + " | Gold " + stats.gold);
                     } else {
                         try (PreparedStatement insert = DatabaseManager.getConnection().prepareStatement(

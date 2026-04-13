@@ -19,17 +19,25 @@ public class DatabaseManager {
             Class.forName("org.sqlite.JDBC");
 
             String url = "jdbc:sqlite:" + pluginFolder.getAbsolutePath() + "/plugin_data.db";
-            
+
             // ASSIGN TO STATIC VARIABLE
             connection = DriverManager.getConnection(url);
 
             try (Statement stmt = connection.createStatement()) {
                 stmt.execute("CREATE TABLE IF NOT EXISTS player_levels (" +
-                             "uuid TEXT PRIMARY KEY, " +
-                             "level INTEGER DEFAULT 1, " +
-                             "xp INTEGER DEFAULT 0, " +
-                             "gold INTEGER DEFAULT 0)");
+                        "uuid TEXT PRIMARY KEY, " +
+                        "level INTEGER DEFAULT 1, " +
+                        "xp INTEGER DEFAULT 0, " +
+                        "gold INTEGER DEFAULT 0)");
                 System.out.println("[Database] SQLite Tables verified.");
+            }
+            try (java.sql.Statement stmt = connection.createStatement()) {
+                stmt.execute("CREATE TABLE IF NOT EXISTS player_stash (" +
+                        "uuid TEXT, " +
+                        "slot INTEGER, " +
+                        "item_id TEXT, " +
+                        "quantity INTEGER, " +
+                        "PRIMARY KEY (uuid, slot))");
             }
         } catch (Exception e) {
             System.err.println("[Database] Critical Error during init: " + e.getMessage());

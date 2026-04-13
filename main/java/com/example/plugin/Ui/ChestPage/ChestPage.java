@@ -185,7 +185,6 @@ public class ChestPage extends InteractiveCustomUIPage<ChestPage.Data> {
                 return;
             }
 
-            // move 1 item from vanilla to stash
             vanillaInventory.moveItemStackFromSlotToSlot(index, 1, stash, freeSlot);
 
             System.out.println("[ChestSystem] Player " + playerId + " deposited 1x "
@@ -207,7 +206,6 @@ public class ChestPage extends InteractiveCustomUIPage<ChestPage.Data> {
         player.getPageManager().openCustomPage(ref, store, new ChestPage(playerRef, chestPos));
     }
 
-    // per-player extraction stash — holds one item slot, expandable later
     private static final Map<String, ItemContainer> extractionStashes = new HashMap<>();
 
     public static ItemContainer getOrCreateExtractionStash(String playerId) {

@@ -80,6 +80,7 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
             case "equip_pants" -> new SlotData(armor, (short) 3, true);
             case "equip_weapon" -> new SlotData(inv.getHotbar(), (short) 0, true);
             case "equip_shield" -> new SlotData(inv.getUtility(), (short) 1, true);
+            case "equip_potion" -> new SlotData(inv.getHotbar(), (short) 8, true);
             default -> null;
         };
     }
@@ -101,7 +102,6 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
         this.playerRef = playerRef;
     }
 
-    // Gets or creates an empty stash without doing the vanilla transfer
     public static ItemContainer getOrCreateEmptyStash(String playerId) {
         return player_inventorys.computeIfAbsent(playerId, id -> new SimpleItemContainer((short) 90));
     }
@@ -121,6 +121,8 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
 
             case "equip_shield" -> id.contains("_Shield_");
 
+            case "equip_potion" -> id.startsWith("Potion_");
+
             default -> true;
         };
     }
@@ -129,12 +131,12 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
     public void build(@Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder uiCommandBuilder,
             @Nonnull UIEventBuilder uiEventBuilder, @Nonnull Store<EntityStore> store) {
         uiCommandBuilder.append("Pages/InventoryPage.ui");
-                var stats = com.example.plugin.Stats.PlayerLevelComponent.getStats(store, ref);
-    int currentLevel = (stats != null) ? stats.level : 1;
-    int currentXp = (stats != null) ? stats.xp : 0;
-    int xpNeeded = currentLevel * 100;
-    uiCommandBuilder.set("#LevelLabel.Text", "Lv. " + currentLevel);
-    uiCommandBuilder.set("#XpLabel.Text", currentXp + " / " + xpNeeded + " XP");
+        var stats = com.example.plugin.Stats.PlayerLevelComponent.getStats(store, ref);
+        int currentLevel = (stats != null) ? stats.level : 1;
+        int currentXp = (stats != null) ? stats.xp : 0;
+        int xpNeeded = currentLevel * 100;
+        uiCommandBuilder.set("#LevelLabel.Text", "Lv. " + currentLevel);
+        uiCommandBuilder.set("#XpLabel.Text", currentXp + " / " + xpNeeded + " XP");
         uiEventBuilder.addEventBinding(
                 com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#PlayBtn",
                 EventData.of("ButtonClicked", "nav_play"), false);
@@ -166,6 +168,8 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
                 EventData.of("ButtonClicked", "equip_weapon"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipShieldBtn",
                 EventData.of("ButtonClicked", "equip_shield"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipHealBtn",
+                EventData.of("ButtonClicked", "equip_potion"), false);
 
         Player player = store.getComponent(ref, Player.getComponentType());
         if (player != null) {
@@ -184,12 +188,15 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
                         currentSelection != null && currentSelection.equals("equip_gloves"));
                 appendArmorSlot(uiCommandBuilder, armor, (short) 3, "#EquipPants", "EquipPantsBtn", "Pants",
                         currentSelection != null && currentSelection.equals("equip_pants"));
+                
 
                 // Waffen & Schild (100% gleiche Logik wie Rüstung)
                 appendArmorSlot(uiCommandBuilder, inventory.getHotbar(), (short) 0, "#EquipWeapon", "EquipWeaponBtn",
                         "Weapon", currentSelection != null && currentSelection.equals("equip_weapon"));
                 appendArmorSlot(uiCommandBuilder, inventory.getUtility(), (short) 1, "#EquipShield", "EquipShieldBtn",
                         "Shield", currentSelection != null && currentSelection.equals("equip_shield"));
+                appendArmorSlot(uiCommandBuilder, inventory.getHotbar(), (short) 8, "#EquipHeal", "EquipHealBtn",
+                        "Potion", currentSelection != null && currentSelection.equals("equip_potion"));
             }
 
             // Stash Slots
@@ -314,7 +321,6 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
                     var itemA = a.container.getItemStack(a.index);
                     var itemB = b.container.getItemStack(b.index);
 
-                    // Pre-Checks
                     if (a.isArmorSlot && !isItemValidForSlot(itemB, currentSelection)) {
                         selectedSlotAction.remove(playerId);
                         refreshPage(player, ref, store);
@@ -326,7 +332,6 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
                         return;
                     }
 
-                    // Swap
                     ItemContainer temp = new SimpleItemContainer((short) 1);
                     if (itemA != null)
                         a.container.moveItemStackFromSlotToSlot(a.index, itemA.getQuantity(), temp, (short) 0);
@@ -335,6 +340,11 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
                     var tItem = temp.getItemStack((short) 0);
                     if (tItem != null)
                         temp.moveItemStackFromSlotToSlot((short) 0, tItem.getQuantity(), b.container, b.index);
+
+                    java.util.concurrent.CompletableFuture.runAsync(() -> {
+                        com.example.plugin.Stats.SellConfig.saveStashToDatabase(playerId,
+                                getOrCreateEmptyStash(playerId));
+                    });
                 }
                 selectedSlotAction.remove(playerId);
             }

@@ -54,7 +54,57 @@ public class SellConfig {
         System.out.println("[SellConfig] Grand total sell value: " + total + "g");
         return total;
     }
+    public static void saveStashToDatabase(String playerId, ItemContainer stash) {
+        if (stash == null) return;
+        
+        try (java.sql.PreparedStatement deleteStmt = DatabaseManager.getConnection().prepareStatement(
+                "DELETE FROM player_stash WHERE uuid = ?")) {
+            deleteStmt.setString(1, playerId);
+            deleteStmt.executeUpdate();
+        } catch (java.sql.SQLException e) { return; }
 
+        try (java.sql.PreparedStatement insertStmt = DatabaseManager.getConnection().prepareStatement(
+                "INSERT INTO player_stash (uuid, slot, item_id, quantity) VALUES (?, ?, ?, ?)")) {
+            
+            for (short i = 0; i < stash.getCapacity(); i++) {
+                ItemStack item = stash.getItemStack(i);
+                if (item != null && !ItemStack.isEmpty(item)) {
+                    insertStmt.setString(1, playerId);
+                    insertStmt.setInt(2, i);
+                    insertStmt.setString(3, item.getItem().getId());
+                    insertStmt.setInt(4, item.getQuantity());
+                    insertStmt.addBatch(); 
+                }
+            }
+            insertStmt.executeBatch();
+        } catch (java.sql.SQLException e) {
+            System.err.println("[Database] Failed to save stash: " + e.getMessage());
+        }
+    }
+
+    public static void loadStashFromDatabase(String playerId, ItemContainer emptyStash) {
+        try (java.sql.PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement(
+                "SELECT slot, item_id, quantity FROM player_stash WHERE uuid = ?")) {
+            
+            pstmt.setString(1, playerId);
+            java.sql.ResultSet rs = pstmt.executeQuery();
+
+           while (rs.next()) {
+                short slot = rs.getShort("slot");
+                String itemId = rs.getString("item_id");
+                int quantity = rs.getInt("quantity");
+
+                try {
+                    ItemStack loadedItem = new ItemStack(itemId, quantity);
+                    emptyStash.setItemStackForSlot(slot, loadedItem);
+                } catch (Exception ex) {
+                    System.err.println("[Database] Could not create item: " + itemId);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("[Database] Failed to load stash: " + e.getMessage());
+        }
+    }
     public static void removeSellableItemsFromVanillaInventory(Player player) {
         ItemContainer[] containers = {
                 player.getInventory().getHotbar(),

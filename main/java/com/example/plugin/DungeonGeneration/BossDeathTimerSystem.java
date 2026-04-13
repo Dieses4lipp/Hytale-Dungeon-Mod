@@ -44,7 +44,7 @@ public class BossDeathTimerSystem extends EntityTickingSystem<EntityStore> {
                 Player player = store.getComponent(ref, Player.getComponentType());
 
                 if (pRef != null && player != null) {
-                    String stats = "Layer: 1\nBoss Defeated!\nCheck your inventory for loot.";
+                    String stats = "Deepest Layer: 1";
                     
                     try {
                         player.getPageManager().openCustomPage(ref, store, new DungeonRecapPage(pRef, stats, timer.dungeonSlot));

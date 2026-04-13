@@ -199,7 +199,6 @@ Group #StatsSection {
 
       Group { Anchor: (Height: 8); }
 
-      // --- NEW LEVEL BOX ---
       Group #LevelBox {
         LayoutMode: CenterMiddle;
         Anchor: (Width: 338, Height: 50);

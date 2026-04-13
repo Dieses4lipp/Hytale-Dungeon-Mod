@@ -46,7 +46,8 @@ Group {
           Text: "MARKETPLACE"; 
           Style: (FontSize: 42, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center); 
           Anchor: (Width: 600, Height: 50);
-        }Group { Anchor: (Height: 15); } 
+        }
+        Group { Anchor: (Height: 15); } 
         Group { 
           Anchor: (Width: 600, Height: 4); 
           LayoutMode: CenterMiddle; 

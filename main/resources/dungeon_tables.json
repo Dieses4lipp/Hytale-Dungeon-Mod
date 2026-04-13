@@ -39,12 +39,16 @@
                 "weight": 80,
                 "Quantity": 2
             },
-            "Bandage_Crude": {
-                "weight": 90,
-                "Quantity": 2
-            },
             "Plant_Crop_Health1": {
                 "weight": 70,
+                "Quantity": 1
+            },
+            "Potion_Health_Lesser": {
+                "weight": 85,
+                "Quantity": 2
+            },
+            "Potion_Health_Small": {
+                "weight": 40,
                 "Quantity": 1
             },
             "Armor_Wood_Head": {
@@ -91,6 +95,14 @@
             },
             "Plant_Crop_Health2": {
                 "weight": 70,
+                "Quantity": 2
+            },
+            "Potion_Health_Lesser": {
+                "weight": 60,
+                "Quantity": 3
+            },
+            "Potion_Health_Small": {
+                "weight": 80,
                 "Quantity": 2
             },
             "Armor_Iron_Head": {
@@ -177,6 +189,14 @@
         "Ingredient_Feathers_Light": 4,
         "Ingredient_Feathers_Dark": 6,
         "Ingredient_Feathers_Red": 8,
-        "Ingredient_Chitin_Sturdy": 22
+        "Ingredient_Chitin_Sturdy": 22,
+        "Plant_Crop_Health1": 2,
+        "Plant_Crop_Health2": 5,
+        "Potion_Health_Lesser": 10,
+        "Potion_Health_Small": 20,
+        "Tool_Pickaxe_Crude": 6,
+        "Tool_Hatchet_Crude": 6,
+        "Tool_Pickaxe_Iron": 18,
+        "Tool_Repair_Kit_Iron": 25
     }
 }
