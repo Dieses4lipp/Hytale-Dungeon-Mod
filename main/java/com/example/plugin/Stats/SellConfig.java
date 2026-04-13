@@ -73,7 +73,13 @@ public class SellConfig {
             }
         }
     }
-
+    public static int getItemSellValue(ItemStack item) {
+        if (item == null || ItemStack.isEmpty(item)) {
+            return 0;
+        }
+        String itemId = item.getItem().getId();
+        return DungeonTables.get().getSellValue(itemId);
+    }
     public static void addGoldToPlayer(Player player, Ref<EntityStore> ref,
             Store<EntityStore> store, int amount) {
         if (amount <= 0)
