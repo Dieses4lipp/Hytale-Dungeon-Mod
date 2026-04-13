@@ -52,6 +52,7 @@ public class BossDeathSystem extends DeathSystems.OnDeathSystem {
 
                             BossDeathTimerComponent timerComp = new BossDeathTimerComponent();
                             timerComp.timeRemaining = 60.0f;
+                            timerComp.dungeonSlot = instance.slot;
                             commandBuffer.addComponent(killerRef, BossDeathTimerComponent.getComponentType(), timerComp);
                         }
                     }

@@ -2,6 +2,8 @@ package com.example.plugin.DungeonGeneration;
 
 import com.example.plugin.DungeonGeneration.DungeonTables.LootEntry;
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -29,6 +31,7 @@ public class DungeonTables {
 
     public Map<String, Map<String, LootEntry>> loot = new HashMap<>();
 
+    @SerializedName("sell_values")
     public Map<String, Integer> sellValues = new HashMap<>();
 
     public static DungeonTables load(InputStream stream) {
@@ -36,10 +39,9 @@ public class DungeonTables {
         return instance;
     }
 
-    public int GetSellValue(String itemId) {
+    public int getSellValue(String itemId) {
         return this.sellValues.getOrDefault(itemId, 0);
     }
-
     public Map.Entry<String, LootEntry> getRandomLootEntry(Map<String, LootEntry> table) {
         if (table == null || table.isEmpty())
             return null;

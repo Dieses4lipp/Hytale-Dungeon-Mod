@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 
 import com.example.plugin.DungeonGeneration.DungeonInstance;
 import com.example.plugin.DungeonGeneration.DungeonManager;
+import com.example.plugin.Stats.SellConfig;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -42,56 +43,60 @@ public class DungeonRecapPage extends InteractiveCustomUIPage<DungeonRecapPage.D
     }
 
     public DungeonRecapPage(PlayerRef playerRef, String statsText, int dungeonSlot) {
-        // Pass the CODEC to the super constructor
-        super(playerRef, CustomPageLifetime.CantClose, Data.CODEC); 
+        super(playerRef, CustomPageLifetime.CantClose, Data.CODEC);
         this.statsText = statsText;
         this.dungeonSlot = dungeonSlot;
     }
 
     @Override
-    public void build(@Nonnull Ref<EntityStore> ref, 
-                      @Nonnull UICommandBuilder uiCommandBuilder, 
-                      @Nonnull UIEventBuilder uiEventBuilder,
-                      @Nonnull Store<EntityStore> store) {
-                      
+    public void build(@Nonnull Ref<EntityStore> ref,
+            @Nonnull UICommandBuilder uiCommandBuilder,
+            @Nonnull UIEventBuilder uiEventBuilder,
+            @Nonnull Store<EntityStore> store) {
+
         uiCommandBuilder.append("Pages/DungeonRecap.ui");
-        
-        // Push the dynamic text to the Label
+
         uiCommandBuilder.set("#StatsLabel.Text", this.statsText);
 
-        // 3. Bind the Close Button Click Event
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (player != null) {
+            String playerId = player.getUuid().toString();
+            int goldValue = SellConfig.calculateStashSellValue(playerId, player);
+            uiCommandBuilder.set("#GoldValueLabel.Text", goldValue + " Gold");
+            SellConfig.addGoldToPlayer(player, ref, store, goldValue);
+            SellConfig.removeSellableItemsFromVanillaInventory(player);
+        }
         uiEventBuilder.addEventBinding(
-            CustomUIEventBindingType.Activating, 
-            "#CloseBtn",
-            EventData.of("ButtonClicked", "close_recap"), 
-            false
-        );
+                CustomUIEventBindingType.Activating,
+                "#CloseBtn",
+                EventData.of("ButtonClicked", "close_recap"),
+                false);
     }
 
-    // 4. Handle the button click event
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref,
-                                @Nonnull Store<EntityStore> store,
-                                Data data) {
+            @Nonnull Store<EntityStore> store,
+            Data data) {
         super.handleDataEvent(ref, store, data);
 
-        if (data.clickedButton == null) return;
+        if (data.clickedButton == null)
+            return;
         String action = data.clickedButton;
         data.clickedButton = null;
 
         Player player = store.getComponent(ref, Player.getComponentType());
 
         if ("close_recap".equals(action) && player != null) {
-            
+
             player.getPageManager().setPage(ref, store, Page.None);
-            
-            World activeWorld = DungeonManager.get().activeWorld; 
+
+            World activeWorld = DungeonManager.get().activeWorld;
             if (activeWorld != null) {
-                Transform transform = new Transform(0, 90, 0);
+                Transform transform = new Transform(110, 133, 110);
                 Teleport teleport = Teleport.createForPlayer(activeWorld, transform);
                 store.addComponent(ref, Teleport.getComponentType(), teleport);
             }
-            
+
             DungeonInstance inst = DungeonManager.get().getBySlot(this.dungeonSlot);
             if (inst != null) {
                 try {

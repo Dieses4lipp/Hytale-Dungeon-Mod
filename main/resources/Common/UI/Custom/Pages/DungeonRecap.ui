@@ -1,42 +1,37 @@
 Group {
   LayoutMode: Center;
   Anchor: (Full: 0);
-  Background: #000000(0.8); // Dark semi-transparent background overlay
+  Background: #000000(0.8);
 
   Group #RecapPanel {
     LayoutMode: Top;
-    Anchor: (Width: 500, Height: 400);
-    Background: #0d1117(0.95); // Matches your main inventory panel background
+    Anchor: (Width: 500, Height: 500);
+    Background: #0d1117(0.95);
     Padding: (Horizontal: 30, Vertical: 20);
 
-    // Main Title
     Label { 
       Text: "DUNGEON RECAP"; 
       Style: (FontSize: 28, TextColor: #5bc8f5, HorizontalAlignment: Center, VerticalAlignment: Center, RenderBold: true);
       Anchor: (Top: 0, Width: 440, Height: 50); 
     }
 
-    // Horizontal Divider (Matches #DividerInv from your style)
     Group #Divider { Anchor: (Width: 440, Height: 2); Background: #2a3040; }
     
-    Group { Anchor: (Height: 20); } // Spacer
+    Group { Anchor: (Height: 20); }
 
-    // Subtitle
     Label { 
       Text: "Boss Defeated!"; 
       Style: (FontSize: 20, TextColor: #00FF00, HorizontalAlignment: Center);
       Anchor: (Full: 0, Height: 30);
     }
 
-    Group { Anchor: (Height: 20); } // Spacer
+    Group { Anchor: (Height: 20); }
 
-    // Stats Box (Uses your equipment/slot background color)
     Group #StatsBox {
       LayoutMode: CenterMiddle;
       Anchor: (Width: 440, Height: 120);
       Background: #30435f(0.4); 
 
-      // The all-important #StatsLabel for your Java code
       Label #StatsLabel { 
         Text: "Loading stats..."; 
         Style: (FontSize: 16, TextColor: #8899aa, HorizontalAlignment: Center, VerticalAlignment: Center);
@@ -44,9 +39,22 @@ Group {
       }
     }
 
-    Group { FlexWeight: 1; } // Flexible spacer to push the button down to the bottom
+    Group { Anchor: (Height: 16); }
 
-    // Close/Continue Button (Styled exactly like your #CloseBtn)
+    Group #TotalGoldBox {
+      LayoutMode: CenterMiddle;
+      Anchor: (Width: 440, Height: 120);
+      Background: #30435f(0.4); 
+
+      Label #GoldValueLabel { 
+        Text: "Loading stats..."; 
+        Style: (FontSize: 16, TextColor: #8899aa, HorizontalAlignment: Center, VerticalAlignment: Center);
+        Anchor: (Full: 0);
+      }
+    }
+
+        Group { Anchor: (Height: 16); }
+
     Group {
       LayoutMode: CenterMiddle;
       Anchor: (Width: 440, Height: 60);
