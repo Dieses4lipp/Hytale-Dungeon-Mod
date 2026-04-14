@@ -170,6 +170,8 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
                 EventData.of("ButtonClicked", "equip_shield"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipHealBtn",
                 EventData.of("ButtonClicked", "equip_potion"), false);
+        uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipTrashBtn",
+                EventData.of("ButtonClicked", "trash_item"), false);
 
         Player player = store.getComponent(ref, Player.getComponentType());
         if (player != null) {
@@ -188,7 +190,6 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
                         currentSelection != null && currentSelection.equals("equip_gloves"));
                 appendArmorSlot(uiCommandBuilder, armor, (short) 3, "#EquipPants", "EquipPantsBtn", "Pants",
                         currentSelection != null && currentSelection.equals("equip_pants"));
-                
 
                 // Waffen & Schild (100% gleiche Logik wie Rüstung)
                 appendArmorSlot(uiCommandBuilder, inventory.getHotbar(), (short) 0, "#EquipWeapon", "EquipWeaponBtn",
@@ -197,8 +198,23 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
                         "Shield", currentSelection != null && currentSelection.equals("equip_shield"));
                 appendArmorSlot(uiCommandBuilder, inventory.getHotbar(), (short) 8, "#EquipHeal", "EquipHealBtn",
                         "Potion", currentSelection != null && currentSelection.equals("equip_potion"));
-            }
 
+            }
+            String trashTooltip = "TRASH ITEM (Permanently Deletes Item)";
+            uiCommandBuilder.appendInline("#EquipTrash",
+                    "TextButton #EquipTrashBtn { Anchor: (Full: 0); Text: \"TRASH\"; Background: #ff0000(0.1); TooltipText: \""
+                            + trashTooltip
+                            + "\"; Style: (Hovered: (Background: #ff0000(0.4)), Default: (LabelStyle: (TextColor: #ff5555, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center))); }");
+            if (currentSelection != null && currentSelection.equals("trash_item")) {
+                        uiCommandBuilder.appendInline("#EquipTrash",
+                                "Group { Anchor: (Top: 0, Left: 0, Right: 0, Height: 2); Background: #f5c518; }");
+                        uiCommandBuilder.appendInline("#EquipTrash",
+                                "Group { Anchor: (Bottom: 0, Left: 0, Right: 0, Height: 2); Background: #f5c518; }");
+                        uiCommandBuilder.appendInline("#EquipTrash",
+                                "Group { Anchor: (Left: 0, Top: 0, Bottom: 0, Width: 2); Background: #f5c518; }");
+                        uiCommandBuilder.appendInline("#EquipTrash",
+                                "Group { Anchor: (Right: 0, Top: 0, Bottom: 0, Width: 2); Background: #f5c518; }");
+                    }
             // Stash Slots
             ItemContainer stash = getOrCreateEmptyStash(playerId);
             for (short i = 0; i < 90; i++) {
@@ -306,8 +322,40 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
             return;
         }
 
-        if (action.startsWith("slot_clicked_") || action.startsWith("equip_")) {
+        if (action.startsWith("slot_clicked_") || action.startsWith("equip_") || action.equals("trash_item")) {
             String currentSelection = selectedSlotAction.get(playerId);
+            if (action.equals("trash_item")) {
+                if (currentSelection != null && !currentSelection.equals("trash_item")) {
+                    SlotData a = resolveSlot(player, currentSelection);
+                    if (a != null) {
+                        a.container.setItemStackForSlot(a.index, null);
+
+                        java.util.concurrent.CompletableFuture.runAsync(() -> {
+                            com.example.plugin.Stats.SellConfig.saveStashToDatabase(playerId,
+                                    getOrCreateEmptyStash(playerId));
+                        });
+                    }
+                    selectedSlotAction.remove(playerId);
+                } else {
+                    selectedSlotAction.put(playerId, action);
+                }
+                refreshPage(player, ref, store);
+                return;
+            }
+            if (currentSelection != null && currentSelection.equals("trash_item")) {
+                SlotData b = resolveSlot(player, action);
+                if (b != null) {
+                    b.container.setItemStackForSlot(b.index, null);
+
+                    java.util.concurrent.CompletableFuture.runAsync(() -> {
+                        com.example.plugin.Stats.SellConfig.saveStashToDatabase(playerId,
+                                getOrCreateEmptyStash(playerId));
+                    });
+                }
+                selectedSlotAction.remove(playerId);
+                refreshPage(player, ref, store);
+                return;
+            }
             if (currentSelection == null) {
                 SlotData slot = resolveSlot(player, action);
                 if (slot != null && slot.container.getItemStack(slot.index) != null)

@@ -190,8 +190,14 @@ Group {
         Group #Slot90 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); }
       }
       Group { Anchor: (Height: 10); }
+
+      Group #InvRow10 { LayoutMode: Left; Anchor: (Width: 730, Height: 64);
+        Group #EquipTrash { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 10); }
+      }
+
+      }
     }
-  }
+  
 
   Group #BottomBar {
     Anchor: (Full: 0, Height: 100); LayoutMode: CenterMiddle; Background: #0d1117(0.97);
