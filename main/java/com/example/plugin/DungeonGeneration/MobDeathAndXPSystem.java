@@ -67,7 +67,7 @@ public class MobDeathAndXPSystem extends DeathSystems.OnDeathSystem {
                     }
 
                     try (PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement(
-                            "UPDATE player_levels SET level = ?, xp = ?, gold = ? WHERE uuid = ?")) {
+                            "UPDATE player_info SET level = ?, xp = ?, gold = ? WHERE uuid = ?")) {
                         pstmt.setInt(1, stats.level);
                         pstmt.setInt(2, stats.xp);
                         pstmt.setInt(3, stats.gold);

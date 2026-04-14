@@ -144,7 +144,7 @@ public class SellConfig {
         stats.gold += amount;
 
         try (PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement(
-                "UPDATE player_levels SET gold = ? WHERE uuid = ?")) {
+                "UPDATE player_info SET gold = ? WHERE uuid = ?")) {
             pstmt.setInt(1, stats.gold);
             pstmt.setString(2, playerRef.getUuid().toString());
             pstmt.executeUpdate();

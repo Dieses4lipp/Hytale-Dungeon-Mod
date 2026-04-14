@@ -44,7 +44,7 @@ public class PlayerDatabaseSetupSystem extends EntityTickingSystem<EntityStore> 
                 String uuid = playerRef.getUuid().toString();
 
                 try (PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement(
-                        "SELECT level, xp, gold FROM player_levels WHERE uuid = ?")) {
+                        "SELECT level, xp, gold, can_build FROM player_info WHERE uuid = ?")) {
                     pstmt.setString(1, uuid);
                     ResultSet rs = pstmt.executeQuery();
 
@@ -52,12 +52,19 @@ public class PlayerDatabaseSetupSystem extends EntityTickingSystem<EntityStore> 
                         stats.level = rs.getInt("level");
                         stats.xp = rs.getInt("xp");
                         stats.gold = rs.getInt("gold");
-                            com.example.plugin.Ui.PlayPage.InventoryPage.getOrCreateEmptyStash(uuid); 
-    com.example.plugin.Stats.SellConfig.loadStashFromDatabase(uuid, com.example.plugin.Ui.PlayPage.InventoryPage.getOrCreateEmptyStash(uuid));
+                        
+                        boolean canBuild = rs.getInt("can_build") == 1;
+                        if (canBuild) {
+                            commandBuffer.addComponent(ref, com.example.plugin.System.BuildPermissionComponent.getComponentType(), new com.example.plugin.System.BuildPermissionComponent());
+                            System.out.println("[DungeonMod] Spieler " + uuid + " hat Baurechte!");
+                        }
+
+                        com.example.plugin.Ui.PlayPage.InventoryPage.getOrCreateEmptyStash(uuid); 
+                        com.example.plugin.Stats.SellConfig.loadStashFromDatabase(uuid, com.example.plugin.Ui.PlayPage.InventoryPage.getOrCreateEmptyStash(uuid));
                         System.out.println("[DungeonMod] Daten geladen für " + uuid + ": Level " + stats.level + " | Gold " + stats.gold);
                     } else {
                         try (PreparedStatement insert = DatabaseManager.getConnection().prepareStatement(
-                                "INSERT INTO player_levels (uuid, level, xp, gold) VALUES (?, 1, 0, 0)")) {
+                                "INSERT INTO player_info (uuid, level, xp, gold, can_build) VALUES (?, 1, 0, 0, 0)")) {
                             insert.setString(1, uuid);
                             insert.executeUpdate();
                             System.out.println("[DungeonMod] Neuer Spieler in Datenbank registriert: " + uuid);
