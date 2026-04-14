@@ -1,0 +1,202 @@
+{
+    "mobs": {
+        "default_room": {
+            "Skeleton_Sand_Guard": {
+                "weight": 50,
+                "xp": 15
+            },
+            "Skeleton_Archmage": {
+                "weight": 30,
+                "xp": 25
+            },
+            "Skeleton_Burnt_Gunner": {
+                "weight": 20,
+                "xp": 20
+            }
+        },
+        "boss_room": {
+            "Trork_Sentry": {
+                "weight": 60,
+                "xp": 50
+            },
+            "Trork_Chieftain": {
+                "weight": 100,
+                "xp": 150
+            }
+        }
+    },
+    "loot": {
+        "common_chest": {
+            "Ingredient_Bone_Fragment": {
+                "weight": 100,
+                "Quantity": 3
+            },
+            "Ingredient_Bar_Copper": {
+                "weight": 60,
+                "Quantity": 1
+            },
+            "Ingredient_Hide_Light": {
+                "weight": 80,
+                "Quantity": 2
+            },
+            "Plant_Crop_Health1": {
+                "weight": 70,
+                "Quantity": 1
+            },
+            "Potion_Health_Lesser": {
+                "weight": 85,
+                "Quantity": 2
+            },
+            "Potion_Health_Small": {
+                "weight": 40,
+                "Quantity": 1
+            },
+            "Armor_Wood_Head": {
+                "weight": 30,
+                "Quantity": 1
+            },
+            "Armor_Wood_Chest": {
+                "weight": 25,
+                "Quantity": 1
+            },
+            "Armor_Leather_Light_Head": {
+                "weight": 20,
+                "Quantity": 1
+            },
+            "Armor_Leather_Light_Chest": {
+                "weight": 20,
+                "Quantity": 1
+            },
+            "Weapon_Shield_Copper": {
+                "weight": 25,
+                "Quantity": 1
+            },
+            "Tool_Pickaxe_Crude": {
+                "weight": 30,
+                "Quantity": 1
+            },
+            "Tool_Hatchet_Crude": {
+                "weight": 30,
+                "Quantity": 1
+            }
+        },
+        "epic_chest": {
+            "Ingredient_Bar_Iron": {
+                "weight": 80,
+                "Quantity": 2
+            },
+            "Ingredient_Bar_Silver": {
+                "weight": 40,
+                "Quantity": 1
+            },
+            "Ingredient_Hide_Scaled": {
+                "weight": 50,
+                "Quantity": 1
+            },
+            "Plant_Crop_Health2": {
+                "weight": 70,
+                "Quantity": 2
+            },
+            "Potion_Health_Lesser": {
+                "weight": 60,
+                "Quantity": 3
+            },
+            "Potion_Health_Small": {
+                "weight": 80,
+                "Quantity": 2
+            },
+            "Armor_Iron_Head": {
+                "weight": 35,
+                "Quantity": 1
+            },
+            "Armor_Iron_Chest": {
+                "weight": 30,
+                "Quantity": 1
+            },
+            "Armor_Iron_Hands": {
+                "weight": 30,
+                "Quantity": 1
+            },
+            "Armor_Iron_Legs": {
+                "weight": 30,
+                "Quantity": 1
+            },
+            "Armor_Leather_Heavy_Chest": {
+                "weight": 25,
+                "Quantity": 1
+            },
+            "Weapon_Shield_Iron": {
+                "weight": 35,
+                "Quantity": 1
+            },
+            "Weapon_Shield_Cobalt": {
+                "weight": 15,
+                "Quantity": 1
+            },
+            "Tool_Pickaxe_Iron": {
+                "weight": 40,
+                "Quantity": 1
+            },
+            "Tool_Repair_Kit_Iron": {
+                "weight": 30,
+                "Quantity": 1
+            },
+            "Rock_Gem_Emerald": {
+                "weight": 10,
+                "Quantity": 1
+            },
+            "Ingredient_Crystal_Blue": {
+                "weight": 15,
+                "Quantity": 2
+            }
+        }
+    },
+    "sell_values": {
+        "Ingredient_Bone_Fragment": 2,
+        "Ingredient_Bar_Copper": 8,
+        "Ingredient_Bar_Iron": 15,
+        "Ingredient_Bar_Silver": 25,
+        "Ingredient_Bar_Gold": 40,
+        "Ingredient_Bar_Cobalt": 35,
+        "Ingredient_Bar_Bronze": 20,
+        "Ingredient_Bar_Thorium": 50,
+        "Ingredient_Bar_Mithril": 65,
+        "Ingredient_Hide_Light": 5,
+        "Ingredient_Hide_Medium": 10,
+        "Ingredient_Hide_Heavy": 18,
+        "Ingredient_Hide_Scaled": 30,
+        "Ingredient_Leather_Light": 7,
+        "Ingredient_Leather_Medium": 12,
+        "Ingredient_Leather_Heavy": 20,
+        "Ingredient_Leather_Scaled": 35,
+        "Ingredient_Fibre": 2,
+        "Ingredient_Stick": 1,
+        "Ingredient_Tree_Bark": 3,
+        "Ore_Copper": 4,
+        "Ore_Iron": 8,
+        "Ore_Silver": 14,
+        "Ore_Gold": 20,
+        "Ore_Cobalt": 18,
+        "Rock_Gem_Emerald": 80,
+        "Ingredient_Crystal_Blue": 25,
+        "Ingredient_Crystal_Red": 25,
+        "Ingredient_Crystal_Purple": 30,
+        "Ingredient_Fire_Essence": 45,
+        "Ingredient_Ice_Essence": 45,
+        "Ingredient_Lightning_Essence": 45,
+        "Ingredient_Life_Essence": 55,
+        "Ingredient_Void_Essence": 70,
+        "Ingredient_Feathers_Light": 4,
+        "Ingredient_Feathers_Dark": 6,
+        "Ingredient_Feathers_Red": 8,
+        "Ingredient_Chitin_Sturdy": 22,
+        "Plant_Crop_Health1": 2,
+        "Plant_Crop_Health2": 5,
+        "Potion_Health_Lesser": 10,
+        "Potion_Health_Small": 20,
+        "Tool_Pickaxe_Crude": 6,
+        "Tool_Hatchet_Crude": 6,
+        "Tool_Pickaxe_Iron": 18,
+        "Tool_Repair_Kit_Iron": 25
+    }
+}

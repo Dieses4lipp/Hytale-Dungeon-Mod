@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
 public class PlayerLevelComponent implements Component<EntityStore> {
     public int level = 1;
     public int xp = 0;
+    public int gold = 0; 
 
     private static ComponentType<EntityStore, PlayerLevelComponent> TYPE;
     
@@ -29,6 +30,7 @@ public class PlayerLevelComponent implements Component<EntityStore> {
         PlayerLevelComponent cloned = new PlayerLevelComponent();
         cloned.level = this.level;
         cloned.xp = this.xp;
+        cloned.gold = this.gold;
         return cloned;
     }
 

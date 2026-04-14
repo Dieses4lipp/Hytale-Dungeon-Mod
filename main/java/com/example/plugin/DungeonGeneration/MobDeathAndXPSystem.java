@@ -34,7 +34,8 @@ public class MobDeathAndXPSystem extends DeathSystems.OnDeathSystem {
             @Nonnull CommandBuffer<EntityStore> commandBuffer) {
 
         Damage damageInfo = deathComponent.getDeathInfo();
-        if (damageInfo == null) return;
+        if (damageInfo == null)
+            return;
 
         Damage.Source source = damageInfo.getSource();
         Ref<EntityStore> killerRef = null;
@@ -45,43 +46,48 @@ public class MobDeathAndXPSystem extends DeathSystems.OnDeathSystem {
 
         if (killerRef != null) {
             if (store.getArchetype(killerRef).contains(PlayerLevelComponent.getComponentType())) {
-                
+
                 PlayerLevelComponent stats = store.getComponent(killerRef, PlayerLevelComponent.getComponentType());
                 PlayerRef pRef = store.getComponent(killerRef, PlayerRef.getComponentType());
-                
+
                 if (stats != null && pRef != null) {
-                    // XP Berechnung
-                    stats.xp += 25; 
-                    int xpNeeded = stats.level * 100; 
-                    
+
+                    int xpGained = 25;
+                    if (DungeonManager.get().mobXpRewards.containsKey(ref)) {
+                        xpGained = DungeonManager.get().mobXpRewards.remove(ref);
+                    }
+
+                    stats.xp += xpGained;
+                    int xpNeeded = stats.level * 100;
+
                     if (stats.xp >= xpNeeded) {
                         stats.xp -= xpNeeded;
                         stats.level++;
                         System.out.println("[DungeonMod] Level Up gespeichert!");
                     }
 
-                    // DATENBANK-LOGIK: Fortschritt sofort sichern
                     try (PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement(
-                            "UPDATE player_levels SET level = ?, xp = ? WHERE uuid = ?")) {
+                            "UPDATE player_levels SET level = ?, xp = ?, gold = ? WHERE uuid = ?")) {
                         pstmt.setInt(1, stats.level);
                         pstmt.setInt(2, stats.xp);
-                        pstmt.setString(3, pRef.getUuid().toString());
+                        pstmt.setInt(3, stats.gold);
+                        pstmt.setString(4, pRef.getUuid().toString());
                         pstmt.executeUpdate();
                     } catch (SQLException e) {
                         System.err.println("[DungeonMod] Fehler beim Speichern: " + e.getMessage());
                     }
 
                     // HUD Refresh
-                   try {
+                    try {
                         Player player = store.getComponent(killerRef, Player.getComponentType());
                         if (player != null) {
-                            
+
                             player.getHudManager().setCustomHud(pRef, null);
-                            
+
                             LevelHud refreshedHud = new LevelHud(pRef, stats.level, stats.xp);
-                            
+
                             player.getHudManager().setCustomHud(pRef, refreshedHud);
-                            
+
                         }
                     } catch (Exception e) {
                         System.out.println("[DungeonMod] HUD-Update fehlgeschlagen.");

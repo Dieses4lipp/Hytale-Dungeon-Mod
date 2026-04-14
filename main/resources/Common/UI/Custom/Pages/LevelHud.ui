@@ -19,10 +19,21 @@ Group {
 
     Group { Anchor: (Height: 4); }
 
-    Label #HudVisualBar { 
-      Style: (FontSize: 16, TextColor: #5bc8f5, HorizontalAlignment: Center, RenderBold: true); 
+    Group {
       Anchor: (Full: 0, Height: 18); 
-      Text: "[--------------------]"; 
+      LayoutMode: Left; 
+      
+      Group { FlexWeight: 1; } 
+
+      Label { Style: (FontSize: 16, TextColor: #ffffff, RenderBold: true); Text: "["; }
+      
+      Label #HudVisualBarFilled { Style: (FontSize: 16, TextColor: #32CD32, RenderBold: true); Text: ""; }
+      
+      Label #HudVisualBarEmpty { Style: (FontSize: 16, TextColor: #555555, RenderBold: true); Text: ""; }
+      
+      Label { Style: (FontSize: 16, TextColor: #ffffff, RenderBold: true); Text: "]"; }
+
+      Group { FlexWeight: 1; } 
     }
 
     Group { Anchor: (Height: 4); }

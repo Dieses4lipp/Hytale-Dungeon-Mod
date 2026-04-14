@@ -21,6 +21,7 @@ import java.nio.file.Path;
 
 public class OpenDoorInteraction extends SimpleInstantInteraction {
 
+    
     public static final BuilderCodec<OpenDoorInteraction> CODEC = BuilderCodec.builder(
         OpenDoorInteraction.class,
         OpenDoorInteraction::new,
@@ -49,7 +50,11 @@ public class OpenDoorInteraction extends SimpleInstantInteraction {
             interactionContext.getState().state = InteractionState.Failed;
             return;
         }
-
+        if (doorData.isOpening) {
+            interactionContext.getState().state = InteractionState.Failed;
+            return;
+        }
+        doorData.isOpening = true;
         World world = com.example.plugin.DungeonGeneration.DungeonManager.get().activeWorld;
         if (world == null) {
             System.out.println("[DoorSystem] ERROR: World is null in DoorNPCComponent");

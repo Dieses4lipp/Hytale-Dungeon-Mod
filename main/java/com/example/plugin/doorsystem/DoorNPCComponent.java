@@ -30,7 +30,7 @@ public class DoorNPCComponent implements Component<EntityStore> {
             .build();
 
     private static ComponentType<EntityStore, DoorNPCComponent> componentType;
-
+    public transient boolean isOpening = false;
     private Vector3i doorPos;
     private DoorRegistry.Orientation orientation;
 

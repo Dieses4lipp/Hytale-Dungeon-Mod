@@ -92,7 +92,9 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
     int currentLevel = (stats != null) ? stats.level : 1;
     int currentXp = (stats != null) ? stats.xp : 0;
     int xpNeeded = currentLevel * 100;
+    int currentGold = (stats != null) ? stats.gold : 0;
     uiCommandBuilder.set("#LevelLabel.Text", "Lv. " + currentLevel);
+    uiCommandBuilder.set("#GoldLabel.Text","" + currentGold);
     uiCommandBuilder.set("#XpLabel.Text", currentXp + " / " + xpNeeded + " XP");
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#PlayBtn",
                 EventData.of("ButtonClicked", "nav_play"), false);

@@ -13,6 +13,7 @@ Group {
     Group { Anchor: (Width: 720, Height: 2); Background: #2a3040; }
     Group { Anchor: (Height: 16); }
     Label { Text: "Select one item to deposit:"; Style: (FontSize: 15, TextColor: #8899aa, HorizontalAlignment: Center); Anchor: (Width: 720, Height: 28); }
+    Label { Text: "Be aware you can only deposit 1 item at a time."; Style: (FontSize: 15, TextColor: #a93a4f, HorizontalAlignment: Center); Anchor: (Width: 720, Height: 28); }
     Group { Anchor: (Height: 12); }
 
     Group #InvRow1 { LayoutMode: Left; Anchor: (Width: 720, Height: 64);
