@@ -1,5 +1,7 @@
 package com.example.plugin.doorsystem;
 
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.math.vector.Vector3i;
 
 import java.util.ArrayList;
@@ -9,18 +11,27 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DoorRegistry {
 
-    
     public enum Orientation {
         SN, WE
     }
     
-    private static final Map<String, Orientation> doors = new ConcurrentHashMap<>();
+    public static class DoorEntry {
+        public final Orientation orientation;
+        public final Ref<EntityStore> entityRef;
 
-    public static void register(Vector3i pos, Orientation orientation) {
-        doors.put(key(pos), orientation);
+        public DoorEntry(Orientation orientation, Ref<EntityStore> entityRef) {
+            this.orientation = orientation;
+            this.entityRef = entityRef;
+        }
+    }
+    
+    private static final Map<String, DoorEntry> doors = new ConcurrentHashMap<>();
+
+    public static void register(Vector3i pos, Orientation orientation, Ref<EntityStore> entityRef) {
+        doors.put(key(pos), new DoorEntry(orientation, entityRef));
     }
 
-    public static Orientation get(Vector3i pos) {
+    public static DoorEntry get(Vector3i pos) {
         return doors.get(key(pos));
     }
 

@@ -228,6 +228,7 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         camSettings.lookMultiplier = new Vector2f(0.0f, 0.0f);
         camSettings.skipCharacterPhysics = false;
         camSettings.eyeOffset = true;
+        camSettings.skipCharacterPhysics = true;
         camSettings.positionDistanceOffsetType = PositionDistanceOffsetType.DistanceOffsetRaycast;
 
         playerRef.getPacketHandler().writeNoCache(new SetServerCamera(ClientCameraView.Custom, false, camSettings));

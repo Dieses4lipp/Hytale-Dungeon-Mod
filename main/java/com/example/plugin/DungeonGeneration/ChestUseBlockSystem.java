@@ -1,11 +1,11 @@
-package com.example.plugin.doorsystem;
+package com.example.plugin.DungeonGeneration;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
-import com.example.plugin.DungeonGeneration.DungeonTables;
 import com.example.plugin.Ui.ChestPage.*;
+import com.example.plugin.doorsystem.ChestRegistry;
 import com.hypixel.hytale.builtin.adventure.objectives.config.task.TreasureMapObjectiveTaskAsset.ChestConfig;
 import com.hypixel.hytale.component.Archetype;
 import com.hypixel.hytale.component.ArchetypeChunk;

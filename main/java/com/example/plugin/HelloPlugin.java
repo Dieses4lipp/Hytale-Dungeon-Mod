@@ -8,7 +8,6 @@ import com.example.plugin.Commands.ToggleBuildCommand;
 import com.example.plugin.Npc.Testinteractionnpc.NPCInteractionSetupSystem;
 import com.example.plugin.Npc.Testinteractionnpc.NPCSetupPending;
 import com.example.plugin.Npc.Testinteractionnpc.TalkToNPCInteraction;
-import com.example.plugin.doorsystem.ChestUseBlockSystem;
 import com.example.plugin.doorsystem.DoorNPCComponent;
 import com.example.plugin.doorsystem.MyUseBlockSystem;
 import com.example.plugin.doorsystem.OpenDoorInteraction;

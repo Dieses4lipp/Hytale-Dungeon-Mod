@@ -20,7 +20,30 @@ Group {
     TextButton #MarketBtn { Anchor: (Width: 140, Height: 64); Text: "MARKET"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
     Group { Anchor: (Width: 8); }
     TextButton #LeaderboardBtn { Anchor: (Width: 200, Height: 64); Text: "LEADERBOARDS"; Padding: (Horizontal: 14); Background: #1c2333; Style: (Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
-  }
+    Group { Anchor: (Width: 8); }
+    Group { FlexWeight: 1; } 
+
+    Group #GoldContainer {
+      LayoutMode: CenterMiddle; 
+      Anchor: (Width: 150, Height: 64);
+      Background: #1c2333; 
+    
+      Group {
+        LayoutMode: Left;
+      
+        Label { 
+          Text: "Gold: "; 
+          Style: (FontSize: 18, TextColor: #FFD700, RenderBold: true, VerticalAlignment: Center); 
+          Anchor: (Height: 24);
+        }
+      
+        Label #GoldLabel {
+          Style: (FontSize: 18, TextColor: #FFFFFF, VerticalAlignment: Center); 
+          Anchor: (Height: 24);
+        }
+      }
+    }
+    }
 
   Group #NavSpacer { Anchor: (Full: 0, Height: 18); Background: #060809; }
 
@@ -87,7 +110,6 @@ Group {
       Anchor: (Width: 860, Height: 70); LayoutMode: Left;
       Label #LevelLabel { Style: (FontSize: 18, TextColor: #ffffff, HorizontalAlignment: Center, RenderBold: true); Anchor: (Width: 120, Height: 60); Text: ""; Padding: (Full: 8); }
       Label #XpLabel { Style: (FontSize: 15, TextColor: #8899aa, HorizontalAlignment: Center); Anchor: (Width: 180, Height: 60); Text: ""; Padding: (Full: 8); }
-      Label #GoldLabel { Style: (FontSize: 16, TextColor: #FFD700, HorizontalAlignment: Center, RenderBold: true); Anchor: (Width: 120, Height: 60); Text: ""; Padding: (Full: 8); }
       TextButton #EnterBtn { Anchor: (Width: 240, Height: 54); Text: "ENTER DUNGEON"; Padding: (Horizontal: 12); Style: (Default: (Background: #1a3a5c, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (Background: #254a75, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Pressed: (Background: #0f151e, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }
       Group { Anchor: (Width: 16); }
       TextButton #CloseBtn { Anchor: (Width: 140, Height: 54); Text: "CLOSE"; Padding: (Horizontal: 12); Style: (Default: (Background: #1c2333, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (Background: #2a344d, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)), Pressed: (Background: #0f151e, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }

@@ -8,9 +8,18 @@ Group {
   }
 
   Group #HudContainer {
-    Anchor: (Full: 0, Height: 80);
+    Anchor: (Full: 0, Height: 104);
     LayoutMode: Top;
+   
+      
+    Label #HudExtractionTimer { 
+      Style: (FontSize: 16, TextColor: #ffaa00, HorizontalAlignment: Center, RenderBold: true); 
+      Anchor: (Full: 0, Height: 20); 
+      Text: ""; 
+    }
 
+    Group { Anchor: (Height: 4); }
+    
     Label #HudLevelLabel { 
       Style: (FontSize: 18, TextColor: #ffffff, HorizontalAlignment: Center, RenderBold: true); 
       Anchor: (Full: 0, Height: 24); 
@@ -43,6 +52,7 @@ Group {
       Anchor: (Full: 0, Height: 16); 
       Text: "0 / 100 XP"; 
     }
+    
   }
 
   Group #BottomSpacer { 

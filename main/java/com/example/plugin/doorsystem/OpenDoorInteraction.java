@@ -62,15 +62,31 @@ public class OpenDoorInteraction extends SimpleInstantInteraction {
             return;
         }
 
-        Vector3i pos = doorData.getDoorPos();
-        Path openPath = doorData.getOrientation() == DoorRegistry.Orientation.WE ? DOOR_WE_OPEN : DOOR_SN_OPEN;
-        BlockSelection openPrefab = PrefabStore.get().getPrefab(openPath);
+        Vector3i clickedPos = doorData.getDoorPos();
 
-        openPrefab.placeNoReturn(world, pos, null);
-        System.out.println("[DoorSystem] Door opened at " + pos.x + "," + pos.y + "," + pos.z);
+        java.util.List<Vector3i> nearbyDoors = DoorRegistry.getNearby(clickedPos, 2);
+        boolean clickedNpcDeleted = false;
 
-        commandBuffer.removeEntity(npcRef, RemoveReason.REMOVE);
-        DoorRegistry.remove(pos);
+        for (Vector3i doorPos : nearbyDoors) {
+            DoorRegistry.DoorEntry entry = DoorRegistry.get(doorPos);
+            if (entry == null) continue;
+
+            Path openPath = entry.orientation == DoorRegistry.Orientation.WE ? DOOR_WE_OPEN : DOOR_SN_OPEN;
+            BlockSelection openPrefab = PrefabStore.get().getPrefab(openPath);
+            openPrefab.placeNoReturn(world, doorPos, null);
+            System.out.println("[DoorSystem] Double-Door part opened at " + doorPos.x + "," + doorPos.y + "," + doorPos.z);
+
+            if (entry.entityRef != null && entry.entityRef.isValid()) {
+                commandBuffer.removeEntity(entry.entityRef, RemoveReason.REMOVE);
+                if (entry.entityRef.equals(npcRef)) clickedNpcDeleted = true;
+            }
+
+            DoorRegistry.remove(doorPos);
+        }
+
+        if (!clickedNpcDeleted) {
+            commandBuffer.removeEntity(npcRef, RemoveReason.REMOVE);
+        }
 
         interactionContext.getState().state = InteractionState.Finished;
     }

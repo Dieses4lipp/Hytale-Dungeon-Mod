@@ -11,6 +11,7 @@ public class BossDeathTimerComponent implements Component<EntityStore> {
 
     public float timeRemaining = 60.0f; 
     public int dungeonSlot;
+    public int lastSentSecond = -1;
 
     public static ComponentType<EntityStore, BossDeathTimerComponent> getComponentType() {
         return TYPE;

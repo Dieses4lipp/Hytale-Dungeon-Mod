@@ -138,7 +138,7 @@ public class DungeonGenerator {
 
         store.addComponent(npcRef, Invulnerable.getComponentType());
 
-        DoorRegistry.register(pos, orientation);
+        DoorRegistry.register(pos, orientation, npcRef);
         inst.registerNPC(npcRef);
 
         System.out.println("[DoorSystem] Door NPC spawned at " + pos.x + "," + pos.y + "," + pos.z);

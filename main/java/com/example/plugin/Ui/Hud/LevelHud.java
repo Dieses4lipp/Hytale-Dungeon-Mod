@@ -9,11 +9,17 @@ public class LevelHud extends CustomUIHud {
 
     private final int level;
     private final int xp;
+    private final int extractionTimeSeconds;
 
     public LevelHud(PlayerRef playerRef, int level, int xp) {
+        this(playerRef, level, xp, -1); 
+    }
+
+    public LevelHud(PlayerRef playerRef, int level, int xp, int extractionTimeSeconds) {
         super(playerRef); 
         this.level = level;
         this.xp = xp;
+        this.extractionTimeSeconds = extractionTimeSeconds;
     }
 
     @Override
@@ -42,5 +48,15 @@ public class LevelHud extends CustomUIHud {
 
         uiCommandBuilder.set("#HudLevelLabel.Text", "Lv. " + this.level);
         uiCommandBuilder.set("#HudXpLabel.Text", this.xp + " / " + xpNeeded + " XP");
+
+        if (this.extractionTimeSeconds >= 0) {
+            int minutes = this.extractionTimeSeconds / 60;
+            int seconds = this.extractionTimeSeconds % 60;
+            String formattedTime = String.format("%02d:%02d", minutes, seconds);
+            
+            uiCommandBuilder.set("#HudExtractionTimer.Text", "Extraction in: " + formattedTime);
+        } else {
+            uiCommandBuilder.set("#HudExtractionTimer.Text", ""); 
+        }
     }
 }
