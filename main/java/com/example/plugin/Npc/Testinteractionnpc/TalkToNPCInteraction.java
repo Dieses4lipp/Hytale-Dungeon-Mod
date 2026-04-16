@@ -4,7 +4,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import com.example.plugin.Ui.TestUi.Testpage;
+import com.example.plugin.Ui.Shop.ShopPage;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -64,7 +64,7 @@ public class TalkToNPCInteraction extends SimpleInstantInteraction {
         Store<EntityStore> store = player.getWorld().getEntityStore().getStore();
 
         // docs: player.getPageManager().openCustomPage(ref, store, page)
-        Testpage page = new Testpage(playerRef);
+        ShopPage page = new ShopPage(playerRef);
         player.getPageManager().openCustomPage(ref, store, page);
 
         String dialogLine = DIALOG_LINES[random.nextInt(DIALOG_LINES.length)];

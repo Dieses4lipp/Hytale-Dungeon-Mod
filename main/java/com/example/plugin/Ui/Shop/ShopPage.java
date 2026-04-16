@@ -1,4 +1,4 @@
-package com.example.plugin.Ui.TestUi;
+package com.example.plugin.Ui.Shop;
 
 
 import javax.annotation.Nonnull;
@@ -33,7 +33,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 
-public class Testpage extends InteractiveCustomUIPage<Testpage.Data> {
+public class ShopPage extends InteractiveCustomUIPage<ShopPage.Data> {
 
     public static class Data {
         public static final BuilderCodec<Data> CODEC = BuilderCodec.builder(Data.class, Data::new)
@@ -54,14 +54,14 @@ public class Testpage extends InteractiveCustomUIPage<Testpage.Data> {
         private String clickedButton;
     }
 
-    public Testpage(PlayerRef playerRef) {
+    public ShopPage(PlayerRef playerRef) {
         super(playerRef, CustomPageLifetime.CanDismiss, Data.CODEC);
     }
 
     @Override
     public void build(@Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder uiCommandBuilder,
             @Nonnull UIEventBuilder uiEventBuilder, @Nonnull Store<EntityStore> store) {
-        uiCommandBuilder.append("Pages/TestPage.ui");
+        uiCommandBuilder.append("Pages/ShopPage.ui");
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.ValueChanged, "#MyInput",
                 EventData.of("@MyInput", "#MyInput.Value"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#SaveBtn",
@@ -83,7 +83,7 @@ public class Testpage extends InteractiveCustomUIPage<Testpage.Data> {
             case "reset" -> System.out.println("Reset button was clicked!");
             case "close" -> System.out.println("Close button was clicked!");
         }
-        data.clickedButton = null; // reset so it doesn't fire again on next event
+        data.clickedButton = null; 
     }
 
         sendUpdate();

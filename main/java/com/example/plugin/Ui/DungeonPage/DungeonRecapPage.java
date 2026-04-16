@@ -74,6 +74,10 @@ public class DungeonRecapPage extends InteractiveCustomUIPage<DungeonRecapPage.D
         int goldValue = SellConfig.calculateStashSellValue(playerId, player);
         cmd.set("#GoldValueLabel.Text", "Current earned Gold: " + goldValue + "g");
 
+        var stats = com.example.plugin.Stats.PlayerLevelComponent.getStats(store, ref);
+        int currentLevel = (stats != null) ? stats.level : 1;
+        cmd.set("#LevelLabel.Text", "LEVEL: " + currentLevel);
+
         for (short i = 0; i < 36; i++) {
             String groupId = "#Slot" + (i + 1);
             String btnId = "Slot" + (i + 1) + "Btn";

@@ -98,38 +98,39 @@ public class DungeonGenerator {
 
         if (doors[0]) {
             Vector3i pos = new Vector3i(worldX, doorY, worldZ - offset);
-            doorSN.placeNoReturn(world, pos, null);
             spawnDoorNPC(store, pos, DoorRegistry.Orientation.SN, world, inst);
+            doorSN.placeNoReturn(world, pos, null);
+            
         }
         if (doors[1]) {
             Vector3i pos = new Vector3i(worldX + offset, doorY, worldZ);
-            doorWE.placeNoReturn(world, pos, null);
             spawnDoorNPC(store, pos, DoorRegistry.Orientation.WE, world, inst);
+            doorWE.placeNoReturn(world, pos, null);
+            
         }
         if (doors[2]) {
             Vector3i pos = new Vector3i(worldX, doorY, worldZ + offset);
-            doorSN.placeNoReturn(world, pos, null);
             spawnDoorNPC(store, pos, DoorRegistry.Orientation.SN, world, inst);
+            doorSN.placeNoReturn(world, pos, null);
         }
         if (doors[3]) {
             Vector3i pos = new Vector3i(worldX - offset, doorY, worldZ);
-            doorWE.placeNoReturn(world, pos, null);
             spawnDoorNPC(store, pos, DoorRegistry.Orientation.WE, world, inst);
+            doorWE.placeNoReturn(world, pos, null);
         }
     }
 
     private void spawnDoorNPC(Store<EntityStore> store, Vector3i pos,
             DoorRegistry.Orientation orientation, World world, DungeonInstance inst) {
-        Vector3d spawnPos = new Vector3d(pos.x + 0.5, pos.y, pos.z + 0.5);
+        Vector3d spawnPos = new Vector3d(pos.x + 0.5, pos.y+ 0.1, pos.z + 0.5);
         Vector3f rotation = new Vector3f(0, 0, 0);
 
         Pair<Ref<EntityStore>, INonPlayerCharacter> result = NPCPlugin.get().spawnNPC(
                 store, "Invis", null, spawnPos, rotation);
         if (result == null) {
             System.out.println("[DoorSystem] ERROR: Failed to spawn door NPC at " + pos.x + "," + pos.y + "," + pos.z);
-            return;
-        }
-        Ref<EntityStore> npcRef = result.first();
+        }else{
+            Ref<EntityStore> npcRef = result.first();
         store.addComponent(npcRef, DoorNPCComponent.getComponentType(),
                 new DoorNPCComponent(pos, orientation));
 
@@ -142,6 +143,8 @@ public class DungeonGenerator {
         inst.registerNPC(npcRef);
 
         System.out.println("[DoorSystem] Door NPC spawned at " + pos.x + "," + pos.y + "," + pos.z);
+        }
+        
     }
 
     public void clearDungeon(World world, DungeonInstance inst) {

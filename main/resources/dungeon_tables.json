@@ -15,11 +15,11 @@
             }
         },
         "boss_room": {
-            "Trork_Sentry": {
+            "Dungeon_Scarak_Broodmother": {
                 "weight": 60,
-                "xp": 50
+                "xp": 250
             },
-            "Trork_Chieftain": {
+            "Skeleton_Burnt_Praetorian": {
                 "weight": 100,
                 "xp": 150
             }
@@ -77,6 +77,14 @@
             },
             "Tool_Hatchet_Crude": {
                 "weight": 30,
+                "Quantity": 1
+            },
+            "Weapon_Sword_Steel": {
+                "weight": 20,
+                "Quantity": 1
+            },
+            "Weapon_Sword_Steel_Incandescent": {
+                "weight": 10,
                 "Quantity": 1
             }
         },
@@ -148,6 +156,30 @@
             "Ingredient_Crystal_Blue": {
                 "weight": 15,
                 "Quantity": 2
+            },
+            "Weapon_Sword_Frost": {
+                "weight": 15,
+                "Quantity": 1
+            },
+            "Weapon_Daggers_Doomed": {
+                "weight": 12,
+                "Quantity": 1
+            },
+            "Weapon_Longsword_Adamantite": {
+                "weight": 10,
+                "Quantity": 1
+            },
+            "Weapon_Battleaxe_Mithril": {
+                "weight": 8,
+                "Quantity": 1
+            },
+            "Weapon_Sword_Adamantite": {
+                "weight": 12,
+                "Quantity": 1
+            },
+            "Weapon_Shield_Thorium": {
+                "weight": 10,
+                "Quantity": 1
             }
         }
     },
@@ -194,7 +226,6 @@
         "Plant_Crop_Health2": 5,
         "Tool_Pickaxe_Crude": 6,
         "Tool_Hatchet_Crude": 6,
-        "Tool_Pickaxe_Iron": 18,
-        "Tool_Repair_Kit_Iron": 25
+        "Tool_Pickaxe_Iron": 18
     }
 }

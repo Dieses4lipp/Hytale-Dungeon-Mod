@@ -1,7 +1,7 @@
 package com.example.plugin;
 
 import com.example.plugin.Commands.DestroyDungeonCommand;
-import com.example.plugin.Commands.GenerateDungeonCommand;
+import com.example.plugin.Commands.GetStarterKitCommand;
 import com.example.plugin.Commands.OpenPlayPageCommand;
 import com.example.plugin.Commands.SpawnNPCCommand;
 import com.example.plugin.Commands.ToggleBuildCommand;
@@ -98,7 +98,7 @@ BuildPermissionComponent.setComponentType(buildPermissionType);
         this.getEntityStoreRegistry().registerSystem(new PlayerDeathDungeonSystem());
         this.getEntityStoreRegistry().registerSystem(new BossDeathTimerSystem());
         this.getEntityStoreRegistry().registerSystem(new BlockBreakPreventionSystem());
-        this.getCommandRegistry().registerCommand(new GenerateDungeonCommand("test", "An example command", false));
+        this.getCommandRegistry().registerCommand(new GetStarterKitCommand("starterkit", "Get a starter kit to begin your dungeon adventure!", false));
         this.getCommandRegistry().registerCommand(new SpawnNPCCommand());
         this.getCommandRegistry().registerCommand(new OpenPlayPageCommand());
         this.getCommandRegistry().registerCommand(new DestroyDungeonCommand());
