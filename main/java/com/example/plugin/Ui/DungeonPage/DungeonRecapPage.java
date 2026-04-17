@@ -259,7 +259,7 @@ public class DungeonRecapPage extends InteractiveCustomUIPage<DungeonRecapPage.D
 
             World activeWorld = DungeonManager.get().activeWorld;
             if (activeWorld != null) {
-                Teleport teleport = Teleport.createForPlayer(activeWorld, new Transform(110, 133, 110));
+                Teleport teleport = Teleport.createForPlayer(activeWorld, new Transform(110.5, 136, 110.5));
                 store.addComponent(ref, Teleport.getComponentType(), teleport);
             }
 
