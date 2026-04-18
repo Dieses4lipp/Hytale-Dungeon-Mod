@@ -54,18 +54,22 @@ public class SellConfig {
         System.out.println("[SellConfig] Grand total sell value: " + total + "g");
         return total;
     }
+
     public static void saveStashToDatabase(String playerId, ItemContainer stash) {
-        if (stash == null) return;
-        
+        if (stash == null)
+            return;
+
         try (java.sql.PreparedStatement deleteStmt = DatabaseManager.getConnection().prepareStatement(
                 "DELETE FROM player_stash WHERE uuid = ?")) {
             deleteStmt.setString(1, playerId);
             deleteStmt.executeUpdate();
-        } catch (java.sql.SQLException e) { return; }
+        } catch (java.sql.SQLException e) {
+            System.err.println("[Database] Failed to clear old stash: " + e.getMessage());
+        }
 
         try (java.sql.PreparedStatement insertStmt = DatabaseManager.getConnection().prepareStatement(
-                "INSERT INTO player_stash (uuid, slot, item_id, quantity) VALUES (?, ?, ?, ?)")) {
-            
+                "INSERT OR REPLACE INTO player_stash (uuid, slot, item_id, quantity) VALUES (?, ?, ?, ?)")) {
+
             for (short i = 0; i < stash.getCapacity(); i++) {
                 ItemStack item = stash.getItemStack(i);
                 if (item != null && !ItemStack.isEmpty(item)) {
@@ -73,7 +77,7 @@ public class SellConfig {
                     insertStmt.setInt(2, i);
                     insertStmt.setString(3, item.getItem().getId());
                     insertStmt.setInt(4, item.getQuantity());
-                    insertStmt.addBatch(); 
+                    insertStmt.addBatch();
                 }
             }
             insertStmt.executeBatch();
@@ -85,11 +89,11 @@ public class SellConfig {
     public static void loadStashFromDatabase(String playerId, ItemContainer emptyStash) {
         try (java.sql.PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement(
                 "SELECT slot, item_id, quantity FROM player_stash WHERE uuid = ?")) {
-            
+
             pstmt.setString(1, playerId);
             java.sql.ResultSet rs = pstmt.executeQuery();
 
-           while (rs.next()) {
+            while (rs.next()) {
                 short slot = rs.getShort("slot");
                 String itemId = rs.getString("item_id");
                 int quantity = rs.getInt("quantity");
@@ -105,6 +109,7 @@ public class SellConfig {
             System.err.println("[Database] Failed to load stash: " + e.getMessage());
         }
     }
+
     public static void removeSellableItemsFromVanillaInventory(Player player) {
         ItemContainer[] containers = {
                 player.getInventory().getHotbar(),
@@ -123,6 +128,7 @@ public class SellConfig {
             }
         }
     }
+
     public static int getItemSellValue(ItemStack item) {
         if (item == null || ItemStack.isEmpty(item)) {
             return 0;
@@ -130,6 +136,7 @@ public class SellConfig {
         String itemId = item.getItem().getId();
         return DungeonTables.get().getSellValue(itemId);
     }
+
     public static void addGoldToPlayer(Player player, Ref<EntityStore> ref,
             Store<EntityStore> store, int amount) {
         if (amount <= 0)

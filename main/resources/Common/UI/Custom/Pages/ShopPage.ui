@@ -1,43 +1,63 @@
 Group {
-  LayoutMode: Center;
+  LayoutMode: CenterMiddle;
+  Anchor: (Full: 0);
+  Background: #000000(0.0);
 
-  Group #MyPanel {
-    Anchor: (Width: 800, Height: 1000);
+  Group #ShopPanel {
+    Anchor: (Width: 640, Height: 480);
     LayoutMode: Top;
+    Background: #0d1117(0.97);
+    Padding: (Horizontal: 30, Vertical: 24);
 
-    Label #MyLabel {
-      Style: (FontSize: 32, Alignment: Center);
-      Anchor: (Top: 50);
-      Text: "MyText";
-      Padding: (Full: 10);
-    }
-
-    TextField #MyInput {
-      Anchor: (Top: 10, Width: 200, Height: 50);
-      Padding: (Full: 10);
-    }
-
-    Group #ButtonGroup {
-    Anchor: (Top: 20, Width: 600, Height: 60);
-    LayoutMode: Left; 
+    Label #ShopTitle { Text: "MERCHANT SHOP"; Style: (FontSize: 28, TextColor: #5bc8f5, RenderBold: true, HorizontalAlignment: Center); Anchor: (Width: 580, Height: 34); }
     
-    TextButton #SaveBtn {
-        Anchor: (Width: 150, Height: 50);
-        Text: "Save";
-        Padding: (Horizontal: 5);
+    Label #GoldLabel { Text: "Gold: 0"; Style: (FontSize: 20, TextColor: #f5c518, RenderBold: true, HorizontalAlignment: Center); Anchor: (Width: 580, Height: 24); }
+    
+    Group { Anchor: (Height: 8); }
+    Group { Anchor: (Width: 580, Height: 2); Background: #2a3040; }
+    Group { Anchor: (Height: 16); }
+
+    Label { Text: "Available Items:"; Style: (FontSize: 15, TextColor: #8899aa, HorizontalAlignment: Center); Anchor: (Width: 580, Height: 24); }
+    Group { Anchor: (Height: 8); }
+
+    Group #ShopRow1 { LayoutMode: CenterMiddle; Anchor: (Width: 580, Height: 64);
+      Group #ShopSlot1 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 10); }
+      Group #ShopSlot2 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 10); }
+      Group #ShopSlot3 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 10); }
+      Group #ShopSlot4 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 10); }
+      Group #ShopSlot5 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); }
+    }
+    Group { Anchor: (Height: 10); }
+    Group #ShopRow2 { LayoutMode: CenterMiddle; Anchor: (Width: 580, Height: 64);
+      Group #ShopSlot6 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 10); }
+      Group #ShopSlot7 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 10); }
+      Group #ShopSlot8 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 10); }
+      Group #ShopSlot9 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 10); }
+      Group #ShopSlot10 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } 
     }
 
-    TextButton #ResetBtn {
-        Anchor: (Width: 150, Height: 50);
-        Text: "Reset";
-        Padding: (Horizontal: 5);
+    Group { Anchor: (Height: 24); }
+    Group { Anchor: (Width: 580, Height: 2); Background: #2a3040; }
+    Group { Anchor: (Height: 16); }
+
+    Group #TransactionRow { LayoutMode: CenterMiddle; Anchor: (Width: 580, Height: 50);
+      Label { Text: "Type Quantity:"; Style: (FontSize: 18, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center); Anchor: (Width: 160, Height: 50); Padding: (Top: 10); }
+      
+      Group #InputWrapper {
+        Anchor: (Width: 120, Height: 50);
+        Background: #1c2638; 
+        
+      }
     }
 
-    TextButton #CloseBtn {
-        Anchor: (Width: 150, Height: 50);
-        Text: "Close";
-        Padding: (Horizontal: 5);
+    Group { Anchor: (Height: 24); }
+
+    Group #ButtonRow { LayoutMode: Left; Anchor: (Width: 580, Height: 54);
+      Group { FlexWeight: 1; }
+      TextButton #BuyBtn { Anchor: (Width: 160, Height: 54); Text: "BUY"; Padding: (Horizontal: 12); Style: (Default: (Background: #1a3a5c, LabelStyle: (TextColor: #5bc8f5, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (Background: #254a75, LabelStyle: (TextColor: #5bc8f5, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center))); }
+      Group { Anchor: (Width: 16); } 
+      TextButton #CloseBtn { Anchor: (Width: 160, Height: 54); Text: "CLOSE"; Padding: (Horizontal: 12); Style: (Default: (Background: #1c2333, LabelStyle: (TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center)), Hovered: (Background: #2a344d, LabelStyle: (TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center))); }
+      Group { FlexWeight: 1; }
     }
-}
   }
 }

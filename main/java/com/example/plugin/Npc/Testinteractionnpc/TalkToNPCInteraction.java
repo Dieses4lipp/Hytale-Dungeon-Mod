@@ -26,17 +26,6 @@ public class TalkToNPCInteraction extends SimpleInstantInteraction {
         TalkToNPCInteraction::new,
         SimpleInstantInteraction.CODEC
     ).build();
-
-    private static final String[] DIALOG_LINES = {
-        "Hello, traveler! Welcome to our village.",
-        "Have you seen any Trorks around lately?",
-        "The weather in Zone 1 is lovely this time of year.",
-        "I heard there's treasure hidden in the caves to the north!",
-        "Would you like to trade? ...Just kidding, I have nothing to sell."
-    };
-
-    private final Random random = new Random();
-
     @Override
     protected void firstRun(@Nonnull InteractionType interactionType,
                            @Nonnull InteractionContext interactionContext,
@@ -48,7 +37,6 @@ public class TalkToNPCInteraction extends SimpleInstantInteraction {
             return;
         }
 
-        // ref is the entity ref of the player who triggered the interaction
         Ref<EntityStore> ref = interactionContext.getEntity();
         Player player = commandBuffer.getComponent(ref, Player.getComponentType());
 
@@ -57,19 +45,12 @@ public class TalkToNPCInteraction extends SimpleInstantInteraction {
             return;
         }
 
-        // docs: player.getPlayerRef() gives the typed PlayerRef needed by the page constructor
         PlayerRef playerRef = player.getPlayerRef();
 
-        // docs: player.getWorld().getEntityStore().getStore() gives the Store<EntityStore>
         Store<EntityStore> store = player.getWorld().getEntityStore().getStore();
 
-        // docs: player.getPageManager().openCustomPage(ref, store, page)
         ShopPage page = new ShopPage(playerRef);
         player.getPageManager().openCustomPage(ref, store, page);
-
-        String dialogLine = DIALOG_LINES[random.nextInt(DIALOG_LINES.length)];
-        player.sendMessage(Message.raw("§6[Kweebec]§r " + dialogLine));
-
         interactionContext.getState().state = InteractionState.Finished;
     }
 }
