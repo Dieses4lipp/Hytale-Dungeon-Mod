@@ -135,16 +135,16 @@ public class DungeonRecapPage extends InteractiveCustomUIPage<DungeonRecapPage.D
                     "ItemSlot { ItemId: \"" + item.getItemId() + "\"; Anchor: (Full: 0); ShowQuantity: true; }");
 
             int itemValue = SellConfig.getItemSellValue(item);
-                String tooltip = "Will be sold automatically for: ";
             if (itemValue > 0) {
                 int totalStackValue = itemValue * item.getQuantity();
-                tooltip += totalStackValue + " Gold";
+                String tooltip = "Will be sold automatically for: " + totalStackValue + " Gold";
 
                 cmd.appendInline(groupId,
                         "TextButton #" + btnId
                                 + " { Anchor: (Full: 0); Text: \"\"; Background: #ff0000(0.15); TooltipText: \""
                                 + tooltip + "\"; }");
             } else {
+                String tooltip = item.getItemId();
                 cmd.appendInline(groupId,
                         "TextButton #" + btnId
                                 + " { Anchor: (Full: 0); Text: \"\"; Background: #000000(0.0); TooltipText: \""

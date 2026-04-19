@@ -70,7 +70,6 @@ public class SpawnNPCCommand extends AbstractPlayerCommand {
 
         
         store.removeComponent(npcRef, DisplayNameComponent.getComponentType());
-        // store.addComponent(npcRef, Nameplate.getComponentType(), new Nameplate("Merchant"));
         
         NPCSetupPending setupPending = new NPCSetupPending("Root_TalkToNPC", "Talk");
         store.addComponent(npcRef, NPCSetupPending.getComponentType(), setupPending);

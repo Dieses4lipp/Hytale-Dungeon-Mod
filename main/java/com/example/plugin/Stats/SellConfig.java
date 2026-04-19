@@ -139,7 +139,7 @@ public class SellConfig {
 
     public static void addGoldToPlayer(Player player, Ref<EntityStore> ref,
             Store<EntityStore> store, int amount) {
-        if (amount <= 0)
+        if (amount == 0)
             return;
 
         PlayerLevelComponent stats = store.getComponent(ref, PlayerLevelComponent.getComponentType());

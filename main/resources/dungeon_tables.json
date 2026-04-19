@@ -6,11 +6,11 @@
                 "xp": 15
             },
             "Skeleton_Archmage": {
-                "weight": 30,
+                "weight": 20,
                 "xp": 25
             },
             "Skeleton_Burnt_Gunner": {
-                "weight": 20,
+                "weight": 5,
                 "xp": 20
             }
         },
@@ -79,6 +79,14 @@
                 "weight": 30,
                 "Quantity": 1
             },
+            "Weapon_Shortbow_Iron": {
+                "weight": 40,
+                "Quantity": 1
+            },
+            "Weapon_Shortbow_Bronze": {
+                "weight": 40,
+                "Quantity": 1
+            },
             "Weapon_Sword_Steel": {
                 "weight": 20,
                 "Quantity": 1
@@ -91,11 +99,11 @@
         "epic_chest": {
             "Ingredient_Bar_Iron": {
                 "weight": 80,
-                "Quantity": 2
+                "Quantity": 4
             },
             "Ingredient_Bar_Silver": {
                 "weight": 40,
-                "Quantity": 1
+                "Quantity": 2
             },
             "Ingredient_Hide_Scaled": {
                 "weight": 50,
@@ -142,6 +150,14 @@
                 "Quantity": 1
             },
             "Tool_Pickaxe_Iron": {
+                "weight": 40,
+                "Quantity": 1
+            },
+            "Weapon_Shortbow_Thorium": {
+                "weight": 40,
+                "Quantity": 1
+            },
+            "Weapon_Shortbow_Doomed": {
                 "weight": 40,
                 "Quantity": 1
             },
