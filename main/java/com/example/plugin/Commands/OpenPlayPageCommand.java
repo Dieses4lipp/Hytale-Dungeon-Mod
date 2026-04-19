@@ -33,7 +33,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 public class OpenPlayPageCommand extends AbstractPlayerCommand {
 
     public OpenPlayPageCommand() {
-        super("playpage", "Opens the fullscreen play UI", false);
+        super("play", "Opens the fullscreen play UI", false);
     }
 
     @Override
