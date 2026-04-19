@@ -17,7 +17,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 public class ToggleBuildCommand extends AbstractPlayerCommand {
 
     public ToggleBuildCommand() {
-        super("build", "Schaltet deinen Baumodus an oder aus", true);
+        super("build", "Toggles build mode", true);
     }
 
     @Override
@@ -37,13 +37,13 @@ public class ToggleBuildCommand extends AbstractPlayerCommand {
             
             DatabaseManager.setBuildPermission(uuid, false);
             
-            playerRef.sendMessage(Message.raw("Baumodus deaktiviert. Du kannst keine Blöcke mehr abbauen."));
+            playerRef.sendMessage(Message.raw("Buildmode deactivated. You cant break Blocks anymore"));
         } else {
             store.addComponent(ref, BuildPermissionComponent.getComponentType(), new BuildPermissionComponent());
             
             DatabaseManager.setBuildPermission(uuid, true);
             
-            playerRef.sendMessage(Message.raw("Baumodus aktiviert. Du kannst jetzt Blöcke abbauen."));
+            playerRef.sendMessage(Message.raw("Buildmode activated. You can break Blocks now"));
         }
     }
 }

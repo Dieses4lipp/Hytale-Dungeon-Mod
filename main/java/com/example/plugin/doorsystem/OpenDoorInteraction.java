@@ -25,20 +25,18 @@ import java.nio.file.Path;
 
 public class OpenDoorInteraction extends SimpleInstantInteraction {
 
-    
     public static final BuilderCodec<OpenDoorInteraction> CODEC = BuilderCodec.builder(
-        OpenDoorInteraction.class,
-        OpenDoorInteraction::new,
-        SimpleInstantInteraction.CODEC
-    ).build();
+            OpenDoorInteraction.class,
+            OpenDoorInteraction::new,
+            SimpleInstantInteraction.CODEC).build();
 
     private static final Path DOOR_WE_OPEN = Path.of("prefabs/Prefabs/Door/door_we_open.prefab.json");
     private static final Path DOOR_SN_OPEN = Path.of("prefabs/Prefabs/Door/door_sn_open.prefab.json");
 
     @Override
     protected void firstRun(@Nonnull InteractionType interactionType,
-                            @Nonnull InteractionContext interactionContext,
-                            @Nonnull CooldownHandler cooldownHandler) {
+            @Nonnull InteractionContext interactionContext,
+            @Nonnull CooldownHandler cooldownHandler) {
 
         CommandBuffer<EntityStore> commandBuffer = interactionContext.getCommandBuffer();
         if (commandBuffer == null) {
@@ -68,7 +66,7 @@ public class OpenDoorInteraction extends SimpleInstantInteraction {
         Store<EntityStore> store = world.getEntityStore().getStore();
         int soundIndex = SoundEvent.getAssetMap().getIndex("sfx_door_crude_open");
         SoundUtil.playSoundEvent2d(playerRef, soundIndex, SoundCategory.SFX, store);
-        
+
         Vector3i clickedPos = doorData.getDoorPos();
 
         java.util.List<Vector3i> nearbyDoors = DoorRegistry.getNearby(clickedPos, 2);
@@ -76,21 +74,27 @@ public class OpenDoorInteraction extends SimpleInstantInteraction {
 
         for (Vector3i doorPos : nearbyDoors) {
             DoorRegistry.DoorEntry entry = DoorRegistry.get(doorPos);
-            if (entry == null) continue;
+            if (entry == null)
+                continue;
 
             Path openPath = entry.orientation == DoorRegistry.Orientation.WE ? DOOR_WE_OPEN : DOOR_SN_OPEN;
             BlockSelection openPrefab = PrefabStore.get().getPrefab(openPath);
             openPrefab.placeNoReturn(world, doorPos, null);
-            System.out.println("[DoorSystem] Double-Door part opened at " + doorPos.x + "," + doorPos.y + "," + doorPos.z);
+            System.out.println(
+                    "[DoorSystem] Double-Door part opened at " + doorPos.x + "," + doorPos.y + "," + doorPos.z);
 
             if (entry.entityRef != null && entry.entityRef.isValid()) {
                 commandBuffer.removeEntity(entry.entityRef, RemoveReason.REMOVE);
-                if (entry.entityRef.equals(npcRef)) clickedNpcDeleted = true;
+                if (entry.entityRef.equals(npcRef))
+                    clickedNpcDeleted = true;
             }
 
             DoorRegistry.remove(doorPos);
         }
-
+        if (doorData.isBossDoor()) {
+            int soundBossIndex = SoundEvent.getAssetMap().getIndex("sfx_memories_unlock_local");
+            SoundUtil.playSoundEvent2d(playerRef, soundBossIndex, SoundCategory.SFX, store);
+        }
         if (!clickedNpcDeleted) {
             commandBuffer.removeEntity(npcRef, RemoveReason.REMOVE);
         }
