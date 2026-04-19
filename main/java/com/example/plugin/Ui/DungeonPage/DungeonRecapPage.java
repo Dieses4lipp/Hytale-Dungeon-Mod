@@ -74,6 +74,10 @@ public class DungeonRecapPage extends InteractiveCustomUIPage<DungeonRecapPage.D
         int goldValue = SellConfig.calculateStashSellValue(playerId, player);
         cmd.set("#GoldValueLabel.Text", "Current earned Gold: " + goldValue + "g");
 
+        var stats = com.example.plugin.Stats.PlayerLevelComponent.getStats(store, ref);
+        int currentLevel = (stats != null) ? stats.level : 1;
+        cmd.set("#LevelLabel.Text", "LEVEL: " + currentLevel);
+
         for (short i = 0; i < 36; i++) {
             String groupId = "#Slot" + (i + 1);
             String btnId = "Slot" + (i + 1) + "Btn";
@@ -131,16 +135,16 @@ public class DungeonRecapPage extends InteractiveCustomUIPage<DungeonRecapPage.D
                     "ItemSlot { ItemId: \"" + item.getItemId() + "\"; Anchor: (Full: 0); ShowQuantity: true; }");
 
             int itemValue = SellConfig.getItemSellValue(item);
-                String tooltip = "Will be sold automatically for: ";
             if (itemValue > 0) {
                 int totalStackValue = itemValue * item.getQuantity();
-                tooltip += totalStackValue + " Gold";
+                String tooltip = "Will be sold automatically for: " + totalStackValue + " Gold";
 
                 cmd.appendInline(groupId,
                         "TextButton #" + btnId
                                 + " { Anchor: (Full: 0); Text: \"\"; Background: #ff0000(0.15); TooltipText: \""
                                 + tooltip + "\"; }");
             } else {
+                String tooltip = item.getItemId();
                 cmd.appendInline(groupId,
                         "TextButton #" + btnId
                                 + " { Anchor: (Full: 0); Text: \"\"; Background: #000000(0.0); TooltipText: \""
@@ -255,7 +259,7 @@ public class DungeonRecapPage extends InteractiveCustomUIPage<DungeonRecapPage.D
 
             World activeWorld = DungeonManager.get().activeWorld;
             if (activeWorld != null) {
-                Teleport teleport = Teleport.createForPlayer(activeWorld, new Transform(110, 133, 110));
+                Teleport teleport = Teleport.createForPlayer(activeWorld, new Transform(110.5, 136, 110.5));
                 store.addComponent(ref, Teleport.getComponentType(), teleport);
             }
 

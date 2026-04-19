@@ -1,13 +1,13 @@
 package com.example.plugin;
 
 import com.example.plugin.Commands.DestroyDungeonCommand;
-import com.example.plugin.Commands.GenerateDungeonCommand;
+import com.example.plugin.Commands.GetStarterKitCommand;
 import com.example.plugin.Commands.OpenPlayPageCommand;
 import com.example.plugin.Commands.SpawnNPCCommand;
+import com.example.plugin.Commands.ToggleBuildCommand;
 import com.example.plugin.Npc.Testinteractionnpc.NPCInteractionSetupSystem;
 import com.example.plugin.Npc.Testinteractionnpc.NPCSetupPending;
 import com.example.plugin.Npc.Testinteractionnpc.TalkToNPCInteraction;
-import com.example.plugin.doorsystem.ChestUseBlockSystem;
 import com.example.plugin.doorsystem.DoorNPCComponent;
 import com.example.plugin.doorsystem.MyUseBlockSystem;
 import com.example.plugin.doorsystem.OpenDoorInteraction;
@@ -20,6 +20,7 @@ import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.example.plugin.Stats.PlayerLevelComponent;
 import com.example.plugin.DungeonGeneration.*;
+import com.example.plugin.System.*;
 
 import java.io.File;
 import java.io.InputStream;
@@ -36,7 +37,11 @@ public class HelloPlugin extends JavaPlugin {
     protected void setup() {
         super.setup();
         DatabaseManager.initialize(new File("plugins/HytaleDungeonMod"));
-
+        ComponentType<EntityStore, BuildPermissionComponent> buildPermissionType = this.getEntityStoreRegistry()
+        .registerComponent(
+                BuildPermissionComponent.class,
+                BuildPermissionComponent::new);
+BuildPermissionComponent.setComponentType(buildPermissionType);
         ComponentType<EntityStore, PlayerLevelComponent> playerLevelType = this.getEntityStoreRegistry()
                 .registerComponent(
                         PlayerLevelComponent.class,
@@ -92,10 +97,12 @@ public class HelloPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new BossDeathSystem());
         this.getEntityStoreRegistry().registerSystem(new PlayerDeathDungeonSystem());
         this.getEntityStoreRegistry().registerSystem(new BossDeathTimerSystem());
-        this.getCommandRegistry().registerCommand(new GenerateDungeonCommand("test", "An example command", false));
+        this.getEntityStoreRegistry().registerSystem(new BlockBreakPreventionSystem());
+        this.getCommandRegistry().registerCommand(new GetStarterKitCommand("starterkit", "Get a starter kit to begin your dungeon adventure!", false));
         this.getCommandRegistry().registerCommand(new SpawnNPCCommand());
         this.getCommandRegistry().registerCommand(new OpenPlayPageCommand());
         this.getCommandRegistry().registerCommand(new DestroyDungeonCommand());
+        this.getCommandRegistry().registerCommand(new ToggleBuildCommand());
         
         System.out.println("Plugin loaded");
     }

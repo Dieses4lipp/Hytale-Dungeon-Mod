@@ -9,6 +9,9 @@ import com.hypixel.hytale.server.core.modules.entity.damage.DeathComponent;
 import com.hypixel.hytale.server.core.modules.entity.damage.DeathSystems;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.protocol.SoundCategory;
+import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
+import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 
 import javax.annotation.Nonnull;
 
@@ -28,13 +31,15 @@ public class BossDeathSystem extends DeathSystems.OnDeathSystem {
             @Nonnull CommandBuffer<EntityStore> commandBuffer) {
 
         DungeonManager manager = DungeonManager.get();
-        if (manager == null) return;
-        
+        if (manager == null)
+            return;
+
         for (DungeonInstance instance : manager.getAllActiveDungeons()) {
             if (instance.bossRef != null && instance.bossRef.equals(ref)) {
-                
-                System.out.println("[DungeonMod] DEBUG: Der Boss im Dungeon (Slot " + instance.slot + ") wurde getötet!");
-                
+
+                System.out
+                        .println("[DungeonMod] DEBUG: Der Boss im Dungeon (Slot " + instance.slot + ") wurde getötet!");
+
                 Damage damageInfo = deathComponent.getDeathInfo();
                 if (damageInfo != null) {
                     Damage.Source source = damageInfo.getSource();
@@ -45,19 +50,24 @@ public class BossDeathSystem extends DeathSystems.OnDeathSystem {
                     }
 
                     if (killerRef != null) {
-                        PlayerRef pRef = store.getComponent(killerRef, PlayerRef.getComponentType());
-                        
-                        if (pRef != null) {
-                            System.out.println("[DungeonMod] Boss killed by player: " + pRef.getUuid() + ". Scheduling Recap UI.");
+                        PlayerRef playerRef = store.getComponent(killerRef, PlayerRef.getComponentType());
+
+                        if (playerRef != null) {
+                            int soundIndex = SoundEvent.getAssetMap().getIndex("sfx_memories_unlock_local");
+                            SoundUtil.playSoundEvent2d(ref, soundIndex, SoundCategory.SFX, store);
+                            
+                            System.out.println(
+                                    "[DungeonMod] Boss killed by player: " + playerRef.getUuid() + ". Scheduling Recap UI.");
 
                             BossDeathTimerComponent timerComp = new BossDeathTimerComponent();
                             timerComp.timeRemaining = 60.0f;
                             timerComp.dungeonSlot = instance.slot;
-                            commandBuffer.addComponent(killerRef, BossDeathTimerComponent.getComponentType(), timerComp);
+                            commandBuffer.addComponent(killerRef, BossDeathTimerComponent.getComponentType(),
+                                    timerComp);
                         }
                     }
                 }
-                
+
                 break;
             }
         }

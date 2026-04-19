@@ -42,6 +42,9 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.EventTitleUtil;
 import com.hypixel.hytale.server.core.entity.entities.player.CameraManager;
+import com.hypixel.hytale.protocol.SoundCategory;
+import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
+import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 
 public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
     public World world;
@@ -184,6 +187,8 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
 
     private void generateAndTeleport(Ref<EntityStore> ref, Store<EntityStore> store) {
         DungeonInstance instance = DungeonManager.get().createDungeon(world, selectedRoomCount, store);
+        int soundIndex = SoundEvent.getAssetMap().getIndex("sfx_discovery_z1_medium");
+        SoundUtil.playSoundEvent2d(ref, soundIndex, SoundCategory.SFX, store);
 
         int spawnX = instance.worldOriginX + (instance.startX * instance.spacing);
         int spawnY = DungeonConfig.get().generator.baseY + 2;
@@ -228,6 +233,7 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         camSettings.lookMultiplier = new Vector2f(0.0f, 0.0f);
         camSettings.skipCharacterPhysics = false;
         camSettings.eyeOffset = true;
+        camSettings.skipCharacterPhysics = true;
         camSettings.positionDistanceOffsetType = PositionDistanceOffsetType.DistanceOffsetRaycast;
 
         playerRef.getPacketHandler().writeNoCache(new SetServerCamera(ClientCameraView.Custom, false, camSettings));

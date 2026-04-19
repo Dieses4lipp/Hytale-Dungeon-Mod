@@ -5,6 +5,7 @@ import com.example.plugin.DungeonGeneration.DungeonGenerator;
 import com.example.plugin.DungeonGeneration.DungeonInstance;
 import com.example.plugin.DungeonGeneration.DungeonManager;
 import com.example.plugin.DungeonGeneration.LayoutGenerator;
+import com.example.plugin.System.StarterKit;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Transform;
@@ -13,6 +14,7 @@ import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredArg;
 import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -21,10 +23,9 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import javax.annotation.Nonnull;
 
-public class GenerateDungeonCommand extends AbstractPlayerCommand {
-    private final RequiredArg<Integer> roomArg = withRequiredArg("room", "Rooms", ArgTypes.INTEGER);
+public class GetStarterKitCommand extends AbstractPlayerCommand {
 
-    public GenerateDungeonCommand(@Nonnull String name, @Nonnull String description, boolean requiresConfirmation) {
+    public GetStarterKitCommand(@Nonnull String name, @Nonnull String description, boolean requiresConfirmation) {
         super(name, description, requiresConfirmation);
     }
 
@@ -35,27 +36,11 @@ public class GenerateDungeonCommand extends AbstractPlayerCommand {
             @Nonnull Ref<EntityStore> ref,
             @Nonnull PlayerRef playerRef,
             @Nonnull World world) {
+                
+         com.hypixel.hytale.server.core.entity.entities.Player player = (com.hypixel.hytale.server.core.entity.entities.Player) store
+                .getComponent(ref, com.hypixel.hytale.server.core.entity.entities.Player.getComponentType());
+                
+       StarterKit.giveStarterKit(player);
 
-        Integer roomCount = roomArg.get(commandContext);
-
-        DungeonInstance instance = DungeonManager.get().createDungeon(world, roomCount, store);
-
-        // Calculate start room world position
-        int spawnX = instance.worldOriginX + instance.startX * instance.spacing;
-        int spawnY = DungeonConfig.get().generator.baseY + 2; // +2 so player spawns above floor
-        int spawnZ = instance.worldOriginZ + instance.startY * instance.spacing;
-
-        Transform transform = new Transform(spawnX, spawnY, spawnZ);
-        Teleport teleport = Teleport.createForPlayer(world, transform);
-        store.addComponent(ref, Teleport.getComponentType(), teleport);
-
-        EventTitleUtil.showEventTitleToPlayer(
-                playerRef,
-                Message.raw("Dungeon Built!"),
-                Message.raw("Dungeon Built!"),
-                true);
-
-        playerRef.sendMessage(Message.raw("Slot " + instance.slot +
-                " at (" + instance.worldOriginX + ", " + instance.worldOriginZ + ")"));
     }
 }

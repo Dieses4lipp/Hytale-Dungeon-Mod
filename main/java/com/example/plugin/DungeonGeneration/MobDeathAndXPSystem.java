@@ -36,7 +36,12 @@ public class MobDeathAndXPSystem extends DeathSystems.OnDeathSystem {
         Damage damageInfo = deathComponent.getDeathInfo();
         if (damageInfo == null)
             return;
-
+        com.hypixel.hytale.server.npc.entities.NPCEntity npcComponent = 
+                store.getComponent(ref, com.hypixel.hytale.server.npc.entities.NPCEntity.getComponentType());
+        
+        if (npcComponent != null && npcComponent.getRole() != null) {
+            npcComponent.getRole().setDeathItemsDropped();
+        }
         Damage.Source source = damageInfo.getSource();
         Ref<EntityStore> killerRef = null;
 
@@ -67,7 +72,7 @@ public class MobDeathAndXPSystem extends DeathSystems.OnDeathSystem {
                     }
 
                     try (PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement(
-                            "UPDATE player_levels SET level = ?, xp = ?, gold = ? WHERE uuid = ?")) {
+                            "UPDATE player_info SET level = ?, xp = ?, gold = ? WHERE uuid = ?")) {
                         pstmt.setInt(1, stats.level);
                         pstmt.setInt(2, stats.xp);
                         pstmt.setInt(3, stats.gold);

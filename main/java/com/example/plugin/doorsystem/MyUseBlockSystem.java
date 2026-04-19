@@ -35,17 +35,16 @@ public class MyUseBlockSystem extends EntityEventSystem<EntityStore, UseBlockEve
         System.out.println("[DoorSystem] Block used at: " + pos.x + "," + pos.y + "," + pos.z);
         System.out.println("[DoorSystem] Block type: " + event.getBlockType().getId());
 
-        // Dump nearby registered doors to find the offset
         DoorRegistry.getNearby(pos, 5)
                 .forEach(p -> System.out.println("[DoorSystem] Nearby door at: " + p.x + "," + p.y + "," + p.z));
-        DoorRegistry.Orientation orientation = DoorRegistry.get(pos);
+        DoorRegistry.DoorEntry entry = DoorRegistry.get(pos);
 
-        if (orientation == null) {
+        if (entry == null) {
             System.out.println("[DoorSystem] Not a registered door. Registry size: " + DoorRegistry.size());
             return;
         }
 
-        System.out.println("[DoorSystem] Door found! Orientation: " + orientation);
+        System.out.println("[DoorSystem] Door found! Orientation: " + entry.orientation);
         event.setCancelled(true);
 
         if (world == null) {
@@ -53,7 +52,7 @@ public class MyUseBlockSystem extends EntityEventSystem<EntityStore, UseBlockEve
             return;
         }
 
-        Path openPath = orientation == DoorRegistry.Orientation.WE ? doorWE_open : doorSN_open;
+        Path openPath = entry.orientation == DoorRegistry.Orientation.WE ? doorWE_open : doorSN_open;
         System.out.println("[DoorSystem] Placing open prefab: " + openPath);
 
         BlockSelection openPrefab = PrefabStore.get().getPrefab(openPath);
