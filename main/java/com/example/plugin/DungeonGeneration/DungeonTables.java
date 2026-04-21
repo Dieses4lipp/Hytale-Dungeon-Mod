@@ -26,9 +26,15 @@ public class DungeonTables {
         public int weight;
         public int Quantity;
     }
-
-    public Map<String, Map<String, MobStats>> mobs = new HashMap<>();
-
+    public static class BossRoomData {
+        public Map<String, MobStats> bosses = new HashMap<>();
+        public Map<String, MobStats> minions = new HashMap<>();
+    }
+    public static class MobsData {
+        public Map<String, MobStats> default_room = new HashMap<>();
+        public BossRoomData boss_room = new BossRoomData(); 
+    }
+    public MobsData mobs = new MobsData();
     public Map<String, Map<String, LootEntry>> loot = new HashMap<>();
 
     @SerializedName("sell_values")

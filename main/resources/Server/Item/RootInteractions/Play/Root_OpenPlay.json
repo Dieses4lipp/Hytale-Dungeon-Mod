@@ -1,0 +1,10 @@
+{
+  "RequireNewClick": true,
+  "ClickQueuingTimeout": 0.2,
+  "Cooldown": {
+    "Cooldown": 1.0
+  },
+  "Interactions": [
+    "OpenPlay_Interaction"
+  ]
+}

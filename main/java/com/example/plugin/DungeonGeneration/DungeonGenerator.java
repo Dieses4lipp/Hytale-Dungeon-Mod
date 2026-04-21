@@ -2,7 +2,7 @@ package com.example.plugin.DungeonGeneration;
 
 import java.nio.file.Path;
 
-import com.example.plugin.Npc.Testinteractionnpc.NPCSetupPending;
+import com.example.plugin.Npc.Shopinteraction.NPCSetupPending;
 import com.example.plugin.doorsystem.DoorNPCComponent;
 import com.example.plugin.doorsystem.DoorRegistry;
 import com.hypixel.hytale.component.Ref;
@@ -141,6 +141,7 @@ public class DungeonGenerator {
             Room room, int worldX, int worldZ, DungeonInstance inst) {
         boolean[] doors = room.getDoors();
         boolean isBossOrigin = room.getType() == RoomType.BOSS && !room.isSatellite();
+        boolean isBossDoor = room.getType() == RoomType.BOSS;
         int offset = isBossOrigin ? (spacing + spacing / 2) : (spacing / 2);
 
         BlockSelection doorSN = prefabStore.getPrefab(doorSNPath_closed);
@@ -148,53 +149,58 @@ public class DungeonGenerator {
 
         if (doors[0]) {
             Vector3i pos = new Vector3i(worldX, doorY, worldZ - offset);
-            spawnDoorNPC(store, pos, DoorRegistry.Orientation.SN, world, inst, isBossOrigin);
+            spawnDoorNPC(store, pos, DoorRegistry.Orientation.SN, world, inst, isBossDoor);
             doorSN.placeNoReturn(world, pos, null);
 
         }
         if (doors[1]) {
             Vector3i pos = new Vector3i(worldX + offset, doorY, worldZ);
-            spawnDoorNPC(store, pos, DoorRegistry.Orientation.WE, world, inst, isBossOrigin);
+            spawnDoorNPC(store, pos, DoorRegistry.Orientation.WE, world, inst, isBossDoor);
             doorWE.placeNoReturn(world, pos, null);
 
         }
         if (doors[2]) {
             Vector3i pos = new Vector3i(worldX, doorY, worldZ + offset);
-            spawnDoorNPC(store, pos, DoorRegistry.Orientation.SN, world, inst, isBossOrigin);
+            spawnDoorNPC(store, pos, DoorRegistry.Orientation.SN, world, inst, isBossDoor);
             doorSN.placeNoReturn(world, pos, null);
         }
         if (doors[3]) {
             Vector3i pos = new Vector3i(worldX - offset, doorY, worldZ);
-            spawnDoorNPC(store, pos, DoorRegistry.Orientation.WE, world, inst, isBossOrigin);
+            spawnDoorNPC(store, pos, DoorRegistry.Orientation.WE, world, inst, isBossDoor);
             doorWE.placeNoReturn(world, pos, null);
         }
     }
 
     private void spawnDoorNPC(Store<EntityStore> store, Vector3i pos,
-        DoorRegistry.Orientation orientation, World world, DungeonInstance inst, boolean isBossDoor) {
-    Vector3d spawnPos = new Vector3d(pos.x + 0.5, pos.y + 0.1, pos.z + 0.5);
-    Vector3f rotation = new Vector3f(0, 0, 0);
+            DoorRegistry.Orientation orientation, World world, DungeonInstance inst, boolean isBossDoor) {
+        if (DoorRegistry.get(pos) != null) {
+            System.out.println("[DoorSystem] Skipping duplicate door at " + pos.x + "," + pos.y + "," + pos.z);
+            return;
+        }
+        Vector3d spawnPos = new Vector3d(pos.x + 0.5, pos.y + 0.1, pos.z + 0.5);
+        Vector3f rotation = new Vector3f(0, 0, 0);
 
-    Pair<Ref<EntityStore>, INonPlayerCharacter> result = NPCPlugin.get().spawnNPC(
-            store, "Invis", null, spawnPos, rotation);
-    if (result == null) {
-        System.out.println("[DoorSystem] ERROR: Failed to spawn door NPC at " + pos.x + "," + pos.y + "," + pos.z);
-    } else {
-        Ref<EntityStore> npcRef = result.first();
-        store.addComponent(npcRef, DoorNPCComponent.getComponentType(),
-                new DoorNPCComponent(pos, orientation, isBossDoor));
+        Pair<Ref<EntityStore>, INonPlayerCharacter> result = NPCPlugin.get().spawnNPC(
+                store, "Invis", null, spawnPos, rotation);
+        if (result == null) {
+            System.out.println("[DoorSystem] ERROR: Failed to spawn door NPC at " + pos.x + "," + pos.y + "," + pos.z);
+        } else {
+            Ref<EntityStore> npcRef = result.first();
+            store.addComponent(npcRef, DoorNPCComponent.getComponentType(),
+                    new DoorNPCComponent(pos, orientation, isBossDoor));
 
-        store.addComponent(npcRef, NPCSetupPending.getComponentType(),
-                new NPCSetupPending("Root_OpenDoor", "Open"));
+            store.addComponent(npcRef, NPCSetupPending.getComponentType(),
+                    new NPCSetupPending("Root_OpenDoor", "Open"));
 
-        store.addComponent(npcRef, Invulnerable.getComponentType());
+            store.addComponent(npcRef, Invulnerable.getComponentType());
 
-        DoorRegistry.register(pos, orientation, npcRef);
-        inst.registerNPC(npcRef);
+            DoorRegistry.register(pos, orientation, npcRef);
+            inst.registerNPC(npcRef);
 
-        System.out.println("[DoorSystem] Door NPC spawned at " + pos.x + "," + pos.y + "," + pos.z + (isBossDoor ? " [BOSS DOOR]" : ""));
+            System.out.println("[DoorSystem] Door NPC spawned at " + pos.x + "," + pos.y + "," + pos.z
+                    + (isBossDoor ? " [BOSS DOOR]" : ""));
+        }
     }
-}
 
     public void clearDungeon(World world, DungeonInstance inst) {
         int gridsize = inst.grid.length;

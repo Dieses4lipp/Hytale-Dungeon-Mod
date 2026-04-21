@@ -1,4 +1,4 @@
-package com.example.plugin.Npc.Testinteractionnpc;
+package com.example.plugin.Npc.Shopinteraction;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

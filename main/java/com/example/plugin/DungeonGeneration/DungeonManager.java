@@ -26,7 +26,7 @@ public class DungeonManager {
     private final int slotSize = gridsize * spacing;
     private final int slotsPerRow = DungeonConfig.get().manager.slotsPerRow;
     public World activeWorld;
-    private int nextSlot = 1; // so the first stays clean for the lobby
+    private int nextSlot = 1; // so the first slot is empty for the lobby
     private final Queue<Integer> freeSlots = new LinkedList<>();
     private final Map<Integer, DungeonInstance> activeBySlot = new HashMap<>();
 
