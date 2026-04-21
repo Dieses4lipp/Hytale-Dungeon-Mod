@@ -40,6 +40,8 @@ public class NPCInteractionSetupSystem extends EntityTickingSystem<EntityStore> 
         interactions.setInteractionHint(setupPending.getInteractionHint());
         
         commandBuffer.putComponent(ref, interactionsType, interactions);
+        commandBuffer.removeComponent(ref, setupPendingType);
+
 }
 
     @Nullable

@@ -34,11 +34,6 @@ public class PlayerLevelComponent implements Component<EntityStore> {
         return cloned;
     }
 
-    // --- NEW HELPER METHOD ---
-    /**
-     * Safely fetches a player's Level and XP. 
-     * Returns null if the player doesn't have the component yet.
-     */
     @Nullable
     public static PlayerLevelComponent getStats(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> playerRef) {
         if (TYPE != null && store.getArchetype(playerRef).contains(TYPE)) {

@@ -437,7 +437,7 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
         camSettings.allowPitchControls = false;
         camSettings.sendMouseMotion = false;
         camSettings.mouseInputType = MouseInputType.LookAtTargetEntity;
-        camSettings.displayCursor = true;
+        camSettings.displayCursor = false;
         camSettings.displayReticle = false;
         camSettings.lookMultiplier = new Vector2f(0.0f, 0.0f);
         camSettings.mouseInputTargetType = MouseInputTargetType.None;

@@ -10,6 +10,8 @@ import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.protocol.ApplyLookType;
 import com.hypixel.hytale.protocol.AttachedToType;
+import com.hypixel.hytale.protocol.CameraActionType;
+import com.hypixel.hytale.protocol.CameraInteraction;
 import com.hypixel.hytale.protocol.ClientCameraView;
 import com.hypixel.hytale.protocol.Direction;
 import com.hypixel.hytale.protocol.MouseInputTargetType;
@@ -74,7 +76,7 @@ public class OpenPlayPageCommand extends AbstractPlayerCommand {
         camSettings.allowPitchControls = false;
         camSettings.sendMouseMotion = false;
         camSettings.mouseInputType = MouseInputType.LookAtTargetEntity;
-        camSettings.displayCursor = true;
+        camSettings.displayCursor = false;
         camSettings.displayReticle = false;
         camSettings.lookMultiplier = new Vector2f(0.0f, 0.0f);
         camSettings.mouseInputTargetType = MouseInputTargetType.None;
@@ -82,7 +84,6 @@ public class OpenPlayPageCommand extends AbstractPlayerCommand {
 
         camSettings.eyeOffset = true;
         camSettings.positionDistanceOffsetType = PositionDistanceOffsetType.DistanceOffsetRaycast;
-
-        playerRef.getPacketHandler().writeNoCache(new SetServerCamera(ClientCameraView.Custom, false, camSettings));
+        playerRef.getPacketHandler().writeNoCache(new SetServerCamera(ClientCameraView.Custom, true, camSettings));
     }
 }

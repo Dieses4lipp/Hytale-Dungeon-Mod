@@ -3,6 +3,9 @@ package com.example.plugin;
 import com.example.plugin.Commands.DestroyDungeonCommand;
 import com.example.plugin.Commands.GetStarterKitCommand;
 import com.example.plugin.Commands.OpenPlayPageCommand;
+import com.example.plugin.Commands.SetupHubCommand;
+import com.example.plugin.Commands.SpawnPlayNPCCommand;
+import com.example.plugin.Commands.SpawnStashNPCCommand;
 import com.example.plugin.Commands.ToggleBuildCommand;
 import com.example.plugin.doorsystem.DoorNPCComponent;
 import com.example.plugin.doorsystem.MyUseBlockSystem;
@@ -13,6 +16,7 @@ import com.hypixel.hytale.server.core.event.events.ecs.UseBlockEvent;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.example.plugin.Stats.PlayerLevelComponent;
 import com.example.plugin.DungeonGeneration.*;
@@ -99,9 +103,13 @@ public class HelloPlugin extends JavaPlugin {
                                 TalkToNPCInteraction.class,
                                 TalkToNPCInteraction.CODEC);
                 this.getCodecRegistry(Interaction.CODEC).register(
-                                "openplay_type",
+                                "open_play_page_type",
                                 OpenPlayPageInteraction.class,
                                 OpenPlayPageInteraction.CODEC);
+                this.getCodecRegistry(Interaction.CODEC).register(
+                                "deposit_to_stash_type",
+                                DepositToStashInteraction.class,
+                                DepositToStashInteraction.CODEC);
                 this.getEntityStoreRegistry().registerSystem(new com.example.plugin.Stats.PlayerDatabaseSetupSystem());
                 this.getEntityStoreRegistry().registerSystem(new MobDeathAndXPSystem());
                 this.getEntityStoreRegistry().registerSystem(new ChestUseBlockSystem());
@@ -115,12 +123,14 @@ public class HelloPlugin extends JavaPlugin {
                 this.getCommandRegistry().registerCommand(new OpenPlayPageCommand());
                 this.getCommandRegistry().registerCommand(new DestroyDungeonCommand());
                 this.getCommandRegistry().registerCommand(new ToggleBuildCommand());
-
+                this.getCommandRegistry().registerCommand(new SpawnPlayNPCCommand());
+                this.getCommandRegistry().registerCommand(new SpawnStashNPCCommand());
+                this.getCommandRegistry().registerCommand(new SetupHubCommand());
                 System.out.println("Plugin loaded");
         }
 
         @Override
         protected void shutdown() {
-                System.out.println("Plugin shutdown");
+                
         }
 }

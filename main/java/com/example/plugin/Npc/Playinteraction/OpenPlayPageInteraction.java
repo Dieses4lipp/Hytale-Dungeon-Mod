@@ -63,10 +63,8 @@ public class OpenPlayPageInteraction extends SimpleInstantInteraction {
         World world = player.getWorld();
         Store<EntityStore> store = world.getEntityStore().getStore();
 
-        // 1. Line up the camera (using CommandBuffer to be thread-safe)
         LineUpCameraForCamModel(commandBuffer, playerEntityRef, playerRef);
 
-        // 2. Open the Play Page
         PlayPage page = new PlayPage(playerRef, world);
         player.getPageManager().openCustomPage(playerEntityRef, store, page);
         

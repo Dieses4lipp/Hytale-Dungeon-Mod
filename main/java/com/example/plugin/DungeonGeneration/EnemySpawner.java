@@ -53,8 +53,6 @@ public class EnemySpawner {
 
                 if (room.getType() == RoomType.BOSS) {
                     spawnBoss(store, instance, minX, maxX, baseY, minZ, maxZ);
-                } else if ((room.getType() == RoomType.SHOP)) {
-                    System.out.println("SHop NPC Spawn here");
                 } else {
                     spawnNormalEnemies(store, instance, minX, maxX, baseY, minZ, maxZ);
                 }
@@ -165,7 +163,7 @@ public class EnemySpawner {
             }
         }
     }
-    
+
     private static void spawnBoss(Store<EntityStore> store, DungeonInstance instance, int minX, int maxX, int y,
             int minZ, int maxZ) {
         int centerX = minX + ((maxX - minX) / 2);
@@ -177,7 +175,7 @@ public class EnemySpawner {
 
         String prefabToSpawn = DungeonTables.get().getRandomMob(possibleBosses);
         if (prefabToSpawn == null) {
-            prefabToSpawn = "Klops_Merchant";
+            prefabToSpawn = "Sekeleton";
         }
 
         DungeonTables.MobStats stats = possibleBosses.get(prefabToSpawn);

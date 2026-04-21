@@ -212,7 +212,7 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         Vector3f newLookDirection = new Vector3f(f3Pitch, f3Yaw, f3Roll);
 
         Teleport teleportComponent = Teleport.createForPlayer(currentPosition, newLookDirection);
-
+        Direction lockedDirection = new Direction(0f, (float) Math.PI / 2, 0f);
         store.addComponent(ref, Teleport.getComponentType(), teleportComponent);
         ServerCameraSettings camSettings = new ServerCameraSettings();
         camSettings.mouseInputTargetType = MouseInputTargetType.None;
@@ -221,21 +221,19 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         camSettings.positionOffset = new Position(-0.8, -0.7, 0);
         camSettings.positionLerpSpeed = 0.15f;
         camSettings.rotationLerpSpeed = 0.15f;
-        camSettings.attachedToType = AttachedToType.LocalPlayer;
         camSettings.rotationType = RotationType.AttachedToPlusOffset;
         camSettings.rotationOffset = new Direction((float) Math.PI, 0.7f, 0f);
+        
         camSettings.allowPitchControls = false;
         camSettings.sendMouseMotion = false;
-        camSettings.mouseInputTargetType = MouseInputTargetType.None;
-        camSettings.mouseInputType = MouseInputType.LookAtTargetEntity;
-        camSettings.displayCursor = true;
+        camSettings.displayCursor = false;
         camSettings.displayReticle = false;
         camSettings.lookMultiplier = new Vector2f(0.0f, 0.0f);
         camSettings.skipCharacterPhysics = false;
         camSettings.eyeOffset = true;
-        camSettings.skipCharacterPhysics = true;
-        camSettings.positionDistanceOffsetType = PositionDistanceOffsetType.DistanceOffsetRaycast;
+        
+        camSettings.positionDistanceOffsetType = PositionDistanceOffsetType.DistanceOffset;
 
-        playerRef.getPacketHandler().writeNoCache(new SetServerCamera(ClientCameraView.Custom, false, camSettings));
+        playerRef.getPacketHandler().writeNoCache(new SetServerCamera(ClientCameraView.Custom, true, camSettings));
     }
 }
