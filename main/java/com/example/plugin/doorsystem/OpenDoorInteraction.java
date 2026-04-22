@@ -47,7 +47,7 @@ public class OpenDoorInteraction extends SimpleInstantInteraction {
 
         DoorNPCComponent doorData = commandBuffer.getComponent(npcRef, DoorNPCComponent.getComponentType());
         if (doorData == null) {
-            System.out.println("[DoorSystem] ERROR: NPC has no DoorNPCComponent");
+            System.err.println("[DoorSystem] ERROR: NPC has no DoorNPCComponent");
             interactionContext.getState().state = InteractionState.Failed;
             return;
         }
@@ -59,7 +59,7 @@ public class OpenDoorInteraction extends SimpleInstantInteraction {
         doorData.isOpening = true;
         World world = com.example.plugin.DungeonGeneration.DungeonManager.get().activeWorld;
         if (world == null) {
-            System.out.println("[DoorSystem] ERROR: World is null in DoorNPCComponent");
+            System.err.println("[DoorSystem] ERROR: World is null in DoorNPCComponent");
             interactionContext.getState().state = InteractionState.Failed;
             return;
         }
@@ -94,8 +94,6 @@ public class OpenDoorInteraction extends SimpleInstantInteraction {
             Path openPath = entry.orientation == DoorRegistry.Orientation.WE ? DOOR_WE_OPEN : DOOR_SN_OPEN;
             BlockSelection openPrefab = PrefabStore.get().getPrefab(openPath);
             openPrefab.placeNoReturn(world, doorPos, null);
-            System.out.println(
-                    "[DoorSystem] Double-Door part opened at " + doorPos.x + "," + doorPos.y + "," + doorPos.z);
 
             if (entry.entityRef != null && entry.entityRef.isValid()) {
                 commandBuffer.removeEntity(entry.entityRef, RemoveReason.REMOVE);
@@ -126,7 +124,6 @@ public class OpenDoorInteraction extends SimpleInstantInteraction {
                 if (spawner != null) {
                     spawner.active = true;
                     spawner.dungeonSlot = currentInstance.slot;
-                    System.out.println("[DoorSystem] Boss door opened! 5-second Minion spawner activated.");
                 }
             }
         }

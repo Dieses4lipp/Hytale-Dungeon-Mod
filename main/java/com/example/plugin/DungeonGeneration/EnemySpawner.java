@@ -23,7 +23,6 @@ public class EnemySpawner {
         int baseY = DungeonConfig.get().generator.baseY + 1;
         int roomsPopulated = 0;
 
-        System.out.println("[EnemySpawner] Starting dungeon population...");
 
         for (int x = 0; x < instance.grid.length; x++) {
             for (int y = 0; y < instance.grid[x].length; y++) {
@@ -59,7 +58,6 @@ public class EnemySpawner {
                 roomsPopulated++;
             }
         }
-        System.out.println("[EnemySpawner] Finished! Populated " + roomsPopulated + " rooms.");
     }
 
     private static void spawnNormalEnemies(Store<EntityStore> store, DungeonInstance instance, int minX, int maxX,
@@ -120,7 +118,7 @@ public class EnemySpawner {
             }
 
             if (bossRoomX == -1) {
-                System.out.println("[EnemySpawner] ERROR: Could not find Boss Room to spawn minion!");
+                System.err.println("[EnemySpawner] ERROR: Could not find Boss Room to spawn minion!");
                 return;
             }
 
@@ -155,7 +153,6 @@ public class EnemySpawner {
                     rotation);
 
             if (result != null) {
-                System.out.println("[EnemySpawner] SUCCESS: Spawned boss minion " + selectedMinion + " precisely at " + exactCenterX + ", " + exactCenterZ);
                 instance.spawnedEnemies.add(result.first());
                 int minionXp = minions.get(selectedMinion).xp;
                 DungeonManager.get().mobXpRewards.put(result.first(), minionXp);
@@ -189,12 +186,8 @@ public class EnemySpawner {
         if (result != null) {
             instance.spawnedEnemies.add(result.first());
             DungeonManager.get().mobXpRewards.put(result.first(), xpBounty);
-            System.out.println("[EnemySpawner] SUCCESS: Spawned BOSS " + prefabToSpawn + " at " + centerX + ", " + y
-                    + ", " + centerZ);
             instance.bossRef = result.first();
         } else {
-            System.out.println("[EnemySpawner] FAILED: BOSS spawnNPC returned null for " + prefabToSpawn
-                    + ". (Prefab ID wrong or chunks unloaded?)");
         }
     }
 }

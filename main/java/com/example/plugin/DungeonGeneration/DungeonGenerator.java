@@ -108,7 +108,7 @@ public class DungeonGenerator {
                 store, "Klops_Merchant", null, spawnPos, rotation);
 
         if (result == null) {
-            System.out.println("[ShopSystem] ERROR: Failed to spawn Merchant at " + pos.x + "," + pos.y + "," + pos.z);
+            System.err.println("[ShopSystem] ERROR: Failed to spawn Merchant at " + pos.x + "," + pos.y + "," + pos.z);
         } else {
             Ref<EntityStore> npcRef = result.first();
 
@@ -121,8 +121,6 @@ public class DungeonGenerator {
             store.addComponent(npcRef, Invulnerable.getComponentType());
 
             inst.registerNPC(npcRef);
-            System.out.println(
-                    "[ShopSystem] Klops_Merchant spawned successfully at " + pos.x + "," + pos.y + "," + pos.z);
         }
     }
 
@@ -174,7 +172,6 @@ public class DungeonGenerator {
     private void spawnDoorNPC(Store<EntityStore> store, Vector3i pos,
             DoorRegistry.Orientation orientation, World world, DungeonInstance inst, boolean isBossDoor) {
         if (DoorRegistry.get(pos) != null) {
-            System.out.println("[DoorSystem] Skipping duplicate door at " + pos.x + "," + pos.y + "," + pos.z);
             return;
         }
         Vector3d spawnPos = new Vector3d(pos.x + 0.5, pos.y + 0.1, pos.z + 0.5);
@@ -183,7 +180,7 @@ public class DungeonGenerator {
         Pair<Ref<EntityStore>, INonPlayerCharacter> result = NPCPlugin.get().spawnNPC(
                 store, "Invis", null, spawnPos, rotation);
         if (result == null) {
-            System.out.println("[DoorSystem] ERROR: Failed to spawn door NPC at " + pos.x + "," + pos.y + "," + pos.z);
+            System.err.println("[DoorSystem] ERROR: Failed to spawn door NPC at " + pos.x + "," + pos.y + "," + pos.z);
         } else {
             Ref<EntityStore> npcRef = result.first();
             store.addComponent(npcRef, DoorNPCComponent.getComponentType(),
@@ -197,8 +194,6 @@ public class DungeonGenerator {
             DoorRegistry.register(pos, orientation, npcRef);
             inst.registerNPC(npcRef);
 
-            System.out.println("[DoorSystem] Door NPC spawned at " + pos.x + "," + pos.y + "," + pos.z
-                    + (isBossDoor ? " [BOSS DOOR]" : ""));
         }
     }
 

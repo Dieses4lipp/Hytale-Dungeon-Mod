@@ -57,7 +57,7 @@ public class DungeonInstance {
                     entitiesToDelete.add(ref); 
 
                 } catch (Exception e) {
-                    System.out.println("[DungeonInstance] Error removing Door NPC: " + e.getMessage());
+                    System.err.println("[DungeonInstance] Error removing Door NPC: " + e.getMessage());
                 }
             }
         }
@@ -85,7 +85,6 @@ public class DungeonInstance {
             }
         }
 
-        System.out.println("[DungeonInstance] Cleanup finished. Entities silently despawned: " + entitiesToDelete.size());
     }
 
     public int getId() {

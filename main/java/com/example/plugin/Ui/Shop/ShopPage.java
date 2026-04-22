@@ -184,7 +184,6 @@ public class ShopPage extends InteractiveCustomUIPage<ShopPage.Data> {
         if (action.equals("buy")) {
             String selectedId = selectedItem.get(playerId);
             if (selectedId == null) {
-                System.out.println("[Shop] Player tried to buy but hasn't selected an item.");
                 int soundIndex = SoundEvent.getAssetMap().getIndex("sfx_creative_play_error");
                     SoundUtil.playSoundEvent2d(ref, soundIndex, SoundCategory.SFX, store);
                 return;
@@ -205,7 +204,6 @@ public class ShopPage extends InteractiveCustomUIPage<ShopPage.Data> {
                 Message rawMessage = Message.raw("You don't have enough gold! You need " + totalCost + "g to buy "
                         + amount + "x " + selectedId + ".");
                 player.getPlayerRef().sendMessage(rawMessage);
-                System.out.println("[Shop] Player does not have enough gold. Needs: " + totalCost);
                 int soundIndex = SoundEvent.getAssetMap().getIndex("sfx_creative_play_error");
                     SoundUtil.playSoundEvent2d(ref, soundIndex, SoundCategory.SFX, store);
                 return;
@@ -220,8 +218,6 @@ public class ShopPage extends InteractiveCustomUIPage<ShopPage.Data> {
                 try {
                     ItemStack purchasedItem = new ItemStack(selectedId, amount);
                     inventory.setItemStackForSlot(freeSlot, purchasedItem);
-                    System.out.println(
-                            "[Shop] Successfully purchased " + amount + "x " + selectedId + " for " + totalCost + "g.");
 
                     int soundIndex = SoundEvent.getAssetMap().getIndex("sfx_coins_land");
                     SoundUtil.playSoundEvent2d(ref, soundIndex, SoundCategory.SFX, store);
@@ -230,7 +226,6 @@ public class ShopPage extends InteractiveCustomUIPage<ShopPage.Data> {
                     System.err.println("[Shop] Error giving item: " + e.getMessage());
                 }
             } else {
-                System.out.println("[Shop] Player inventory is full!");
                 Message rawMessage = Message.raw("Your inventory is full! Please free up some space and try again.");
                 player.getPlayerRef().sendMessage(rawMessage);
                 SellConfig.addGoldToPlayer(player, ref, store, totalCost);

@@ -38,13 +38,11 @@ public class SetupHubCommand extends AbstractPlayerCommand {
                            @Nonnull World world) {
 
         playerRef.sendMessage(Message.raw("Starting Hub Setup..."));
-        System.out.println("[HubSetup] Cleaning up old data...");
 
         DungeonManager manager = DungeonManager.get();
         if (manager != null) {
             List<DungeonInstance> activeDungeons = new ArrayList<>(manager.getAllActiveDungeons());
             for (DungeonInstance inst : activeDungeons) {
-                System.out.println("[HubSetup] Destroying leftover dungeon slot " + inst.slot);
                 manager.destroyDungeon(store, null, world, inst); 
             }
             playerRef.sendMessage(Message.raw("Cleared " + activeDungeons.size() + " leftover dungeons."));
@@ -75,6 +73,5 @@ public class SetupHubCommand extends AbstractPlayerCommand {
         }
 
         playerRef.sendMessage(Message.raw("Hub Setup Complete! NPCs spawned at coordinates."));
-        System.out.println("[HubSetup] Setup successfully finished.");
     }
 }

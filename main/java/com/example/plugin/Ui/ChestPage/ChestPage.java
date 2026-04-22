@@ -179,7 +179,6 @@ public class ChestPage extends InteractiveCustomUIPage<ChestPage.Data> {
             }
 
             if (freeSlot == -1) {
-                System.out.println("[ChestSystem] Stash is full!");
                 selectedSlot.remove(playerId);
                 player.getPageManager().setPage(ref, store, Page.None);
                 return;
@@ -187,8 +186,6 @@ public class ChestPage extends InteractiveCustomUIPage<ChestPage.Data> {
 
             vanillaInventory.moveItemStackFromSlotToSlot(index, 1, stash, freeSlot);
 
-            System.out.println("[ChestSystem] Player " + playerId + " deposited 1x "
-                    + item.getItem().getId() + " into stash slot " + freeSlot);
 
             ChestRegistry.lock(chestPos);
             selectedSlot.remove(playerId);

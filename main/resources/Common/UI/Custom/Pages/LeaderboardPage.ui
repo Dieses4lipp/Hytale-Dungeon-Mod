@@ -65,7 +65,7 @@ Group {
     }
   }
 
-  // Die Bottom-Bar
+  // The bottom bar
   Group #BottomBar {
     Anchor: (Full: 0, Height: 100); LayoutMode: CenterMiddle; Background: #0d1117(0.97);
     Group #BottomBarContent {

@@ -70,13 +70,13 @@ public class HelloPlugin extends JavaPlugin {
 
                 InputStream configStream = getClass().getResourceAsStream("/dungeon_config.json");
                 if (configStream == null) {
-                        System.out.println("Failed to load dungeon_config.json");
+                        System.err.println("Failed to load dungeon_config.json");
                 }
                 DungeonConfig.load(configStream);
 
                 InputStream tablesStream = getClass().getResourceAsStream("/dungeon_tables.json");
                 if (tablesStream == null) {
-                        System.out.println("Failed to load dungeon_tables.json");
+                        System.err.println("Failed to load dungeon_tables.json");
                 }
                 DungeonTables.load(tablesStream);
 
@@ -131,7 +131,6 @@ public class HelloPlugin extends JavaPlugin {
 
                 Consumer<PlayerReadyEvent> startupHandler = event -> DungeonStartupSystem.handleStartup(this, event);
                 this.getEventRegistry().registerGlobal(PlayerReadyEvent.class, startupHandler);
-                System.out.println("Plugin loaded");
         }
       
 }

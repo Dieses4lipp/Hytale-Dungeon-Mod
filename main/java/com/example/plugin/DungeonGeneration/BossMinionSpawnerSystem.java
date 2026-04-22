@@ -44,7 +44,7 @@ public class BossMinionSpawnerSystem extends EntityTickingSystem<EntityStore> {
                         try {
                             EnemySpawner.spawnBossMinion(store, instance);
                         } catch (Exception e) {
-                            System.out.println("[MinionSpawner] Error during scheduled spawn:");
+                            System.err.println("[MinionSpawner] Error during scheduled spawn:");
                             e.printStackTrace();
                         }
                     });

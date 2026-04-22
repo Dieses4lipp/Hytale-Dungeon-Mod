@@ -180,7 +180,7 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
             Inventory inventory = player.getInventory();
 
             if (inventory != null) {
-                // Rüstung
+                // Armor
                 ItemContainer armor = inventory.getArmor();
                 appendArmorSlot(uiCommandBuilder, armor, (short) 0, "#EquipHead", "EquipHeadBtn", "Head",
                         currentSelection != null && currentSelection.equals("equip_head"));
@@ -191,7 +191,7 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
                 appendArmorSlot(uiCommandBuilder, armor, (short) 3, "#EquipPants", "EquipPantsBtn", "Pants",
                         currentSelection != null && currentSelection.equals("equip_pants"));
 
-                // Waffen & Schild (100% gleiche Logik wie Rüstung)
+                // Weapons & shield (same logic as armor)
                 appendArmorSlot(uiCommandBuilder, inventory.getHotbar(), (short) 0, "#EquipWeapon", "EquipWeaponBtn",
                         "Weapon", currentSelection != null && currentSelection.equals("equip_weapon"));
                 appendArmorSlot(uiCommandBuilder, inventory.getUtility(), (short) 1, "#EquipShield", "EquipShieldBtn",

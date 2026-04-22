@@ -56,28 +56,25 @@ public class PlayerDatabaseSetupSystem extends EntityTickingSystem<EntityStore> 
                         boolean canBuild = rs.getInt("can_build") == 1;
                         if (canBuild) {
                             commandBuffer.addComponent(ref, com.example.plugin.System.BuildPermissionComponent.getComponentType(), new com.example.plugin.System.BuildPermissionComponent());
-                            System.out.println("[DungeonMod] Spieler " + uuid + " hat Baurechte!");
                         }
 
                         com.example.plugin.Ui.PlayPage.InventoryPage.getOrCreateEmptyStash(uuid); 
                         com.example.plugin.Stats.SellConfig.loadStashFromDatabase(uuid, com.example.plugin.Ui.PlayPage.InventoryPage.getOrCreateEmptyStash(uuid));
-                        System.out.println("[DungeonMod] Daten geladen für " + uuid + ": Level " + stats.level + " | Gold " + stats.gold);
                     } else {
                         try (PreparedStatement insert = DatabaseManager.getConnection().prepareStatement(
                                 "INSERT INTO player_info (uuid, level, xp, gold, can_build) VALUES (?, 1, 0, 0, 0)")) {
                             insert.setString(1, uuid);
                             insert.executeUpdate();
-                            System.out.println("[DungeonMod] Neuer Spieler in Datenbank registriert: " + uuid);
                         }
                     }
                 } catch (SQLException e) {
-                    System.err.println("[DungeonMod] Fehler beim Laden der Spielerdaten: " + e.getMessage());
+                    System.err.println("[DungeonMod] Error while loading player data: " + e.getMessage());
                 }
             }
 
             commandBuffer.addComponent(ref, playerLevelType, stats);
 
-            // HUD Initialisierung
+            // HUD initialization
             try {
                 com.hypixel.hytale.server.core.entity.entities.Player player = store.getComponent(ref, com.hypixel.hytale.server.core.entity.entities.Player.getComponentType());
                 if (player != null && playerRef != null) {
@@ -85,7 +82,7 @@ public class PlayerDatabaseSetupSystem extends EntityTickingSystem<EntityStore> 
                    player.getHudManager().setCustomHud(playerRef, hudPage);
                 }
             } catch (Exception e) {
-                System.out.println("[DungeonMod] Fehler beim HUD-Setup: " + e.getMessage());
+                System.err.println("[DungeonMod] Error during HUD setup: " + e.getMessage());
             }
         }
     }

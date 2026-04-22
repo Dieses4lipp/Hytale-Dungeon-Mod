@@ -68,7 +68,6 @@ public class MobDeathAndXPSystem extends DeathSystems.OnDeathSystem {
                     if (stats.xp >= xpNeeded) {
                         stats.xp -= xpNeeded;
                         stats.level++;
-                        System.out.println("[DungeonMod] Level Up gespeichert!");
                     }
 
                     try (PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement(
@@ -79,7 +78,7 @@ public class MobDeathAndXPSystem extends DeathSystems.OnDeathSystem {
                         pstmt.setString(4, pRef.getUuid().toString());
                         pstmt.executeUpdate();
                     } catch (SQLException e) {
-                        System.err.println("[DungeonMod] Fehler beim Speichern: " + e.getMessage());
+                        System.err.println("[DungeonMod] Error while saving: " + e.getMessage());
                     }
 
                     // HUD Refresh
@@ -95,7 +94,6 @@ public class MobDeathAndXPSystem extends DeathSystems.OnDeathSystem {
 
                         }
                     } catch (Exception e) {
-                        System.out.println("[DungeonMod] HUD-Update fehlgeschlagen.");
                     }
                 }
             }

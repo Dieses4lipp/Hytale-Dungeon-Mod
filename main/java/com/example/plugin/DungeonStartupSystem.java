@@ -37,9 +37,8 @@ public class DungeonStartupSystem {
         World world = event.getPlayer().getWorld();
         Store<EntityStore> store = event.getPlayerRef().getStore();
 
-        System.out.println("[Startup] Server-Restart erkannt. Starte Aufräumarbeiten...");
 
-        // 1. Verwaiste Dungeon-Slots löschen
+        // 1. Clear orphaned dungeon slots
         List<Integer> activeSlots = DatabaseManager.getActiveDungeons();
         if (!activeSlots.isEmpty()) {
             int spacing = DungeonConfig.get().manager.spacing;
@@ -52,7 +51,6 @@ public class DungeonStartupSystem {
             for (int slot : activeSlots) {
                 int originX = (slot % slotsPerRow) * slotSize;
                 int originZ = (slot / slotsPerRow) * slotSize;
-                System.out.println("[Startup] Lösche Blöcke für verwaisten Slot: " + slot);
 
                 for (int dx = 0; dx < slotSize; dx++) {
                     for (int dz = 0; dz < slotSize; dz++) {
@@ -65,8 +63,7 @@ public class DungeonStartupSystem {
             DatabaseManager.clearAllActiveDungeons();
         }
 
-        // 2. Alte Hub-NPCs per UUID entfernen
-        System.out.println("[Startup] Entferne alte Hub-NPCs per UUID...");
+        // 2. Remove old hub NPCs by UUID
         AtomicInteger removedNpcCount = new AtomicInteger(0);
         List<String> hubNpcUuids = DatabaseManager.getHubNpcUuids();
 
@@ -88,10 +85,8 @@ public class DungeonStartupSystem {
         }
 
         DatabaseManager.clearHubNpcUuids();
-        System.out.println("[Startup] Hub-NPCs entfernt: " + removedNpcCount.get());
 
         if (!activeSlots.isEmpty()) {
-            System.out.println("[Startup] Entferne Dungeon-Entities aus verwaisten Slots...");
             AtomicInteger removedDungeonEntityCount = new AtomicInteger(0);
 
             int spacing = DungeonConfig.get().manager.spacing;
@@ -127,12 +122,10 @@ public class DungeonStartupSystem {
                         }
                     });
 
-            System.out.println("[Startup] Dungeon-Entities entfernt: " + removedDungeonEntityCount.get());
         }
 
         spawnSetupNPCs(world, store);
 
-        System.out.println("[Startup] Setup complete.");
     }
 
     private static void spawnSetupNPCs(World world, Store<EntityStore> store) {
@@ -168,9 +161,8 @@ public class DungeonStartupSystem {
         if (uuidComp != null) {
             String uuid = uuidComp.getUuid().toString();
             DatabaseManager.saveHubNpcUuid(uuid);
-            System.out.println("[Startup] " + label + " UUID gespeichert: " + uuid);
         } else {
-            System.err.println("[Startup] Konnte UUID für " + label + " nicht lesen!");
+            System.err.println("[Startup] Could not read UUID for " + label + "!");
         }
     }
 }

@@ -47,7 +47,6 @@ public class DatabaseManager {
                 stmt.execute("CREATE TABLE IF NOT EXISTS hub_npcs (uuid TEXT PRIMARY KEY)");
             }
 
-            System.out.println("[Database] SQLite Tables verified.");
 
         } catch (Exception e) {
             System.err.println("[Database] Critical Error during init: " + e.getMessage());
@@ -69,7 +68,7 @@ public class DatabaseManager {
             pstmt.setString(2, uuid);
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("[Database] Fehler beim Updaten der Baurechte: " + e.getMessage());
+            System.err.println("[Database] Error while updating build permissions: " + e.getMessage());
         }
     }
 

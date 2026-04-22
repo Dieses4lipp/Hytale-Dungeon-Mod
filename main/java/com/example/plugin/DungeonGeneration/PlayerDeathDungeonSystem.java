@@ -73,7 +73,6 @@ public class PlayerDeathDungeonSystem extends DeathSystems.OnDeathSystem {
             double maxZ = instance.worldOriginZ + slotSize;
 
             if (playerX >= minX && playerX <= maxX && playerZ >= minZ && playerZ <= maxZ) {
-                System.out.println("[DungeonMod] Player died in Dungeon Slot " + instance.slot + ". Destroying...");
                 World world = manager.activeWorld;
                 manager.destroyDungeon(store, commandBuffer, world, instance);
                 break;

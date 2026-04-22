@@ -49,8 +49,6 @@ public class DungeonManager {
         int originX = slotCol * slotSize;
         int originZ = slotRow * slotSize;
 
-        System.out.println("[DungeonManager] Spawning dungeon in slot ("
-                + slotCol + "," + slotRow + ") at world (" + originX + ", " + originZ + ")");
 
         LayoutGenerator layout = new LayoutGenerator();
         layout.generateLayout(roomCount);
@@ -73,7 +71,6 @@ public class DungeonManager {
         generator.clearDungeon(world, inst);
         activeBySlot.remove(inst.slot);
         freeSlots.add(inst.slot);
-        System.out.println("[DungeonManager] Destroyed dungeon in slot " + inst.slot);
         DatabaseManager.removeActiveDungeon(inst.slot);
     }
 
