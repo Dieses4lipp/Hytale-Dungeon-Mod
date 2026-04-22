@@ -104,7 +104,6 @@ public class EnemySpawner {
         String selectedMinion = DungeonTables.get().getRandomMob(minions);
 
         if (selectedMinion != null) {
-            // Find the exact Boss Room in the grid
             int bossRoomX = -1;
             int bossRoomZ = -1;
 
@@ -170,7 +169,7 @@ public class EnemySpawner {
         int centerZ = minZ + ((maxZ - minZ) / 2);
         Map<String, DungeonTables.MobStats> possibleBosses = DungeonTables.get().mobs.boss_room.bosses;
 
-        Vector3d spawnPos = new Vector3d(centerX, y, centerZ);
+        Vector3d spawnPos = new Vector3d(centerX, y + 10, centerZ);
         Vector3f rotation = new Vector3f(0, 0, 0);
 
         String prefabToSpawn = DungeonTables.get().getRandomMob(possibleBosses);

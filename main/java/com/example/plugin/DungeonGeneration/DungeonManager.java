@@ -1,5 +1,6 @@
 package com.example.plugin.DungeonGeneration;
 
+import com.example.plugin.DatabaseManager;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -38,6 +39,7 @@ public class DungeonManager {
         this.activeWorld = world;
 
         int slot = freeSlots.isEmpty() ? nextSlot++ : freeSlots.poll();
+        DatabaseManager.addActiveDungeon(slot);
         if (slot == -1)
             slot = nextSlot++;
         if (slot == 0)
@@ -72,6 +74,7 @@ public class DungeonManager {
         activeBySlot.remove(inst.slot);
         freeSlots.add(inst.slot);
         System.out.println("[DungeonManager] Destroyed dungeon in slot " + inst.slot);
+        DatabaseManager.removeActiveDungeon(inst.slot);
     }
 
     public DungeonInstance getBySlot(int slot) {

@@ -18,9 +18,7 @@ public enum RoomType {
             "prefabs/Prefabs/Treasure/treasure2.prefab.json"
     }),
     BOSS(3, 3, new String[] {
-            "prefabs/Prefabs/Boss/boss1.prefab.json",
-            "prefabs/Prefabs/Boss/boss2.prefab.json",
-            "prefabs/Prefabs/Boss/boss3.prefab.json"
+            "prefabs/Prefabs/Boss/boss1.prefab.json"
     }),
     SHOP(1, 1, new String[] {
             "prefabs/Prefabs/Shop/shop_north.prefab.json", // door facing North (0)
