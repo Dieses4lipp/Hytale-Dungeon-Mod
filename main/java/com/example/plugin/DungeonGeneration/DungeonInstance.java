@@ -57,13 +57,12 @@ public class DungeonInstance {
                     entitiesToDelete.add(ref); 
 
                 } catch (Exception e) {
-                    System.out.println("[DungeonInstance] Error removing Door NPC: " + e.getMessage());
+                    System.err.println("[DungeonInstance] Error removing Door NPC: " + e.getMessage());
                 }
             }
         }
         npcDoorRefs.clear();
 
-        // 2. Clean up Enemies
         for (Ref<EntityStore> enemyRef : spawnedEnemies) {
             if (enemyRef != null && enemyRef.isValid()) {
                 entitiesToDelete.add(enemyRef);
@@ -71,7 +70,6 @@ public class DungeonInstance {
         }
         spawnedEnemies.clear();
 
-        // 3. Clean up Boss
         if (bossRef != null && bossRef.isValid()) {
             entitiesToDelete.add(bossRef); 
             bossRef = null;
@@ -85,7 +83,6 @@ public class DungeonInstance {
             }
         }
 
-        System.out.println("[DungeonInstance] Cleanup finished. Entities silently despawned: " + entitiesToDelete.size());
     }
 
     public int getId() {

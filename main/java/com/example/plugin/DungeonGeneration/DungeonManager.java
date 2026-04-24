@@ -1,5 +1,6 @@
 package com.example.plugin.DungeonGeneration;
 
+import com.example.plugin.DatabaseManager;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -26,7 +27,7 @@ public class DungeonManager {
     private final int slotSize = gridsize * spacing;
     private final int slotsPerRow = DungeonConfig.get().manager.slotsPerRow;
     public World activeWorld;
-    private int nextSlot = 1; // so the first stays clean for the lobby
+    private int nextSlot = 1;
     private final Queue<Integer> freeSlots = new LinkedList<>();
     private final Map<Integer, DungeonInstance> activeBySlot = new HashMap<>();
 
@@ -38,6 +39,7 @@ public class DungeonManager {
         this.activeWorld = world;
 
         int slot = freeSlots.isEmpty() ? nextSlot++ : freeSlots.poll();
+        DatabaseManager.addActiveDungeon(slot);
         if (slot == -1)
             slot = nextSlot++;
         if (slot == 0)
@@ -47,8 +49,6 @@ public class DungeonManager {
         int originX = slotCol * slotSize;
         int originZ = slotRow * slotSize;
 
-        System.out.println("[DungeonManager] Spawning dungeon in slot ("
-                + slotCol + "," + slotRow + ") at world (" + originX + ", " + originZ + ")");
 
         LayoutGenerator layout = new LayoutGenerator();
         layout.generateLayout(roomCount);
@@ -71,7 +71,7 @@ public class DungeonManager {
         generator.clearDungeon(world, inst);
         activeBySlot.remove(inst.slot);
         freeSlots.add(inst.slot);
-        System.out.println("[DungeonManager] Destroyed dungeon in slot " + inst.slot);
+        DatabaseManager.removeActiveDungeon(inst.slot);
     }
 
     public DungeonInstance getBySlot(int slot) {

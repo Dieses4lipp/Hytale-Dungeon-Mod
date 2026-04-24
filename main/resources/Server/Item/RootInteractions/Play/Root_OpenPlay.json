@@ -5,6 +5,6 @@
     "Cooldown": 1.0
   },
   "Interactions": [
-    "OpenDoor_Interaction"
+    "OpenPlay_Interaction"
   ]
 }

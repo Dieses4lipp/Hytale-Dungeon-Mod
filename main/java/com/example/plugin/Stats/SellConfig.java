@@ -19,7 +19,6 @@ public class SellConfig {
     public static int calculateStashSellValue(String playerId, Player player) {
         int total = 0;
 
-        System.out.println("[SellConfig] Scanning vanilla inventory for player: " + playerId);
 
         ItemContainer[] containers = {
                 player.getInventory().getHotbar(),
@@ -39,19 +38,11 @@ public class SellConfig {
                 if (price > 0) {
                     int lineTotal = price * quantity;
                     total += lineTotal;
-                    System.out.println("[SellConfig] SELLABLE  slot=" + i
-                            + "  item=" + itemId
-                            + "  qty=" + quantity
-                            + "  price=" + price + "g each"
-                            + "  subtotal=" + lineTotal + "g");
                 } else {
-                    System.out.println("[SellConfig] NOT SELLABLE  slot=" + i
-                            + "  item=" + itemId);
                 }
             }
         }
 
-        System.out.println("[SellConfig] Grand total sell value: " + total + "g");
         return total;
     }
 
@@ -155,8 +146,6 @@ public class SellConfig {
             pstmt.setInt(1, stats.gold);
             pstmt.setString(2, playerRef.getUuid().toString());
             pstmt.executeUpdate();
-            System.out.println("[SellConfig] Saved " + amount + "g to player "
-                    + playerRef.getUuid() + " (total: " + stats.gold + "g)");
         } catch (SQLException e) {
             System.err.println("[SellConfig] Failed to save gold: " + e.getMessage());
         }

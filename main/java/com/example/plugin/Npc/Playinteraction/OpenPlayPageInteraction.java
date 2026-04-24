@@ -1,19 +1,19 @@
-package com.example.plugin.Commands;
+package com.example.plugin.Npc.Playinteraction;
 
 import javax.annotation.Nonnull;
 
 import com.example.plugin.Ui.PlayPage.PlayPage;
-import com.hypixel.hytale.builtin.adventure.camera.CameraPlugin;
+import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3f;
-import com.hypixel.hytale.protocol.ApplyLookType;
 import com.hypixel.hytale.protocol.AttachedToType;
-import com.hypixel.hytale.protocol.CameraActionType;
-import com.hypixel.hytale.protocol.CameraInteraction;
 import com.hypixel.hytale.protocol.ClientCameraView;
 import com.hypixel.hytale.protocol.Direction;
+import com.hypixel.hytale.protocol.InteractionState;
+import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.protocol.MouseInputTargetType;
 import com.hypixel.hytale.protocol.MouseInputType;
 import com.hypixel.hytale.protocol.Position;
@@ -22,47 +22,68 @@ import com.hypixel.hytale.protocol.RotationType;
 import com.hypixel.hytale.protocol.ServerCameraSettings;
 import com.hypixel.hytale.protocol.Vector2f;
 import com.hypixel.hytale.protocol.packets.camera.SetServerCamera;
-import com.hypixel.hytale.server.core.asset.type.model.config.camera.CameraSettings;
-import com.hypixel.hytale.server.core.command.system.CommandContext;
-import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
+import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
-public class OpenPlayPageCommand extends AbstractPlayerCommand {
+public class OpenPlayPageInteraction extends SimpleInstantInteraction {
 
-    public OpenPlayPageCommand() {
-        super("play", "Opens the fullscreen play UI", false);
-    }
+    public static final BuilderCodec<OpenPlayPageInteraction> CODEC = BuilderCodec.builder(
+        OpenPlayPageInteraction.class,
+        OpenPlayPageInteraction::new,
+        SimpleInstantInteraction.CODEC
+    ).build();
 
     @Override
-    protected void execute(@Nonnull CommandContext commandContext,
-            @Nonnull Store<EntityStore> store,
-            @Nonnull Ref<EntityStore> ref,
-            @Nonnull PlayerRef playerRef,
-            @Nonnull World world) {
-        Player player = store.getComponent(ref, Player.getComponentType());
+    protected void firstRun(@Nonnull InteractionType interactionType,
+                           @Nonnull InteractionContext interactionContext,
+                           @Nonnull CooldownHandler cooldownHandler) {
+
+        CommandBuffer<EntityStore> commandBuffer = interactionContext.getCommandBuffer();
+        if (commandBuffer == null) {
+            interactionContext.getState().state = InteractionState.Failed;
+            return;
+        }
+
+        Ref<EntityStore> playerEntityRef = interactionContext.getEntity();
+        Player player = commandBuffer.getComponent(playerEntityRef, Player.getComponentType());
+
+        if (player == null) {
+            interactionContext.getState().state = InteractionState.Failed;
+            return;
+        }
+
+        PlayerRef playerRef = player.getPlayerRef();
+        World world = player.getWorld();
+        Store<EntityStore> store = world.getEntityStore().getStore();
+
+        LineUpCameraForCamModel(commandBuffer, playerEntityRef, playerRef);
+
         PlayPage page = new PlayPage(playerRef, world);
-        LineUpCameraForCamModel(store, ref, playerRef);
-        player.getPageManager().openCustomPage(ref, store, page);
+        player.getPageManager().openCustomPage(playerEntityRef, store, page);
+        
+        interactionContext.getState().state = InteractionState.Finished;
     }
 
-
-    void LineUpCameraForCamModel(Store<EntityStore> store, Ref<EntityStore> ref, PlayerRef playerRef){
+    private void LineUpCameraForCamModel(CommandBuffer<EntityStore> commandBuffer, Ref<EntityStore> ref, PlayerRef playerRef) {
         float f3Pitch = (float) Math.toRadians(-11.9);
         float f3Yaw = (float) Math.toRadians(118.2);
         float f3Roll = 0.0f;
-        TransformComponent transformComp = store.getComponent(ref, TransformComponent.getComponentType());
+        
+        TransformComponent transformComp = commandBuffer.getComponent(ref, TransformComponent.getComponentType());
+        if (transformComp == null) return;
+        
         Vector3d currentPosition = transformComp.getPosition();
-
         Vector3f newLookDirection = new Vector3f(f3Pitch, f3Yaw, f3Roll);
 
         Teleport teleportComponent = Teleport.createForPlayer(currentPosition, newLookDirection);
-
-        store.addComponent(ref, Teleport.getComponentType(), teleportComponent);
+        commandBuffer.addComponent(ref, Teleport.getComponentType(), teleportComponent);
 
         ServerCameraSettings camSettings = new ServerCameraSettings();
         camSettings.isFirstPerson = false;
@@ -76,14 +97,14 @@ public class OpenPlayPageCommand extends AbstractPlayerCommand {
         camSettings.allowPitchControls = false;
         camSettings.sendMouseMotion = false;
         camSettings.mouseInputType = MouseInputType.LookAtTargetEntity;
-        camSettings.displayCursor = false;
+        camSettings.displayCursor = true;
         camSettings.displayReticle = false;
         camSettings.lookMultiplier = new Vector2f(0.0f, 0.0f);
         camSettings.mouseInputTargetType = MouseInputTargetType.None;
         camSettings.skipCharacterPhysics = false;
-
         camSettings.eyeOffset = true;
         camSettings.positionDistanceOffsetType = PositionDistanceOffsetType.DistanceOffsetRaycast;
-        playerRef.getPacketHandler().writeNoCache(new SetServerCamera(ClientCameraView.Custom, true, camSettings));
+
+        playerRef.getPacketHandler().writeNoCache(new SetServerCamera(ClientCameraView.Custom, false, camSettings));
     }
 }

@@ -40,7 +40,6 @@ public class LayoutGenerator {
 
             currentRoom = grid[currentPoint.x][currentPoint.y] = new Room();
 
-            // take over doors from neighbours
             if (grid[currentPoint.x][currentPoint.y - 1] != null
                     && grid[currentPoint.x][currentPoint.y - 1].getDoors()[2])
                 currentRoom.getDoors()[0] = true;
@@ -57,7 +56,6 @@ public class LayoutGenerator {
                     && grid[currentPoint.x - 1][currentPoint.y].getDoors()[1])
                 currentRoom.getDoors()[3] = true;
 
-            // generate doors
             boolean[] doors = currentRoom.getDoors();
             double probability = (counter + nextRoomToProcess.size() > NUMBERROOMS) ? 0.0 : 0.9;
 
@@ -83,7 +81,6 @@ public class LayoutGenerator {
             }
             counter++;
         }
-        // clean up rest doors still pointing outwards
         for (int x = 0; x < gridsize; x++) {
             for (int y = 0; y < gridsize; y++) {
                 Room room = grid[x][y];
@@ -102,15 +99,6 @@ public class LayoutGenerator {
         }
 
         assignRoomTypes();
-        int roomnullCount = 0;
-        for (int x = 0; x < gridsize; x++)
-            for (int y = 0; y < gridsize; y++)
-                if (grid[x][y] != null)
-                    roomnullCount++;
-        System.out.println("[LayoutGenerator] Total cells filled: " + roomnullCount);
-        System.out.println("[LayoutGenerator] Start room at (" + startX + "," + startY + ")");
-
-        printGrid();
     }
 
     private void assignRoomTypes() {
@@ -122,7 +110,6 @@ public class LayoutGenerator {
 
         Point centre = new Point(gridsize / 2, gridsize / 2);
 
-        // Try farthest rooms first, find one where a 3×3 fits adjacent to it
         boolean bossPlaced = allRooms.stream()
                 .sorted(Comparator.comparingDouble((Point p) -> p.distance(centre)).reversed())
                 .anyMatch(p -> tryPlaceBossAdjacentTo(p.x, p.y));
@@ -132,7 +119,6 @@ public class LayoutGenerator {
                     .max(Comparator.comparingDouble(p -> p.distance(centre)))
                     .ifPresent(p -> {
                         grid[p.x][p.y].setType(RoomType.BOSS);
-                        System.out.println("[LayoutGenerator] Boss 1x1 fallback at (" + p.x + "," + p.y + ")");
                     });
         }
 
@@ -166,11 +152,6 @@ public class LayoutGenerator {
         }
     }
 
-    /**
-     * Tries to place a 3×3 boss room adjacent to the room at (rx, ry).
-     * The entry is always through the middle cell of one side of the boss.
-     * Checks all 4 directions and picks the first that fits.
-     */
     private boolean tryPlaceBossAdjacentTo(int rx, int ry) {
         int[][] directions = {
                 { 0, -2 }, { 2, 0 }, { 0, 2 }, { -2, 0 }
@@ -226,8 +207,6 @@ public class LayoutGenerator {
             int connectDoor = (doorIndex[d] + 2) % 4;
             grid[rx][ry].getDoors()[connectDoor] = true;
 
-            System.out.println(
-                    "[LayoutGenerator] Boss placed at (" + bx + "," + by + ") adjacent to (" + rx + "," + ry + ")");
             return true;
         }
         return false;
@@ -245,30 +224,6 @@ public class LayoutGenerator {
             }
         }
         return true;
-    }
-
-    private void printGrid() {
-        for (int y = 0; y < gridsize; y++) {
-            for (int x = 0; x < gridsize; x++) {
-                Room r = grid[x][y];
-                if (r == null)
-                    System.out.print(" .");
-                else if (x == startX && y == startY)
-                    System.out.print(" S");
-                else if (r.isSatellite())
-                    System.out.print(" b");
-                else
-                    switch (r.getType()) {
-                        case BOSS -> System.out.print(" B");
-                        case TREASURE -> System.out.print(" T");
-                        case HALLWAY -> System.out.print(" H");
-                        case SHOP -> System.out.print(" $");
-                        case STASH -> System.out.print(" X");
-                        default -> System.out.print(" R");
-                    }
-            }
-            System.out.println();
-        }
     }
 
     public static <T> T getAndRemoveRandom(Set<T> set) {

@@ -1,0 +1,254 @@
+Group {
+  LayoutMode: CenterMiddle;
+  Anchor: (Full: 0);
+  Background: #000000(0.0);
+
+  Group #MainPanel {
+    LayoutMode: Left;
+    Anchor: (Width: 1200, Height: 760);
+    Background: #0d1117(0.97);
+    Padding: (Horizontal: 20, Vertical: 24);
+
+    Group #LeftPanel {
+      LayoutMode: Top;
+      Anchor: (Width: 560, Height: 712);
+
+      Label {
+        Text: "YOUR INVENTORY";
+        Style: (FontSize: 22, TextColor: #f5c518, RenderBold: true, HorizontalAlignment: Center);
+        Anchor: (Width: 560, Height: 30);
+      }
+      Group { Anchor: (Height: 12); }
+
+      Group #InvRow1 { LayoutMode: Left; Anchor: (Width: 560, Height: 56);
+        Group #InvSlot1  { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot2  { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot3  { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot4  { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot5  { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot6  { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot7  { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot8  { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot9  { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); }
+      }
+      Group { Anchor: (Height: 7); }
+      Group #InvRow2 { LayoutMode: Left; Anchor: (Width: 560, Height: 56);
+        Group #InvSlot10 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot11 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot12 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot13 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot14 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot15 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot16 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot17 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot18 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); }
+      }
+      Group { Anchor: (Height: 7); }
+      Group #InvRow3 { LayoutMode: Left; Anchor: (Width: 560, Height: 56);
+        Group #InvSlot19 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot20 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot21 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot22 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot23 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot24 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot25 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot26 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot27 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); }
+      }
+      Group { Anchor: (Height: 7); }
+      Group #InvRow4 { LayoutMode: Left; Anchor: (Width: 560, Height: 56);
+        Group #InvSlot28 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot29 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot30 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot31 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot32 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot33 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot34 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot35 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot36 { Anchor: (Width: 56, Height: 56); Background: #30435f(0.7); }
+      }
+
+      Group { Anchor: (Height: 14); }
+      Group { Anchor: (Width: 560, Height: 2); Background: #2a3040; }
+      Group { Anchor: (Height: 14); }
+
+      Group #HotbarRow { LayoutMode: Left; Anchor: (Width: 560, Height: 56);
+        Group #InvSlot37 { Anchor: (Width: 56, Height: 56); Background: #3a5080(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot38 { Anchor: (Width: 56, Height: 56); Background: #3a5080(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot39 { Anchor: (Width: 56, Height: 56); Background: #3a5080(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot40 { Anchor: (Width: 56, Height: 56); Background: #3a5080(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot41 { Anchor: (Width: 56, Height: 56); Background: #3a5080(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot42 { Anchor: (Width: 56, Height: 56); Background: #3a5080(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot43 { Anchor: (Width: 56, Height: 56); Background: #3a5080(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot44 { Anchor: (Width: 56, Height: 56); Background: #3a5080(0.7); } Group { Anchor: (Width: 7); }
+        Group #InvSlot45 { Anchor: (Width: 56, Height: 56); Background: #3a5080(0.7); }
+      }
+
+      Group { FlexWeight: 1; }
+
+      Label #SelectionLabel {
+        Text: "Click an item to select, then click a stash slot";
+        Style: (FontSize: 13, TextColor: #8899aa, HorizontalAlignment: Center);
+        Anchor: (Width: 560, Height: 22);
+      }
+      Group { Anchor: (Height: 8); }
+      TextButton #DepositAllBtn {
+        Anchor: (Width: 560, Height: 44);
+        Text: "DEPOSIT ALL TO STASH";
+        Padding: (Horizontal: 12);
+        Style: (
+          Default: (Background: #1a3a5c, LabelStyle: (RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center)),
+          Hovered: (Background: #254a75, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)),
+          Pressed: (Background: #0f151e, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))
+        );
+      }
+      Group { Anchor: (Height: 8); }
+      TextButton #CloseBtn {
+        Anchor: (Width: 560, Height: 44);
+        Text: "CLOSE";
+        Padding: (Horizontal: 12);
+        Style: (
+          Default: (Background: #1c2333, LabelStyle: (RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center)),
+          Hovered: (Background: #2a344d, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center)),
+          Pressed: (Background: #0f151e, LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))
+        );
+      }
+    }
+
+    Group { Anchor: (Width: 20); }
+    Group { Anchor: (Width: 2, Height: 712); Background: #2a3040; }
+    Group { Anchor: (Width: 20); }
+
+    Group #RightPanel {
+      LayoutMode: Top;
+      Anchor: (Width: 578, Height: 712);
+
+      Label {
+        Text: "YOUR STASH";
+        Style: (FontSize: 22, TextColor: #5bc8f5, RenderBold: true, HorizontalAlignment: Center);
+        Anchor: (Width: 578, Height: 30);
+      }
+      Group { Anchor: (Height: 12); }
+
+      Group #StashRow1 { LayoutMode: Left; Anchor: (Width: 578, Height: 56);
+        Group #StashSlot1  { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot2  { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot3  { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot4  { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot5  { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot6  { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot7  { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot8  { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot9  { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); }
+      }
+      Group { Anchor: (Height: 7); }
+      Group #StashRow2 { LayoutMode: Left; Anchor: (Width: 578, Height: 56);
+        Group #StashSlot10 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot11 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot12 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot13 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot14 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot15 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot16 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot17 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot18 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); }
+      }
+      Group { Anchor: (Height: 7); }
+      Group #StashRow3 { LayoutMode: Left; Anchor: (Width: 578, Height: 56);
+        Group #StashSlot19 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot20 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot21 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot22 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot23 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot24 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot25 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot26 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot27 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); }
+      }
+      Group { Anchor: (Height: 7); }
+      Group #StashRow4 { LayoutMode: Left; Anchor: (Width: 578, Height: 56);
+        Group #StashSlot28 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot29 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot30 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot31 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot32 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot33 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot34 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot35 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot36 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); }
+      }
+      Group { Anchor: (Height: 7); }
+      Group #StashRow5 { LayoutMode: Left; Anchor: (Width: 578, Height: 56);
+        Group #StashSlot37 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot38 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot39 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot40 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot41 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot42 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot43 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot44 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot45 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); }
+      }
+      Group { Anchor: (Height: 7); }
+      Group #StashRow6 { LayoutMode: Left; Anchor: (Width: 578, Height: 56);
+        Group #StashSlot46 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot47 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot48 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot49 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot50 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot51 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot52 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot53 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot54 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); }
+      }
+      Group { Anchor: (Height: 7); }
+      Group #StashRow7 { LayoutMode: Left; Anchor: (Width: 578, Height: 56);
+        Group #StashSlot55 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot56 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot57 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot58 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot59 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot60 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot61 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot62 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot63 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); }
+      }
+      Group { Anchor: (Height: 7); }
+      Group #StashRow8 { LayoutMode: Left; Anchor: (Width: 578, Height: 56);
+        Group #StashSlot64 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot65 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot66 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot67 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot68 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot69 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot70 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot71 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot72 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); }
+      }
+      Group { Anchor: (Height: 7); }
+      Group #StashRow9 { LayoutMode: Left; Anchor: (Width: 578, Height: 56);
+        Group #StashSlot73 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot74 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot75 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot76 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot77 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot78 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot79 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot80 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot81 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); }
+      }
+      Group { Anchor: (Height: 7); }
+      Group #StashRow10 { LayoutMode: Left; Anchor: (Width: 578, Height: 56);
+        Group #StashSlot82 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot83 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot84 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot85 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot86 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot87 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot88 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot89 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); } Group { Anchor: (Width: 7); }
+        Group #StashSlot90 { Anchor: (Width: 56, Height: 56); Background: #1a2a40(0.8); }
+      }
+    }
+  }
+}

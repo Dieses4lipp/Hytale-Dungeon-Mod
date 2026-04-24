@@ -38,7 +38,7 @@ public class BossDeathSystem extends DeathSystems.OnDeathSystem {
             if (instance.bossRef != null && instance.bossRef.equals(ref)) {
 
                 System.out
-                        .println("[DungeonMod] DEBUG: Der Boss im Dungeon (Slot " + instance.slot + ") wurde getötet!");
+                    .println("[DungeonMod] DEBUG: The boss in dungeon (slot " + instance.slot + ") was killed!");
 
                 Damage damageInfo = deathComponent.getDeathInfo();
                 if (damageInfo != null) {
@@ -56,8 +56,6 @@ public class BossDeathSystem extends DeathSystems.OnDeathSystem {
                             int soundIndex = SoundEvent.getAssetMap().getIndex("sfx_memories_unlock_local");
                             SoundUtil.playSoundEvent2d(ref, soundIndex, SoundCategory.SFX, store);
                             
-                            System.out.println(
-                                    "[DungeonMod] Boss killed by player: " + playerRef.getUuid() + ". Scheduling Recap UI.");
 
                             BossDeathTimerComponent timerComp = new BossDeathTimerComponent();
                             timerComp.timeRemaining = 60.0f;

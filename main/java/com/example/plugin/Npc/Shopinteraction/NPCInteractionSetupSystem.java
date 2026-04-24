@@ -1,4 +1,4 @@
-package com.example.plugin.Npc.Testinteractionnpc;
+package com.example.plugin.Npc.Shopinteraction;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -40,6 +40,8 @@ public class NPCInteractionSetupSystem extends EntityTickingSystem<EntityStore> 
         interactions.setInteractionHint(setupPending.getInteractionHint());
         
         commandBuffer.putComponent(ref, interactionsType, interactions);
+        commandBuffer.removeComponent(ref, setupPendingType);
+
 }
 
     @Nullable

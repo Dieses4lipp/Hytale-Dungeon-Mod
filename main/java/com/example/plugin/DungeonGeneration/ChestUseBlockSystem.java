@@ -64,7 +64,6 @@ public class ChestUseBlockSystem extends EntityEventSystem<EntityStore, UseBlock
             event.setCancelled(true);
 
             if (ChestRegistry.isLocked(pos)) {
-                System.out.println("[ChestSystem] Chest is locked at " + pos.x + "," + pos.y + "," + pos.z);
                 return;
             }
 
@@ -101,8 +100,7 @@ public class ChestUseBlockSystem extends EntityEventSystem<EntityStore, UseBlock
                                     slots.add(s);
                                 Collections.shuffle(slots, random);
 
-                                int rollCount = 3 + random.nextInt(3); // 3 to 5 items
-                                System.out.println("[ChestSystem] Rolling " + rollCount + " items");
+                                int rollCount = 3 + random.nextInt(3);
 
                                 for (int i = 0; i < rollCount && i < slots.size(); i++) {
                                     Map.Entry<String, DungeonTables.LootEntry> rolled = DungeonTables.get()
@@ -114,22 +112,17 @@ public class ChestUseBlockSystem extends EntityEventSystem<EntityStore, UseBlock
                                                 rolled.getKey(), rolled.getValue().Quantity);
                                         containerBlock.getItemContainer()
                                                 .setItemStackForSlot(slot, lootItem);
-                                        System.out.println("[ChestSystem] Slot " + slot + ": "
-                                                + rolled.getKey() + " x" + rolled.getValue().Quantity);
                                     }
                                 }
                             } else {
-                                System.out.println("[ChestSystem] No ItemContainerBlock found.");
                             }
                         } else {
-                            System.out.println("[ChestSystem] No block component entity at pos.");
                         }
                     } else {
-                        System.out.println("[ChestSystem] Chunk not loaded.");
                     }
 
                 } catch (Exception e) {
-                    System.out.println("[ChestSystem] Error: " + e.getMessage());
+                    System.err.println("[ChestSystem] Error: " + e.getMessage());
                     e.printStackTrace();
                 }
 
@@ -163,8 +156,7 @@ public class ChestUseBlockSystem extends EntityEventSystem<EntityStore, UseBlock
                                     slots.add(s);
                                 Collections.shuffle(slots, random);
 
-                                int rollCount = 3 + random.nextInt(3); // 3 to 5 items
-                                System.out.println("[ChestSystem] Rolling " + rollCount + " items");
+                                int rollCount = 3 + random.nextInt(3);
 
                                 for (int i = 0; i < rollCount && i < slots.size(); i++) {
                                     Map.Entry<String, DungeonTables.LootEntry> rolled = DungeonTables.get()
@@ -176,22 +168,17 @@ public class ChestUseBlockSystem extends EntityEventSystem<EntityStore, UseBlock
                                                 rolled.getKey(), rolled.getValue().Quantity);
                                         containerBlock.getItemContainer()
                                                 .setItemStackForSlot(slot, lootItem);
-                                        System.out.println("[ChestSystem] Slot " + slot + ": "
-                                                + rolled.getKey() + " x" + rolled.getValue().Quantity);
                                     }
                                 }
                             } else {
-                                System.out.println("[ChestSystem] No ItemContainerBlock found.");
                             }
                         } else {
-                            System.out.println("[ChestSystem] No block component entity at pos.");
                         }
                     } else {
-                        System.out.println("[ChestSystem] Chunk not loaded.");
                     }
 
                 } catch (Exception e) {
-                    System.out.println("[ChestSystem] Error: " + e.getMessage());
+                    System.err.println("[ChestSystem] Error: " + e.getMessage());
                     e.printStackTrace();
                 }
 

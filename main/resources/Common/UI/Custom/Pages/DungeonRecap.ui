@@ -9,9 +9,6 @@ Group #StatsSection {
     Background: #0d1117(0.97);
     Padding: (Horizontal: 20, Vertical: 24);
 
-    // ==========================================
-    // LEFT PANEL: INVENTORY & DEPOSIT
-    // ==========================================
     Group #LeftPanel {
       LayoutMode: Top;
       Anchor: (Width: 640, Height: 672);
@@ -24,7 +21,6 @@ Group #StatsSection {
       
       Group { Anchor: (Height: 12); }
 
-      // --- MAIN INVENTORY (4 ROWS = 36 SLOTS) ---
       Group #InvRow1 { LayoutMode: Left; Anchor: (Width: 640, Height: 64);
         Group #Slot1  { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
         Group #Slot2  { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
@@ -73,12 +69,10 @@ Group #StatsSection {
         Group #Slot36 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); }
       }
 
-      // --- HOTBAR ROW VISUAL SEPARATOR ---
       Group { Anchor: (Height: 16); }
       Group { Anchor: (Width: 640, Height: 2); Background: #2a3040; }
       Group { Anchor: (Height: 16); }
 
-      // --- HOTBAR (1 ROW = 9 SLOTS) ---
       Group #HotbarRow { LayoutMode: Left; Anchor: (Width: 640, Height: 64);
         Group #Slot37 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }
         Group #Slot38 { Anchor: (Width: 64, Height: 64); Background: #30435f(0.7); } Group { Anchor: (Width: 8); }

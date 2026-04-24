@@ -47,10 +47,11 @@ public class OpenDoorInteraction extends SimpleInstantInteraction {
 
         DoorNPCComponent doorData = commandBuffer.getComponent(npcRef, DoorNPCComponent.getComponentType());
         if (doorData == null) {
-            System.out.println("[DoorSystem] ERROR: NPC has no DoorNPCComponent");
+            System.err.println("[DoorSystem] ERROR: NPC has no DoorNPCComponent");
             interactionContext.getState().state = InteractionState.Failed;
             return;
         }
+
         if (doorData.isOpening) {
             interactionContext.getState().state = InteractionState.Failed;
             return;
@@ -58,7 +59,7 @@ public class OpenDoorInteraction extends SimpleInstantInteraction {
         doorData.isOpening = true;
         World world = com.example.plugin.DungeonGeneration.DungeonManager.get().activeWorld;
         if (world == null) {
-            System.out.println("[DoorSystem] ERROR: World is null in DoorNPCComponent");
+            System.err.println("[DoorSystem] ERROR: World is null in DoorNPCComponent");
             interactionContext.getState().state = InteractionState.Failed;
             return;
         }
@@ -71,7 +72,20 @@ public class OpenDoorInteraction extends SimpleInstantInteraction {
 
         java.util.List<Vector3i> nearbyDoors = DoorRegistry.getNearby(clickedPos, 2);
         boolean clickedNpcDeleted = false;
-
+        boolean isBossDoor = doorData.isBossDoor();
+        if (!isBossDoor) {
+            for (Vector3i doorPos : nearbyDoors) {
+                DoorRegistry.DoorEntry entry = DoorRegistry.get(doorPos);
+                if (entry != null && entry.entityRef != null && entry.entityRef.isValid()) {
+                    DoorNPCComponent other = commandBuffer.getComponent(entry.entityRef,
+                            DoorNPCComponent.getComponentType());
+                    if (other != null && other.isBossDoor()) {
+                        isBossDoor = true;
+                        break;
+                    }
+                }
+            }
+        }
         for (Vector3i doorPos : nearbyDoors) {
             DoorRegistry.DoorEntry entry = DoorRegistry.get(doorPos);
             if (entry == null)
@@ -80,8 +94,6 @@ public class OpenDoorInteraction extends SimpleInstantInteraction {
             Path openPath = entry.orientation == DoorRegistry.Orientation.WE ? DOOR_WE_OPEN : DOOR_SN_OPEN;
             BlockSelection openPrefab = PrefabStore.get().getPrefab(openPath);
             openPrefab.placeNoReturn(world, doorPos, null);
-            System.out.println(
-                    "[DoorSystem] Double-Door part opened at " + doorPos.x + "," + doorPos.y + "," + doorPos.z);
 
             if (entry.entityRef != null && entry.entityRef.isValid()) {
                 commandBuffer.removeEntity(entry.entityRef, RemoveReason.REMOVE);
@@ -91,10 +103,31 @@ public class OpenDoorInteraction extends SimpleInstantInteraction {
 
             DoorRegistry.remove(doorPos);
         }
-        if (doorData.isBossDoor()) {
+        if (isBossDoor) {
             int soundBossIndex = SoundEvent.getAssetMap().getIndex("sfx_memories_unlock_local");
             SoundUtil.playSoundEvent2d(playerRef, soundBossIndex, SoundCategory.SFX, store);
+
+            com.example.plugin.DungeonGeneration.DungeonInstance currentInstance = null;
+            for (com.example.plugin.DungeonGeneration.DungeonInstance inst : com.example.plugin.DungeonGeneration.DungeonManager.get().getAllActiveDungeons()) {
+                
+                if (doorData.getDoorPos().x >= inst.worldOriginX && doorData.getDoorPos().x <= inst.worldOriginX + (inst.grid.length * inst.spacing)) {
+                    currentInstance = inst;
+                    break;
+                }
+            }
+
+           if (currentInstance != null && currentInstance.bossRef != null) {
+                
+                com.example.plugin.DungeonGeneration.BossMinionSpawnerComponent spawner = 
+                    commandBuffer.addComponent(currentInstance.bossRef, com.example.plugin.DungeonGeneration.BossMinionSpawnerComponent.getComponentType());
+                
+                if (spawner != null) {
+                    spawner.active = true;
+                    spawner.dungeonSlot = currentInstance.slot;
+                }
+            }
         }
+
         if (!clickedNpcDeleted) {
             commandBuffer.removeEntity(npcRef, RemoveReason.REMOVE);
         }

@@ -60,9 +60,6 @@ Group {
       Label #PanelTitle { Style: (FontSize: 26, TextColor: #5bc8f5, HorizontalAlignment: Center, RenderBold: true); Anchor: (Top: 40, Width: 360, Height: 44); Text: "PLAY"; Padding: (Full: 8); }
       Label #PanelSubtitle { Style: (FontSize: 15, TextColor: #8899aa, HorizontalAlignment: Center); Anchor: (Top: 6, Width: 360, Height: 28); Text: "Choose your dungeon size"; Padding: (Full: 6); }
       Group #Divider1 { Anchor: (Top: 20, Width: 360, Height: 2); Background: #2a3040; }
-      Label #StatLabel1 { Style: (FontSize: 15, TextColor: #ccddee, HorizontalAlignment: Center); Anchor: (Top: 14, Width: 360, Height: 32); Text: "Max Floor Depth: 12"; Padding: (Full: 6); }
-      Label #StatLabel2 { Style: (FontSize: 15, TextColor: #ccddee, HorizontalAlignment: Center); Anchor: (Top: 6, Width: 360, Height: 32); Text: "Bosses Slain: 4"; Padding: (Full: 6); }
-      Group #Divider2 { Anchor: (Top: 20, Width: 360, Height: 2); Background: #2a3040; }
 
       TextButton #SmallBtn {
         Anchor: (Top: 16, Width: 360, Height: 72);

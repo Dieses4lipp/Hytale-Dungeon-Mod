@@ -53,7 +53,6 @@ public class BossDeathTimerSystem extends EntityTickingSystem<EntityStore> {
                     try {
                         player.getPageManager().openCustomPage(ref, store, new DungeonRecapPage(pRef, recapStats, timer.dungeonSlot));
                         
-                        System.out.println("[DungeonMod] Timer finished! Showing Recap Page to " + pRef.getUuid());
                     } catch (Exception e) {
                         System.err.println("[DungeonMod] Error showing Recap Page: " + e.getMessage());
                     }

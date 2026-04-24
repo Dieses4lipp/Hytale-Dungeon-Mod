@@ -62,12 +62,10 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         private String clickedButton;
     }
 
-    // This constructor allows your OpenPlayPageCommand to work without any changes!
     public PlayPage(PlayerRef playerRef, World world) {
-        this(playerRef, world, 20); // Defaults to small
+        this(playerRef, world, 20);
     }
 
-    // This constructor is used internally to load the different sizes
     public PlayPage(PlayerRef playerRef, World world, int selectedRoomCount) {
         super(playerRef, CustomPageLifetime.CantClose, Data.CODEC);
         this.world = world;
@@ -81,7 +79,6 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
             @Nonnull UIEventBuilder uiEventBuilder,
             @Nonnull Store<EntityStore> store) {
 
-        // Load the specific UI file based on the selected size
         if (this.selectedRoomCount == 100) {
             uiCommandBuilder.append("Pages/PlayPage_Medium.ui");
         } else if (this.selectedRoomCount == 150) {
@@ -110,11 +107,9 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#LeaderboardBtn",
                 EventData.of("ButtonClicked", "nav_leaderboard"), false);
 
-        // Close Button
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CloseBtn",
                 EventData.of("ButtonClicked", "nav_close"), false);
 
-        // Dungeon size selection
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#SmallBtn",
                 EventData.of("ButtonClicked", "small"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#MediumBtn",
@@ -122,7 +117,6 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#LargeBtn",
                 EventData.of("ButtonClicked", "large"), false);
 
-        // Bottom bar
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EnterBtn",
                 EventData.of("ButtonClicked", "enter"), false);
     }
@@ -212,7 +206,7 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         Vector3f newLookDirection = new Vector3f(f3Pitch, f3Yaw, f3Roll);
 
         Teleport teleportComponent = Teleport.createForPlayer(currentPosition, newLookDirection);
-
+        Direction lockedDirection = new Direction(0f, (float) Math.PI / 2, 0f);
         store.addComponent(ref, Teleport.getComponentType(), teleportComponent);
         ServerCameraSettings camSettings = new ServerCameraSettings();
         camSettings.mouseInputTargetType = MouseInputTargetType.None;
@@ -221,21 +215,19 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         camSettings.positionOffset = new Position(-0.8, -0.7, 0);
         camSettings.positionLerpSpeed = 0.15f;
         camSettings.rotationLerpSpeed = 0.15f;
-        camSettings.attachedToType = AttachedToType.LocalPlayer;
         camSettings.rotationType = RotationType.AttachedToPlusOffset;
         camSettings.rotationOffset = new Direction((float) Math.PI, 0.7f, 0f);
+        
         camSettings.allowPitchControls = false;
         camSettings.sendMouseMotion = false;
-        camSettings.mouseInputTargetType = MouseInputTargetType.None;
-        camSettings.mouseInputType = MouseInputType.LookAtTargetEntity;
-        camSettings.displayCursor = true;
+        camSettings.displayCursor = false;
         camSettings.displayReticle = false;
         camSettings.lookMultiplier = new Vector2f(0.0f, 0.0f);
         camSettings.skipCharacterPhysics = false;
         camSettings.eyeOffset = true;
-        camSettings.skipCharacterPhysics = true;
-        camSettings.positionDistanceOffsetType = PositionDistanceOffsetType.DistanceOffsetRaycast;
+        
+        camSettings.positionDistanceOffsetType = PositionDistanceOffsetType.DistanceOffset;
 
-        playerRef.getPacketHandler().writeNoCache(new SetServerCamera(ClientCameraView.Custom, false, camSettings));
+        playerRef.getPacketHandler().writeNoCache(new SetServerCamera(ClientCameraView.Custom, true, camSettings));
     }
 }

@@ -1,7 +1,7 @@
 package com.example.plugin.DungeonGeneration;
 
 public class Room {
-    // norden:0 osten:1 süden:2 westen:3
+    // north:0 east:1 south:2 west:3
     public boolean[] doors = new boolean[4];
 
     private RoomType type = RoomType.NORMAL;
@@ -19,7 +19,6 @@ public class Room {
         this.type = type;
     }
 
-    /** Returns true if this is a satellite cell of a larger room. */
     public boolean isSatellite() {
         return originRoom != null;
     }

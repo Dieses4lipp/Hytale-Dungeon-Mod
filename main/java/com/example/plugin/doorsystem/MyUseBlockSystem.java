@@ -32,34 +32,26 @@ public class MyUseBlockSystem extends EntityEventSystem<EntityStore, UseBlockEve
             UseBlockEvent.Pre event) {
 
         Vector3i pos = event.getTargetBlock();
-        System.out.println("[DoorSystem] Block used at: " + pos.x + "," + pos.y + "," + pos.z);
-        System.out.println("[DoorSystem] Block type: " + event.getBlockType().getId());
 
-        DoorRegistry.getNearby(pos, 5)
-                .forEach(p -> System.out.println("[DoorSystem] Nearby door at: " + p.x + "," + p.y + "," + p.z));
         DoorRegistry.DoorEntry entry = DoorRegistry.get(pos);
 
         if (entry == null) {
-            System.out.println("[DoorSystem] Not a registered door. Registry size: " + DoorRegistry.size());
             return;
         }
 
-        System.out.println("[DoorSystem] Door found! Orientation: " + entry.orientation);
         event.setCancelled(true);
 
         if (world == null) {
-            System.out.println("[DoorSystem] ERROR: World is null in registry!");
+            System.err.println("[DoorSystem] ERROR: World is null in registry!");
             return;
         }
 
         Path openPath = entry.orientation == DoorRegistry.Orientation.WE ? doorWE_open : doorSN_open;
-        System.out.println("[DoorSystem] Placing open prefab: " + openPath);
 
         BlockSelection openPrefab = PrefabStore.get().getPrefab(openPath);
 
         openPrefab.placeNoReturn(world, pos, null);
         DoorRegistry.remove(pos);
-        System.out.println("[DoorSystem] Door opened successfully.");
     }
 
     @Override

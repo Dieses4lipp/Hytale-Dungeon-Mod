@@ -1,4 +1,4 @@
-package com.example.plugin.Npc.Testinteractionnpc;
+package com.example.plugin.Npc.Shopinteraction;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -23,12 +23,12 @@ public class NPCSetupPending implements Component<EntityStore> {
         NPCSetupPending::new
     )
     .addField(
-        new KeyedCodec<String>("InteractionId", Codec.STRING), // Changed to Uppercase
+        new KeyedCodec<String>("InteractionId", Codec.STRING),
         (NPCSetupPending component, String value) -> component.setInteractionId(value), 
         (NPCSetupPending component) -> component.getInteractionId()
     )
     .addField(
-        new KeyedCodec<String>("InteractionHint", Codec.STRING), // Changed to Uppercase
+        new KeyedCodec<String>("InteractionHint", Codec.STRING),
         (NPCSetupPending component, String value) -> component.setInteractionHint(value), 
         (NPCSetupPending component) -> component.getInteractionHint()
     )
