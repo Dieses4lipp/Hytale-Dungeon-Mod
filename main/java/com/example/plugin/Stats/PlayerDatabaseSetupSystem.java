@@ -74,7 +74,6 @@ public class PlayerDatabaseSetupSystem extends EntityTickingSystem<EntityStore> 
 
             commandBuffer.addComponent(ref, playerLevelType, stats);
 
-            // HUD initialization
             try {
                 com.hypixel.hytale.server.core.entity.entities.Player player = store.getComponent(ref, com.hypixel.hytale.server.core.entity.entities.Player.getComponentType());
                 if (player != null && playerRef != null) {

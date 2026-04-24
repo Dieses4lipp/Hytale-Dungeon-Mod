@@ -119,7 +119,6 @@ public class DungeonRecapPage extends InteractiveCustomUIPage<DungeonRecapPage.D
             }
         }
 
-        // Bind the new side-by-side buttons
         evt.addEventBinding(CustomUIEventBindingType.Activating, "#QuickDepositBtn",
                 EventData.of("ButtonClicked", "deposit_selected"), false);
         evt.addEventBinding(CustomUIEventBindingType.Activating, "#QuickDepositAllBtn",
@@ -231,12 +230,10 @@ public class DungeonRecapPage extends InteractiveCustomUIPage<DungeonRecapPage.D
             ItemContainer hotbar = player.getInventory().getHotbar();
             ItemContainer stash = InventoryPage.getOrCreateEmptyStash(playerId);
 
-            // Transfer Main Inventory
             for (short i = 0; i < 36; i++) {
                 transferToStash(inventory, i, stash);
             }
 
-            // Transfer Hotbar
             for (short i = 0; i < 9; i++) {
                 transferToStash(hotbar, i, stash);
             }

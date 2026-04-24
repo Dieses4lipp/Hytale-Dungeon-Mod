@@ -64,12 +64,10 @@ public class StashPage extends InteractiveCustomUIPage<StashPage.Data> {
         ItemContainer hotbar = player.getInventory().getHotbar();
         ItemContainer stash = InventoryPage.getOrCreateEmptyStash(playerId);
 
-        // Update hint label if something is selected
         if (currentSelection != null) {
             cmd.set("#SelectionLabel.Text", "Item selected — click a slot to deposit/swap");
         }
 
-        // --- Left: Player inventory (36 main + 9 hotbar) ---
         for (short i = 0; i < 36; i++) {
             buildInvSlot(cmd, evt, "#InvSlot" + (i + 1), "InvSlot" + (i + 1) + "Btn",
                     getItemSafe(inventory, i), "inv_" + i, currentSelection);
@@ -79,13 +77,11 @@ public class StashPage extends InteractiveCustomUIPage<StashPage.Data> {
                     getItemSafe(hotbar, i), "hotbar_" + i, currentSelection);
         }
 
-        // --- Right: Stash ---
         for (short i = 0; i < 90; i++) {
             buildStashSlot(cmd, evt, "#StashSlot" + (i + 1), "StashSlot" + (i + 1) + "Btn",
                     getItemSafe(stash, i), i, currentSelection);
         }
 
-        // Buttons
         evt.addEventBinding(CustomUIEventBindingType.Activating, "#DepositAllBtn",
                 EventData.of("ButtonClicked", "deposit_all"), false);
         evt.addEventBinding(CustomUIEventBindingType.Activating, "#CloseBtn",
@@ -118,7 +114,6 @@ public class StashPage extends InteractiveCustomUIPage<StashPage.Data> {
             addSelectionHighlight(cmd, groupId);
         }
 
-        // Always add event binding so empty slots can be clicked to deposit stash items
         evt.addEventBinding(CustomUIEventBindingType.Activating, "#" + btnId,
                 EventData.of("ButtonClicked", "click_" + selectionId), false);
     }
@@ -182,13 +177,11 @@ public class StashPage extends InteractiveCustomUIPage<StashPage.Data> {
             return;
         }
 
-        // Unified click handling for any slot
         if (action.startsWith("click_")) {
-            String clickedSlotId = action.replace("click_", ""); // e.g. "inv_5", "stash_10", "hotbar_2"
+            String clickedSlotId = action.replace("click_", "");
             String currentSelection = selectedSlot.get(playerId);
             ItemContainer stash = InventoryPage.getOrCreateEmptyStash(playerId);
 
-            // 1. Nothing is selected: Select the clicked item (if it exists)
             if (currentSelection == null) {
                 ItemContainer clickedContainer = getContainerForSlot(player, clickedSlotId, stash);
                 short clickedIndex = getIndexForSlot(clickedSlotId);
@@ -201,14 +194,12 @@ public class StashPage extends InteractiveCustomUIPage<StashPage.Data> {
                 return;
             }
 
-            // 2. Clicked the same slot twice: Deselect
             if (currentSelection.equals(clickedSlotId)) {
                 selectedSlot.remove(playerId);
                 refresh(player, ref, store);
                 return;
             }
 
-            // 3. Different slot clicked: Perform a swap
             ItemContainer sourceContainer = getContainerForSlot(player, currentSelection, stash);
             short sourceIndex = getIndexForSlot(currentSelection);
             
@@ -218,11 +209,9 @@ public class StashPage extends InteractiveCustomUIPage<StashPage.Data> {
             ItemStack sourceItem = getItemSafe(sourceContainer, sourceIndex);
             ItemStack destItem = getItemSafe(destContainer, destIndex);
 
-            // Swap them using the temporary container method
             swapItems(sourceContainer, sourceIndex, destContainer, destIndex, sourceItem, destItem);
-            selectedSlot.remove(playerId); // Clear selection after swap
+            selectedSlot.remove(playerId);
 
-            // Save if stash was involved in the transaction, otherwise just refresh
             if (currentSelection.startsWith("stash_") || clickedSlotId.startsWith("stash_")) {
                 saveAndRefresh(player, playerId, stash, ref, store);
             } else {
@@ -231,7 +220,6 @@ public class StashPage extends InteractiveCustomUIPage<StashPage.Data> {
         }
     }
 
-    // --- Helper Methods to parse unified slot IDs ---
 
     private ItemContainer getContainerForSlot(Player player, String slotId, ItemContainer stash) {
         if (slotId.startsWith("inv_")) return player.getInventory().getStorage();

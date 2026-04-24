@@ -41,14 +41,12 @@ public class ShopPage extends InteractiveCustomUIPage<ShopPage.Data> {
     }
 
     public static final ShopItem[] SHOP_INVENTORY = {
-            // first row
             new ShopItem("Potion_Health_Small", 25),
             new ShopItem("Potion_Health_Greater", 50),
             new ShopItem("Potion_Health_Large", 100),
             new ShopItem("Weapong_Arrow_Crude", 10),
             new ShopItem("Weapong_Arrow_Iron", 10),
 
-            // second row
             new ShopItem("Weapon_Battleaxe_Mithril", 5000),
             new ShopItem("Armor_Mithril_Head", 10000),
             new ShopItem("Armor_Mithril_Chest", 15000),

@@ -19,7 +19,6 @@ public class Room {
         this.type = type;
     }
 
-    /** Returns true if this is a satellite cell of a larger room. */
     public boolean isSatellite() {
         return originRoom != null;
     }

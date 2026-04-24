@@ -63,7 +63,6 @@ public class DungeonInstance {
         }
         npcDoorRefs.clear();
 
-        // 2. Clean up Enemies
         for (Ref<EntityStore> enemyRef : spawnedEnemies) {
             if (enemyRef != null && enemyRef.isValid()) {
                 entitiesToDelete.add(enemyRef);
@@ -71,7 +70,6 @@ public class DungeonInstance {
         }
         spawnedEnemies.clear();
 
-        // 3. Clean up Boss
         if (bossRef != null && bossRef.isValid()) {
             entitiesToDelete.add(bossRef); 
             bossRef = null;

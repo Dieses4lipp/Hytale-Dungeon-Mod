@@ -31,7 +31,6 @@ public class ChestPage extends InteractiveCustomUIPage<ChestPage.Data> {
     private final Vector3i chestPos;
     private final PlayerRef playerRef;
 
-    // tracks which inventory slot is selected, per player
     private static final Map<String, Short> selectedSlot = new HashMap<>();
 
     public static class Data {
@@ -62,8 +61,7 @@ public class ChestPage extends InteractiveCustomUIPage<ChestPage.Data> {
         String playerId = player.getUuid().toString();
         Short currentSelection = selectedSlot.get(playerId);
 
-        // read directly from vanilla inventory — always synced
-        ItemContainer inventory = player.getInventory().getStorage(); // vanilla, no transfer
+        ItemContainer inventory = player.getInventory().getStorage();
 
         for (short i = 0; i < 36; i++) {
             String groupId = "#Slot" + (i + 1);
@@ -87,13 +85,9 @@ public class ChestPage extends InteractiveCustomUIPage<ChestPage.Data> {
             }
 
             if (currentSelection != null && currentSelection == i) {
-                // Obere Linie
             cmd.appendInline(groupId, "Group { Anchor: (Top: 0, Left: 0, Right: 0, Height: 2); Background: #f5c518; }");
-            // Untere Linie
             cmd.appendInline(groupId, "Group { Anchor: (Bottom: 0, Left: 0, Right: 0, Height: 2); Background: #f5c518; }");
-            // Linke Linie
             cmd.appendInline(groupId, "Group { Anchor: (Left: 0, Top: 0, Bottom: 0, Width: 2); Background: #f5c518; }");
-            // Rechte Linie
             cmd.appendInline(groupId, "Group { Anchor: (Right: 0, Top: 0, Bottom: 0, Width: 2); Background: #f5c518; }");
             }
 
@@ -134,7 +128,7 @@ public class ChestPage extends InteractiveCustomUIPage<ChestPage.Data> {
 
         if (action.startsWith("slot_")) {
             short index = Short.parseShort(action.replace("slot_", ""));
-            ItemContainer inventory = player.getInventory().getStorage(); // vanilla, no transfer
+            ItemContainer inventory = player.getInventory().getStorage();
             ItemStack item = null;
             try {
                 item = inventory.getItemStack(index);
@@ -152,7 +146,6 @@ public class ChestPage extends InteractiveCustomUIPage<ChestPage.Data> {
             if (index == null)
                 return;
 
-            // read from vanilla
             ItemContainer vanillaInventory = player.getInventory().getStorage();
             ItemStack item = null;
             try {
@@ -164,7 +157,6 @@ public class ChestPage extends InteractiveCustomUIPage<ChestPage.Data> {
                 return;
             }
 
-            // find a free slot in the InventoryPage stash
             ItemContainer stash = InventoryPage.getOrCreateEmptyStash(playerId);
             short freeSlot = -1;
             for (short s = 0; s < 90; s++) {

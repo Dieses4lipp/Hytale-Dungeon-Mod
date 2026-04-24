@@ -62,12 +62,10 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         private String clickedButton;
     }
 
-    // This constructor allows your OpenPlayPageCommand to work without any changes!
     public PlayPage(PlayerRef playerRef, World world) {
-        this(playerRef, world, 20); // Defaults to small
+        this(playerRef, world, 20);
     }
 
-    // This constructor is used internally to load the different sizes
     public PlayPage(PlayerRef playerRef, World world, int selectedRoomCount) {
         super(playerRef, CustomPageLifetime.CantClose, Data.CODEC);
         this.world = world;
@@ -81,7 +79,6 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
             @Nonnull UIEventBuilder uiEventBuilder,
             @Nonnull Store<EntityStore> store) {
 
-        // Load the specific UI file based on the selected size
         if (this.selectedRoomCount == 100) {
             uiCommandBuilder.append("Pages/PlayPage_Medium.ui");
         } else if (this.selectedRoomCount == 150) {
@@ -110,11 +107,9 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#LeaderboardBtn",
                 EventData.of("ButtonClicked", "nav_leaderboard"), false);
 
-        // Close Button
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CloseBtn",
                 EventData.of("ButtonClicked", "nav_close"), false);
 
-        // Dungeon size selection
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#SmallBtn",
                 EventData.of("ButtonClicked", "small"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#MediumBtn",
@@ -122,7 +117,6 @@ public class PlayPage extends InteractiveCustomUIPage<PlayPage.Data> {
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#LargeBtn",
                 EventData.of("ButtonClicked", "large"), false);
 
-        // Bottom bar
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EnterBtn",
                 EventData.of("ButtonClicked", "enter"), false);
     }

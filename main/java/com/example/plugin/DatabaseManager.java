@@ -71,11 +71,6 @@ public class DatabaseManager {
             System.err.println("[Database] Error while updating build permissions: " + e.getMessage());
         }
     }
-
-    // =========================================================================
-    // DUNGEON TRACKING
-    // =========================================================================
-
     public static void addActiveDungeon(int slot) {
         try (PreparedStatement pstmt = getConnection().prepareStatement(
                 "INSERT OR IGNORE INTO active_dungeons (slot) VALUES (?)")) {
@@ -116,10 +111,6 @@ public class DatabaseManager {
             e.printStackTrace();
         }
     }
-
-    // =========================================================================
-    // HUB NPC TRACKING
-    // =========================================================================
 
     public static void saveHubNpcUuid(String uuid) {
         try (PreparedStatement pstmt = getConnection().prepareStatement(

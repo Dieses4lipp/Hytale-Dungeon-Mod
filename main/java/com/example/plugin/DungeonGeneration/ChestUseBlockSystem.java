@@ -100,7 +100,7 @@ public class ChestUseBlockSystem extends EntityEventSystem<EntityStore, UseBlock
                                     slots.add(s);
                                 Collections.shuffle(slots, random);
 
-                                int rollCount = 3 + random.nextInt(3); // 3 to 5 items
+                                int rollCount = 3 + random.nextInt(3);
 
                                 for (int i = 0; i < rollCount && i < slots.size(); i++) {
                                     Map.Entry<String, DungeonTables.LootEntry> rolled = DungeonTables.get()
@@ -156,7 +156,7 @@ public class ChestUseBlockSystem extends EntityEventSystem<EntityStore, UseBlock
                                     slots.add(s);
                                 Collections.shuffle(slots, random);
 
-                                int rollCount = 3 + random.nextInt(3); // 3 to 5 items
+                                int rollCount = 3 + random.nextInt(3);
 
                                 for (int i = 0; i < rollCount && i < slots.size(); i++) {
                                     Map.Entry<String, DungeonTables.LootEntry> rolled = DungeonTables.get()

@@ -81,7 +81,6 @@ public class MobDeathAndXPSystem extends DeathSystems.OnDeathSystem {
                         System.err.println("[DungeonMod] Error while saving: " + e.getMessage());
                     }
 
-                    // HUD Refresh
                     try {
                         Player player = store.getComponent(killerRef, Player.getComponentType());
                         if (player != null) {

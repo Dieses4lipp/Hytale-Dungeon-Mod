@@ -155,7 +155,6 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
         uiEventBuilder.addEventBinding(
                 com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#CloseBtn",
                 EventData.of("ButtonClicked", "nav_close"), false);
-        // Dynamische Equipment Bindings
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipHeadBtn",
                 EventData.of("ButtonClicked", "equip_head"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#EquipChestBtn",
@@ -180,7 +179,6 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
             Inventory inventory = player.getInventory();
 
             if (inventory != null) {
-                // Armor
                 ItemContainer armor = inventory.getArmor();
                 appendArmorSlot(uiCommandBuilder, armor, (short) 0, "#EquipHead", "EquipHeadBtn", "Head",
                         currentSelection != null && currentSelection.equals("equip_head"));
@@ -191,7 +189,6 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
                 appendArmorSlot(uiCommandBuilder, armor, (short) 3, "#EquipPants", "EquipPantsBtn", "Pants",
                         currentSelection != null && currentSelection.equals("equip_pants"));
 
-                // Weapons & shield (same logic as armor)
                 appendArmorSlot(uiCommandBuilder, inventory.getHotbar(), (short) 0, "#EquipWeapon", "EquipWeaponBtn",
                         "Weapon", currentSelection != null && currentSelection.equals("equip_weapon"));
                 appendArmorSlot(uiCommandBuilder, inventory.getUtility(), (short) 1, "#EquipShield", "EquipShieldBtn",
@@ -215,7 +212,6 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
                         uiCommandBuilder.appendInline("#EquipTrash",
                                 "Group { Anchor: (Right: 0, Top: 0, Bottom: 0, Width: 2); Background: #f5c518; }");
                     }
-            // Stash Slots
             ItemContainer stash = getOrCreateEmptyStash(playerId);
             for (short i = 0; i < 90; i++) {
                 String slotGroupId = "#Slot" + (i + 1);
@@ -235,16 +231,12 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
                 }
 
                 if (currentSelection != null && currentSelection.equals("slot_clicked_" + i)) {
-                    // Top Edge
                     uiCommandBuilder.appendInline(slotGroupId,
                             "Group { Anchor: (Top: 0, Left: 0, Right: 0, Height: 2); Background: #f5c518; }");
-                    // Bottom Edge
                     uiCommandBuilder.appendInline(slotGroupId,
                             "Group { Anchor: (Bottom: 0, Left: 0, Right: 0, Height: 2); Background: #f5c518; }");
-                    // Left Edge
                     uiCommandBuilder.appendInline(slotGroupId,
                             "Group { Anchor: (Left: 0, Top: 0, Bottom: 0, Width: 2); Background: #f5c518; }");
-                    // Right Edge
                     uiCommandBuilder.appendInline(slotGroupId,
                             "Group { Anchor: (Right: 0, Top: 0, Bottom: 0, Width: 2); Background: #f5c518; }");
                 }
@@ -269,14 +261,10 @@ public class InventoryPage extends InteractiveCustomUIPage<InventoryPage.Data> {
                     + "\"; Background: #141c28(0.0); Style: (Hovered: (Background: #254a7588), Default: (LabelStyle: (HorizontalAlignment: Center, VerticalAlignment: Center))); }");
         }
         if (isSelected) {
-            // Obere Linie
             cmd.appendInline(groupId, "Group { Anchor: (Top: 0, Left: 0, Right: 0, Height: 2); Background: #f5c518; }");
-            // Untere Linie
             cmd.appendInline(groupId,
                     "Group { Anchor: (Bottom: 0, Left: 0, Right: 0, Height: 2); Background: #f5c518; }");
-            // Linke Linie
             cmd.appendInline(groupId, "Group { Anchor: (Left: 0, Top: 0, Bottom: 0, Width: 2); Background: #f5c518; }");
-            // Rechte Linie
             cmd.appendInline(groupId,
                     "Group { Anchor: (Right: 0, Top: 0, Bottom: 0, Width: 2); Background: #f5c518; }");
         }

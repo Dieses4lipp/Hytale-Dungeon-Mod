@@ -34,7 +34,6 @@ var stats = com.example.plugin.Stats.PlayerLevelComponent.getStats(store, ref);
     int xpNeeded = currentLevel * 100;
     uiCommandBuilder.set("#LevelLabel.Text", "Lv. " + currentLevel);
     uiCommandBuilder.set("#XpLabel.Text", currentXp + " / " + xpNeeded + " XP");
-        // Navi Bindings
         uiEventBuilder.addEventBinding(com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#PlayBtn", EventData.of("ButtonClicked", "nav_play"), false);
         uiEventBuilder.addEventBinding(com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#StashBtn", EventData.of("ButtonClicked", "nav_inventory"), false);
         uiEventBuilder.addEventBinding(com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType.Activating, "#CharacterBtn", EventData.of("ButtonClicked", "nav_character"), false);

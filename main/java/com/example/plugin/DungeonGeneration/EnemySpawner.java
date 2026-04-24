@@ -5,6 +5,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3f;
+import com.hypixel.hytale.server.core.modules.entity.component.Invulnerable;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.npc.INonPlayerCharacter;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -21,8 +22,6 @@ public class EnemySpawner {
 
     public static void populateDungeon(World world, DungeonInstance instance, Store<EntityStore> store) {
         int baseY = DungeonConfig.get().generator.baseY + 1;
-        int roomsPopulated = 0;
-
 
         for (int x = 0; x < instance.grid.length; x++) {
             for (int y = 0; y < instance.grid[x].length; y++) {
@@ -55,7 +54,6 @@ public class EnemySpawner {
                 } else {
                     spawnNormalEnemies(store, instance, minX, maxX, baseY, minZ, maxZ);
                 }
-                roomsPopulated++;
             }
         }
     }
@@ -118,11 +116,10 @@ public class EnemySpawner {
             }
 
             if (bossRoomX == -1) {
-                System.err.println("[EnemySpawner] ERROR: Could not find Boss Room to spawn minion!");
+                System.err.println("[EnemySpawner] Could not find boss room to spawn minion.");
                 return;
             }
 
-            // Calculate the exact center of that specific Boss Room
             int roomStartX = instance.worldOriginX + (bossRoomX * instance.spacing);
             int roomStartZ = instance.worldOriginZ + (bossRoomZ * instance.spacing);
             
@@ -136,7 +133,6 @@ public class EnemySpawner {
             int exactCenterZ = minZ + ((maxZ - minZ) / 2);
             int spawnY = DungeonConfig.get().generator.baseY + 1;
 
-            // Spawn them at the center with a tiny random offset
             com.hypixel.hytale.math.vector.Vector3d spawnPos = new com.hypixel.hytale.math.vector.Vector3d(
                     exactCenterX + (new java.util.Random()).nextInt(5) - 2, 
                     spawnY, 
@@ -182,12 +178,13 @@ public class EnemySpawner {
                 null,
                 spawnPos,
                 rotation);
-
         if (result != null) {
             instance.spawnedEnemies.add(result.first());
             DungeonManager.get().mobXpRewards.put(result.first(), xpBounty);
             instance.bossRef = result.first();
         } else {
+            System.err.println("[EnemySpawner] Boss spawnNPC returned null for " + prefabToSpawn
+                    + ". (Prefab ID wrong or chunks unloaded?)");
         }
     }
 }

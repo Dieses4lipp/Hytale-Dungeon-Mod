@@ -37,8 +37,6 @@ public class DungeonStartupSystem {
         World world = event.getPlayer().getWorld();
         Store<EntityStore> store = event.getPlayerRef().getStore();
 
-
-        // 1. Clear orphaned dungeon slots
         List<Integer> activeSlots = DatabaseManager.getActiveDungeons();
         if (!activeSlots.isEmpty()) {
             int spacing = DungeonConfig.get().manager.spacing;
@@ -63,7 +61,6 @@ public class DungeonStartupSystem {
             DatabaseManager.clearAllActiveDungeons();
         }
 
-        // 2. Remove old hub NPCs by UUID
         AtomicInteger removedNpcCount = new AtomicInteger(0);
         List<String> hubNpcUuids = DatabaseManager.getHubNpcUuids();
 

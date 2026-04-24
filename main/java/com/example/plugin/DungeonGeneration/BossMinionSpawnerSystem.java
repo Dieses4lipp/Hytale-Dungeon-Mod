@@ -34,12 +34,11 @@ public class BossMinionSpawnerSystem extends EntityTickingSystem<EntityStore> {
             spawner.timer += dt;
             
             if (spawner.timer >= 5.0f) {
-                spawner.timer = 0.0f; // Reset timer for the next 5 seconds
+                spawner.timer = 0.0f;
                 
                 DungeonInstance instance = DungeonManager.get().getBySlot(spawner.dungeonSlot);
                 
                 if (instance != null && DungeonManager.get().activeWorld != null) {
-                    // Tell the World Thread to execute this safely AFTER the tick finishes!
                     DungeonManager.get().activeWorld.execute(() -> {
                         try {
                             EnemySpawner.spawnBossMinion(store, instance);

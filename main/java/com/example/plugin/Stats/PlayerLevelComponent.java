@@ -1,4 +1,4 @@
-package com.example.plugin.Stats; // Adjust package as needed
+package com.example.plugin.Stats;
 
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;

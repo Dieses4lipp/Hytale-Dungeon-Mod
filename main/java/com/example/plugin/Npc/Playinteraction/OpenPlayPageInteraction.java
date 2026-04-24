@@ -82,7 +82,6 @@ public class OpenPlayPageInteraction extends SimpleInstantInteraction {
         Vector3d currentPosition = transformComp.getPosition();
         Vector3f newLookDirection = new Vector3f(f3Pitch, f3Yaw, f3Roll);
 
-        // Safely add teleport component using command buffer
         Teleport teleportComponent = Teleport.createForPlayer(currentPosition, newLookDirection);
         commandBuffer.addComponent(ref, Teleport.getComponentType(), teleportComponent);
 
